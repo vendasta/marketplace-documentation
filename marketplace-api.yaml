@@ -1,0 +1,1581 @@
+openapi: 3.0.0
+servers:
+  - url: 'https://developers.vendasta.com/api/v1'
+    description: Production Server
+info:
+  version: '1.0'
+  title: Vendasta Marketplace API V1 Endpoints
+security:
+  - BearerAuth: []
+paths:
+  /account/:
+    get:
+      tags:
+        - account
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/account'
+                  next_url:
+                    type: string
+                    description: 'The URL to call to fetch the next page of results, if there are any.'
+                  total_results:
+                    type: integer
+                    description: The total number of results (across all pages).
+        '401':
+          description: Invalid Authentication
+      parameters:
+        - description: Must be a positive integer.
+          name: page_size
+          in: query
+          schema:
+            type: integer
+        - name: cursor
+          in: query
+          schema:
+            type: string
+      summary: List Accounts
+  '/account/{account_id}':
+    get:
+      tags:
+        - account
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/account'
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+        '404':
+          description: Account not found
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+      summary: Get Account
+  '/account/{account_id}/settings':
+    get:
+      tags:
+        - account
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/account_settings'
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+        '404':
+          description: Account settings not found
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+      summary: Get Account Settings
+  '/account/{account_id}/session-transfer':
+    get:
+      tags:
+        - account
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/session_transfer_url'
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to retrieve a session transfer url.
+        '404':
+          description: Url not found
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+      summary: Get Session Transfer URL
+  /activity/:
+    post:
+      tags:
+        - activity
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/activity'
+        '400':
+          description: 'Invalid activity for app, missing title, or link wasn''t a full URL'
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: App doesn't have access to the account
+        '404':
+          description: Account not found
+      summary: Create Activity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - account_id
+                - activity_type
+                - title
+                - link
+              properties:
+                account_id:
+                  type: string
+                  description: A unique account ID that can be used to identify and reference an account.
+                activity_type:
+                  type: string
+                  description: The activity type. This must be preregistered with Vendasta.
+                title:
+                  type: string
+                  description: The activity title.
+                link:
+                  type: string
+                  description: The URL visited when the user interacts with the activity.Must include the protocol (http or https).
+                content:
+                  type: string
+                  description: The activity content.
+                media_url:
+                  type: string
+                  description: The activity image URL. Must include the protocol (http or https).
+                settings_tags:
+                  type: string
+                  description: Settings tags for the activity
+                requires_platform_auth:
+                  type: boolean
+                  description: Whether the link is public or requires Vendasta authentication
+        required: true
+  /customer:
+    post:
+      tags:
+        - customer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    properties:
+                      customer:
+                        $ref: '#/components/schemas/return_customer'
+                    type: object
+        '400':
+          description: Bad Request
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+      summary: Create Customer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - account_id
+              properties:
+                account_id:
+                  type: string
+                  description: 'A unique account ID that can be used to identify and reference an account. IF NOT PROVIDED, use  Associate Customer IDs to add after the fact.'
+                id:
+                  type: string
+                  description: A unique ID that can be used to identify and reference a customer.
+                email:
+                  items:
+                    type: string
+                  type: array
+                  description: Email address
+                phone:
+                  items:
+                    type: string
+                  type: array
+                  description: Phone number
+                address:
+                  type: string
+                  description: Address
+                city:
+                  type: string
+                  description: City
+                country:
+                  type: string
+                  description: Country
+                state:
+                  type: string
+                  description: State
+                first_name:
+                  type: string
+                  description: First name
+                last_name:
+                  type: string
+                  description: Last name
+        required: true
+  /customer/list-customers:
+    post:
+      tags:
+        - customer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    type: object
+                    properties:
+                      next_cursor:
+                        type: string
+                      has_more:
+                        type: boolean
+                      total_results:
+                        type: integer
+                      customers:
+                        items:
+                          $ref: '#/components/schemas/return_customer'
+                        type: array
+        '400':
+          description: Bad Request
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+      summary: List Customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - account_id
+                - token
+              properties:
+                account_id:
+                  type: string
+                  description: A unique account ID that can be used to identify and reference an account.
+                page_size:
+                  type: integer
+                  description: Amount of results per page
+                cursor:
+                  type: string
+                  description: Cursor
+                sort_options:
+                  $ref: '#/components/schemas/sort_options'
+                search_term:
+                  type: string
+                  description: Search term
+                filters:
+                  $ref: '#/components/schemas/filters'
+        required: true
+  /customer/associate-id:
+    post:
+      tags:
+        - customer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+        '400':
+          description: Bad Request
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+      summary: Associate Customer IDs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - customer_id
+                - vendor_customer_id
+              properties:
+                customer_id:
+                  type: string
+                  description: A unique string indicating which customer to create an ID mapping for
+                vendor_customer_id:
+                  type: string
+                  description: A string indicating what value to return with the customer for api interactions
+        required: true
+  /customer/update-customer:
+    post:
+      tags:
+        - customer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/customer'
+        '400':
+          description: Bad Request
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+        '404':
+          description: ContactID not found for customer you are attempting to update
+      summary: Update Customer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - account_id
+                - id
+              properties:
+                account_id:
+                  type: string
+                  description: A unique account ID that can be used to identify and reference an account.
+                id:
+                  type: string
+                  description: 'Must be the vendor_customer_id for the customer you are  attempting to update. If this is not set for your App, use the Associate Customer ID endpoint to add your id before updating customer.'
+                email:
+                  items:
+                    type: string
+                  type: array
+                  description: Email address
+                phone:
+                  items:
+                    type: string
+                  type: array
+                  description: Phone number
+                address:
+                  type: string
+                  description: Address
+                city:
+                  type: string
+                  description: City
+                country:
+                  type: string
+                  description: Country
+                state:
+                  type: string
+                  description: State
+                first_name:
+                  type: string
+                  description: First name
+                last_name:
+                  type: string
+                  description: Last name
+        required: true
+  /customer/delete-customer:
+    post:
+      tags:
+        - customer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+        '400':
+          description: Bad Request
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+      summary: Delete Customer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - customer_id
+                - account_id
+              properties:
+                customer_id:
+                  type: string
+                  description: A unique ID (Vendor's customerID) indicating which customer to delete.
+                account_id:
+                  type: string
+                  description: A unique account ID that can be used to identify and reference an account.
+        required: true
+  '/marketplace_app/{marketplace_app_id}':
+    get:
+      tags:
+        - marketplace_app
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/marketplace_application'
+        '401':
+          description: Invalid Authentication
+        '404':
+          description: Marketplace App not found
+      parameters:
+        - required: true
+          description: A unique identifier for each Marketplace Application. This is automatically generated upon application creation.
+          in: path
+          name: marketplace_app_id
+          schema:
+            type: string
+      summary: Get Marketplace Application
+  '/account/{account_id}/users':
+    get:
+      tags:
+        - account
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/associated_user'
+        '400':
+          description: Invalid Request
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+      summary: List Users
+  '/account/{account_id}/addons':
+    get:
+      tags:
+        - account
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/active_addon'
+        '400':
+          description: Invalid Request
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+      summary: List Activated Addons
+  /activation/resolve/:
+    post:
+      tags:
+        - account
+      responses:
+        '202':
+          description: Accepted
+        '401':
+          description: Invalid Authentication
+      summary: Resolve a Pending Activation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - activation_id
+                - business_id
+                - approved
+              properties:
+                activation_id:
+                  type: string
+                  description: A unique ID that can be used to identify a specific activation record.
+                business_id:
+                  type: string
+                  description: A unique ID that can be used to identify a business.
+                addon_id:
+                  type: string
+                  description: A unique ID used to identify a marketplace addon.
+                approved:
+                  type: boolean
+                  description: A boolean value representing whether the activation has been approved or rejected.
+                rejection_reason:
+                  type: string
+                  description: 'If approved is false, you must give a reason for rejecting the activation.'
+        required: true
+  /activation/list-pending/:
+    get:
+      tags:
+        - account
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/pending_activation'
+                  next_url:
+                    type: string
+                    description: 'The URL to call to fetch the next page of results, if there are any.'
+        '400':
+          description: Invalid Input
+        '401':
+          description: Invalid Authentication
+      parameters:
+        - required: false
+          description: A unique ID used to identify a marketplace addon.
+          in: query
+          name: addon_id
+          schema:
+            type: string
+        - required: false
+          description: The maximum number of entries you want returned.
+          in: query
+          name: page_size
+          schema:
+            type: integer
+        - required: false
+          description: Used for pagination.
+          in: query
+          name: cursor
+          schema:
+            type: string
+      summary: List Pending Activations
+  /oauth/token:
+    post:
+      security: []
+      tags:
+        - oauth
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/access_token'
+        '400':
+          description: Invalid JSON Web token
+        '404':
+          description: App ID not found
+      summary: Get OAuth Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - grant_type
+                - assertion
+              properties:
+                grant_type:
+                  type: string
+                  description: 'Use the following string, URL-encoded as necessary: urn:ietf:params:oauth:grant-type:jwt-bearer'
+                assertion:
+                  type: string
+                  description: 'The JWT, including signature'
+        required: true
+  '/user/{user_id}':
+    get:
+      tags:
+        - user
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/user'
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access user.
+        '404':
+          description: User not found
+      parameters:
+        - required: true
+          description: A unique user ID that can be used to identify and reference a user.
+          in: path
+          name: user_id
+          schema:
+            type: string
+      summary: Get User
+  '/user/{user_id}/permissions/{account_id}':
+    head:
+      tags:
+        - user
+      responses:
+        '200':
+          description: User has permissions to the given account.
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: User does not have permission to the account.
+        '404':
+          description: Account not found.
+      parameters:
+        - required: true
+          description: A unique user ID that can be used to identify and reference a user.
+          in: path
+          name: user_id
+          schema:
+            type: string
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+      summary: Check User Access to an Account
+  /executive_report/weekly/:
+    post:
+      tags:
+        - executive_report
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Invalid parameter
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: App doesn't have access to the account
+        '404':
+          description: Account not found
+      summary: Create Weekly Executive Report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - category
+                - account_id
+                - report_date
+                - report_data
+              properties:
+                category:
+                  type: string
+                  description: The Local Marketing Index category this app belongs to
+                  enum:
+                    - LISTINGS
+                    - REPUTATION
+                    - SOCIAL
+                    - WEBSITE
+                    - SEO
+                    - ADVERTISING
+                    - CONTENT_AND_EXPERIENCE
+                account_id:
+                  type: string
+                  description: A unique account ID that can be used to identify and reference an account.
+                report_date:
+                  type: string
+                  format: date
+                  description: The last day of the week that the data is being submitted for(This API defines the last day of the week as Sunday). Submissions will only be accepted for the current and previous week.
+                report_data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/executive_report_data'
+              type: object
+  /executive_report/monthly/:
+    post:
+      tags:
+        - executive_report
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Invalid parameter
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: App doesn't have access to the account
+        '404':
+          description: Account not found
+      summary: Create Monthly Executive Report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - category
+                - account_id
+                - report_date
+                - report_data
+              properties:
+                category:
+                  type: string
+                  description: The Local Marketing Index category this app belongs to
+                  enum:
+                    - LISTINGS
+                    - REPUTATION
+                    - SOCIAL
+                    - WEBSITE
+                    - SEO
+                    - ADVERTISING
+                    - CONTENT_AND_EXPERIENCE
+                account_id:
+                  type: string
+                  description: A unique account ID that can be used to identify and reference an account.
+                report_date:
+                  type: string
+                  format: date
+                  description: The first day of the month for that the data is being submitted for. Submissions will only be accepted for the current month and previous month.
+                report_data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/executive_report_data'
+              type: object
+        required: true
+  '/account/{account_id}/file-group/':
+    post:
+      tags:
+        - account
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/file_group'
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+        '404':
+          description: Account not found
+      summary: Create a File Group
+      requestBody:
+        $ref: '#/components/requestBodies/Body'
+    get:
+      tags:
+        - account
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+        - description: Must be a positive integer.
+          name: page_size
+          in: query
+          schema:
+            type: integer
+        - name: cursor
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/file_group'
+                  next_url:
+                    type: string
+                    description: 'The URL to call to fetch the next page of results, if there are any.'
+                  total_results:
+                    type: integer
+                    description: The total number of results (across all pages).
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+        '404':
+          description: Account not found
+      summary: List File Groups
+  '/account/{account_id}/file-group/{file_group_id}/':
+    put:
+      tags:
+        - account
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+        - required: true
+          description: The ID of the file group to update.
+          in: path
+          name: file_group_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/file_group'
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+        '404':
+          description: Account or file group not found
+      summary: Replace a File Group
+      requestBody:
+        $ref: '#/components/requestBodies/Body'
+    delete:
+      tags:
+        - account
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+        - required: true
+          description: The ID of the file group to delete.
+          in: path
+          name: file_group_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/file_group'
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+        '404':
+          description: Account or file group not found
+      summary: Delete a File Group
+    get:
+      tags:
+        - account
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+        - required: true
+          description: The ID of the file group to delete.
+          in: path
+          name: file_group_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/file_group'
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+        '404':
+          description: Account or file group not found
+      summary: Get a File Group
+tags:
+  - name: oauth
+    description: The OAuth APIs allow applications to retrieve a bearer token that must be supplied with all API calls. See the Authentication documentation for more details.
+  - name: account
+    description: The Account APIs allow you to perform actions against a single account that your application has been added to.
+  - name: user
+    description: 'The User APIs allow you to perform operations against Vendasta Users. Each user has a unique identifier in the format UID-{}. This ID is guaranteed to stay the same, while the email associated to a user may change. At any given time, an email is unique to a specific user but over time it is possible for the email to change between user ids.'
+  - name: marketplace_app
+    description: 'The Marketplace App APIs allow you to perform actions against your applications, as well as certain operations against all marketplace apps.'
+  - name: activity
+    description: 'The Activity API lets you inform us of new activity from your Marketplace App.  It will be displayed in the user''s activity stream and used for notifications.  Note: This endpoint has duplicate detection.  Within an hour boundary (E.g. 3:00am to 3:59am), we will only generate a single activity object on our servers for messages we deem "identical".  We compare title, content, account_id, link, media_url, activity_type, and template_data.  This is subject to change.'
+  - name: executive_report
+    description: The executive report APIs are used to submit data to the executive report for a single app on an account.
+  - name: customer
+    description: The Customer APIs allow you to perform actions against customers of the account that your application has been added to.
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    sort_options:
+      properties:
+        direction:
+          type: integer
+          description: '0 = Ascending, 1 = Descending'
+        field:
+          type: integer
+          description: '0 = Sort on Name, 1 = Sort on Created time'
+      type: object
+    pending_activation:
+      type: object
+      properties:
+        addon_id:
+          type: string
+        app_id:
+          type: string
+        business_id:
+          type: string
+        activation_id:
+          type: string
+        created_date:
+          type: string
+    filters:
+      properties:
+        source:
+          items:
+            type: string
+          type: array
+      type: object
+    return_customer:
+      properties:
+        city:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        account_id:
+          type: string
+        country:
+          type: string
+        customer_id:
+          type: string
+        phone:
+          items:
+            type: string
+          type: array
+        state:
+          type: string
+        address:
+          type: string
+        email:
+          items:
+            type: string
+          type: array
+        origin:
+          type: string
+        vendor_customer_id:
+          type: string
+        created:
+          type: string
+          format: date-time
+        updated:
+          type: string
+          format: date-time
+        deleted:
+          type: string
+          format: date-time
+      type: object
+    executive_report_data:
+      required:
+        - template_type
+        - unique_id
+      properties:
+        template_type:
+          type: string
+          description: The card template to be used
+          enum:
+            - BASIC_NUMBER
+            - NUMBER_WITH_CHANGE
+            - CALL_TO_ACTION
+            - BASIC_LIST
+            - INFO_LIST
+            - BAR_CHART
+            - LINE_GRAPH
+            - WORD_CLOUD
+        unique_id:
+          type: string
+          description: The ID to be given to a card.
+        title:
+          type: string
+          description: The title of the card.
+        description:
+          type: string
+          description: The description of what the card is displaying.
+        width:
+          type: string
+          description: The width of the card.
+          enum:
+            - HALF
+            - FULL
+        next_url:
+          type: string
+          description: A click through link for deep linking from the card - will display in the top right corner if provided.
+        next_url_label:
+          type: string
+          description: Label for next_url
+        value:
+          type: string
+          description: 'The base number to display for the card - this value will apply to several different card types - BASIC_NUMBER, NUMBER_WITH_CHANGE.'
+        change:
+          type: string
+          description: The change in the value from the previous reporting period.
+        format:
+          type: string
+          description: The format of the value. Also formats the change stat (except for FRACTION)
+          enum:
+            - NUMBER
+            - PERCENT
+            - TIME
+            - FRACTION
+        precision:
+          type: integer
+          description: The amount of decimals applied to the value and change stats.
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              header:
+                type: string
+                description: The title of the list item.
+              body:
+                type: string
+                description: The content of the list item.
+              footer:
+                type: string
+                description: The footer of the list item.
+              info_text:
+                type: string
+                description: Extra information about the list item. Info section is displayed on the right of the list item.
+              info_text_color:
+                type: string
+                description: The color of the info text.
+                enum:
+                  - BLACK
+                  - WHITE
+                  - GRAY
+                  - RED
+                  - GREEN
+                  - BLUE
+                  - YELLOW
+                  - PURPLE
+                  - ORANGE
+              info_text_icon:
+                type: string
+                description: 'The Google Material icon code/name - see: https://material.io/tools/icons/?style=baseline'
+              image_url:
+                type: string
+                description: The URL of the image to be displayed on the left of the list item
+        bar_chart:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+                description: The label of the individual bar.
+              value:
+                type: string
+                description: The value of the individual bar.
+              fill_percent:
+                type: integer
+                description: How much of the bar is colored in. Integer from 0-100
+              fill_color:
+                type: string
+                description: The color of the bar.
+                enum:
+                  - BLACK
+                  - WHITE
+                  - GRAY
+                  - RED
+                  - GREEN
+                  - BLUE
+                  - YELLOW
+                  - PURPLE
+                  - ORANGE
+        word_cloud_list:
+          type: array
+          items:
+            type: object
+            properties:
+              sentiment:
+                type: integer
+                description: 'Sentiment discibes whether the phrase is displayed in a positive or negative manner. An integer from 0-1000, >=700 GREEN, >= 400 BLUE, >400 RED'
+              text:
+                type: string
+                description: Word or Phrase do be displayed in word cloud
+              weight:
+                type: integer
+                description: An integer between 1 and 1000. Weight determines how large the phrase is in comparison to other phrases.
+        line_graph:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+                description: The Label for an individual line. Appears in a legend below graph.
+              point:
+                type: array
+                description: Array containing the points to populate the line
+                items:
+                  type: object
+                  properties:
+                    x:
+                      type: number
+                      description: Timestamp in milliseconds since epoch. The X axis labels for time will automatically scale based on the timestamps provided.
+                    'y':
+                      type: number
+                      description: Value to determine path of line on chart. Labels for Y axis will automatically scale based on the values provided.
+      type: object
+    account:
+      required:
+        - company_name
+        - id
+        - partner_id
+      properties:
+        call_tracking_number:
+          items:
+            type: string
+          type: array
+        deleted_flag:
+          type: boolean
+        contact_first_name:
+          type: string
+        common_name:
+          items:
+            type: string
+          type: array
+        timezone:
+          type: string
+        work_number:
+          items:
+            type: string
+          type: array
+        partner_id:
+          type: string
+        id:
+          type: string
+        city:
+          type: string
+        zip:
+          type: string
+        market_id:
+          type: string
+        deleted:
+          type: string
+          format: date-time
+        state:
+          type: string
+        company_name:
+          type: string
+        latitude:
+          type: number
+        foursquare_url:
+          type: string
+        tax_ids:
+          items:
+            type: string
+          type: array
+        website:
+          type: string
+        rss_url:
+          type: string
+        updated:
+          type: string
+          format: date-time
+        twitter_url:
+          type: string
+        facebook_url:
+          type: string
+        fax_number:
+          type: string
+        contact_email:
+          type: string
+        address:
+          type: string
+        youtube_url:
+          type: string
+        instagram_url:
+          type: string
+        key_person:
+          items:
+            type: string
+          type: array
+        pinterest_url:
+          type: string
+        contact_last_name:
+          type: string
+        cell_number:
+          type: string
+        country:
+          type: string
+        created:
+          type: string
+          format: date-time
+        linkedin_url:
+          type: string
+        longitude:
+          type: number
+        sales_person_id:
+          type: string
+        googleplus_url:
+          type: string
+        service_area_business_flag:
+          type: boolean
+      type: object
+    account_settings:
+      required:
+        - account_id
+      properties:
+        account_id:
+          type: string
+        partner_id:
+          type: string
+        market_id:
+          type: string
+        platform_settings:
+          type: object
+          properties:
+            partner_name:
+              type: string
+            partner_logo_url:
+              type: string
+            partner_primary_branding_hex_color:
+              type: string
+        white_label_active:
+          type: boolean
+      type: object
+    access_token:
+      required:
+        - access_token
+        - token_type
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+        expires:
+          type: integer
+          description: Unix Timestamp
+      type: object
+    customer:
+      required:
+        - account_id
+        - customer_id
+      properties:
+        city:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        account_id:
+          type: string
+        country:
+          type: string
+        customer_id:
+          type: string
+        phone:
+          items:
+            type: string
+          type: array
+        state:
+          type: string
+        address:
+          type: string
+        email:
+          items:
+            type: string
+          type: array
+      type: object
+    marketplace_application:
+      required:
+        - entry_url
+        - id
+        - name
+        - vendor
+      properties:
+        vendor:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+        entry_url:
+          type: string
+        id:
+          type: string
+        icon:
+          type: string
+      type: object
+    user:
+      required:
+        - id
+        - partner_id
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        work_phone:
+          type: string
+        email:
+          type: string
+        accounts:
+          items:
+            type: string
+          type: array
+        partner_id:
+          type: string
+        id:
+          type: string
+      type: object
+    activity:
+      required:
+        - account_id
+        - activity_id
+        - activity_type
+        - created
+        - link
+        - title
+      properties:
+        activity_id:
+          type: string
+        account_id:
+          type: string
+        created:
+          type: string
+        settings_tags:
+          items:
+            type: string
+          type: array
+        title:
+          type: string
+        content:
+          type: string
+        link:
+          type: string
+        media_url:
+          type: string
+        activity_type:
+          type: string
+        template_date:
+          type: object
+      type: object
+    session_transfer_url:
+      required:
+        - session_transfer_url
+      properties:
+        session_transfer_url:
+          type: string
+      type: object
+    associated_user:
+      type: object
+      properties:
+        user_id:
+          type: string
+    active_addon:
+      type: object
+      properties:
+        addon_id:
+          type: string
+        activation_id:
+          type: string
+    file_group:
+      type: object
+      properties:
+        account_id:
+          type: string
+        file_group_id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        created:
+          type: string
+        modified:
+          type: string
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              url:
+                type: string
+  requestBodies:
+    Body:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - title
+              - files
+            properties:
+              title:
+                type: string
+              description:
+                type: string
+              files:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    url:
+                      type: string
+      required: true
