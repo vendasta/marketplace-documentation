@@ -1,0 +1,13 @@
+{
+  "items": [
+    {
+      "type": "divider",
+      "title": "Getting Started"
+    },
+    {
+      "type": "item",
+      "title": "Overview",
+      "uri": "docs/Overview/getting-started.md"
+    }
+  ]
+}
