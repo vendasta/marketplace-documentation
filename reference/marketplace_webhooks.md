@@ -10,7 +10,16 @@ Webhooks are registered by placing your url in the Integration page of your App 
 
 ## Receiving Webhooks
 
-The JWT signed base64 string will be sent as plaintext raw in the POST body. Auth0 has libraries for most popular languages to help speed up integrations: [https://jwt.io/#libraries-io](https://jwt.io/#libraries-io)
+**Payload Details**
+
+``` text
+content type: text/plain
+body: JWT signed base64 string sent as plaintext raw in the POST body
+```
+Auth0 has libraries for most popular languages to help speed up integrations that interact with JWTs: [https://jwt.io/#libraries-io](https://jwt.io/#libraries-io)
+
+
+**Validation**
 
 You should always verify that the JWT issuer is 'Vendasta Marketplace', or 'Vendasta Marketplace Test' for webhooks sent using the Vendor Center testing tool. For verifying any JWT's sent to your endpoints by Vendasta, the public key for the Vendasta Marketplace is:
 
@@ -26,7 +35,20 @@ uC4SYhRy1dsBQ0S8SgcNQR4hBsx5UxERE8uknBW1TtvoyaqMp/HNWZRCNnuDNcfH
 -----END PUBLIC KEY-----
 ```
 
-## Timing
+You can quickly test whether a token's signature is valid using the [jwt.io debugger](https://jwt.io) used in Step 1. Enter the Marketplace Public key into the public key box on the right, and then re-paste the token into the Encode text area. You will see the graphic below change to 'Signature Verified'.
+
+
+**Testing**
+
+The best way to initially test receiving a purchase payload from Vendasta is to use the Testing Page in Vendor Center. The Testing Page will load the Purchase Webhook URLs you have entered in the Integration Page by default, but you can set them to whatever url you would like.
+
+For your first test, try a service like [Webhook.Site](https://webhook.site) or [RequestBin by Pipedream](https://requestbin.com/). Copy the unique url they give, and enter it into the on the testing page, and select "SEND TEST APP WEBHOOK":
+
+![](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/10/webhooktesting.jpg)
+
+Review the results on the Webhook Tester page. It will have received a dummy payload. To see the contents, place the JWT token into the Encoded text area of the [jwt.io debugger](https://jwt.io). You will see that it indicates that you have an Invalid Signature since no Public Key is in place yet.
+
+## Webhook Timing
 If your App has Add-ons configured, and the App is activated at the same time as one or more Add-ons, the webhook for the parent App will always arrive first. Payloads to your configured endpoint of any subsequent Add-ons on the order will arrive as little as 500ms apart. This is regardless of whether this was multiple instances of a multi-purchasable Add-on, or activations of seperate Add-ons.
 
 ### Message Delivery Failure

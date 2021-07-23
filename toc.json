@@ -16,16 +16,6 @@
       },
       {
          "type":"item",
-         "title":"Calling the Marketplace API",
-         "uri":"docs/Getting Started/calling_mp_api.md"
-      },
-      {
-         "type":"item",
-         "title":"Receiving a Marketplace Payload",
-         "uri":"docs/Getting Started/receive_mp_payload.md"
-      },
-      {
-         "type":"item",
          "title":"Integration Requirement Checklist",
          "uri":"docs/Appendix/integration_requirements.md"
       },
@@ -55,7 +45,16 @@
       },
       {
          "type":"divider",
-         "title":"Marketplace REST APIS"
+         "title":"WEBHOOKS"
+      },
+      {
+         "type":"item",
+         "title":"Marketplace Webhooks",
+         "uri":"reference/marketplace_webhooks.md"
+      },
+      {
+         "type":"divider",
+         "title":"AUTHENTICATION"
       },
       {
          "type":"item",
