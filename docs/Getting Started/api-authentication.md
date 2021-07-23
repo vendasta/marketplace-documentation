@@ -90,7 +90,7 @@ Example of a JWT in plain text
 Example of the same JWT in over the wire format - encoded in url safe base 64.
 
 ```base64
-eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiAiTVAtMTIzIiwiZXhwIjogMTMyODU1NDM4NSwiaWF0IjogMTMyODU1MDc4NX0=.Adq0I54p0qEc_ioLz2zzhQRaGBcAE7Hf7aslSGW_cJ5fyBkQWeqniCtM6SzxzI0f2k2qk7PLSFNIUJkLlTzte6fyF_JZ8_97meNpFnHWQe_WJilrogLYopqftaB-59Vm-5tMuaKKR8A3oKTLwiLBqrYKaiZEtSaAq5souI2Ttgo
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiAiTVAtMTIzIiwiZXhwIjogMTMyODU1NDM4NSwiaWF0IjogMTMyODU1MDc4NX0.Adq0I54p0qEc_ioLz2zzhQRaGBcAE7Hf7aslSGW_cJ5fyBkQWeqniCtM6SzxzI0f2k2qk7PLSFNIUJkLlTzte6fyF_JZ8_97meNpFnHWQe_WJilrogLYopqftaB-59Vm-5tMuaKKR8A3oKTLwiLBqrYKaiZEtSaAq5souI2Ttgo
 ```
 
 You can validate the JWT with the following public key(this example won't validate as the issuer doesn't actually exist):

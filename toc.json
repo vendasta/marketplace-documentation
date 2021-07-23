@@ -1,13 +1,86 @@
 {
-  "items": [
-    {
-      "type": "divider",
-      "title": "Getting Started"
-    },
-    {
-      "type": "item",
-      "title": "Overview",
-      "uri": "docs/Overview/getting-started.md"
-    }
-  ]
+   "items":[
+      {
+         "type":"divider",
+         "title":"Getting Started"
+      },
+      {
+         "type":"item",
+         "title":"Overview",
+         "uri":"docs/Getting Started/getting_started.md"
+      },
+      {
+         "type":"item",
+         "title":"Configuring your Products and Services",
+         "uri":"docs/Getting Started/offerings.md"
+      },
+      {
+         "type":"item",
+         "title":"Calling the Marketplace API",
+         "uri":"docs/Getting Started/calling_mp_api.md"
+      },
+      {
+         "type":"item",
+         "title":"Receiving a Marketplace Payload",
+         "uri":"docs/Getting Started/receive_mp_payload.md"
+      },
+      {
+         "type":"item",
+         "title":"Integration Requirement Checklist",
+         "uri":"docs/Appendix/integration_requirements.md"
+      },
+      {
+         "type":"divider",
+         "title":"Integration Guide"
+      },
+      {
+         "type":"item",
+         "title":"Requirement 1: Provisioning Workflow",
+         "uri":"docs/Guides/purchase_workflow.md"
+      },
+      {
+         "type":"item",
+         "title":"Requirement 2: SSO (OAuth2 3-Legged Flow)",
+         "uri":"docs/Guides/oauth2.md"
+      },
+      {
+         "type":"item",
+         "title":"Requirement 3: End User Communication",
+         "uri":"docs/Guides/activity_stream.md"
+      },
+      {
+         "type":"item",
+         "title":"Requirement 4: Reporting",
+         "uri":"docs/Guides/reporting.md"
+      },
+      {
+         "type":"divider",
+         "title":"Marketplace REST APIS"
+      },
+      {
+         "type":"item",
+         "title":"API Authentication",
+         "uri":"docs/Getting Started/api-authentication.md"
+      },
+      {
+         "type":"item",
+         "title":"Marketplace v1 API",
+         "uri":"reference/marketplace-api.yaml"
+      },
+      {
+         "type":"divider",
+         "title":"APPENDIX"
+      },
+      {
+         "type":"group",
+         "title":"Legacy Documents",
+         "items":[
+            {
+               "type":"item",
+               "title":"Session Transfer Introduction",
+               "uri":"docs/Appendix/Legacy Documents/session_transfer.md"
+            }
+         ]
+      }
+   ]
 }
