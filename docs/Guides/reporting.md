@@ -45,8 +45,7 @@ Example:
     "value": "19/45",
     "change": "1",
     "initial_value": "30",
-    "format": "FRACTION",
-    "created_on": "2018-05-28"
+    "format": "FRACTION"
 }
 ```
 
@@ -327,7 +326,7 @@ Submit tests for the previous period, whether monthly or weekly. If you are subm
 {
    "category":"WEBSITE",
    "account_id":"AG-RN53F9WD",
-   "report_date":"2018-05-27",
+   "report_date":"2021-07-25",
    "report_data":[
       {
          "template_type":"NUMBER_WITH_CHANGE",
@@ -339,8 +338,7 @@ Submit tests for the previous period, whether monthly or weekly. If you are subm
          "value":"19/45",
          "change":"1",
          "initial_value":"30",
-         "format":"FRACTION",
-         "created_on":"2018-05-28"
+         "format":"FRACTION"
       },
       {
          "template_type":"INFO_LIST",
@@ -352,7 +350,7 @@ Submit tests for the previous period, whether monthly or weekly. If you are subm
             {
                "header":"Bing",
                "body":"Previous Status: Data In Progress",
-               "footer":"Jan 14, 2017",
+               "footer":"Jan 14, 2021",
                "info_text":"Data Synced ",
                "info_text_color":"GREEN",
                "info_text_icon":"check_circle",
@@ -361,7 +359,7 @@ Submit tests for the previous period, whether monthly or weekly. If you are subm
             {
                "header":"Cars.com",
                "body":"Data is claimed by others. Here are steps you could take....",
-               "footer":"Jan 14, 2017",
+               "footer":"Jan 14, 2021",
                "info_text":"Data Claimed ",
                "info_text_color":"YELLOW",
                "info_text_icon":"warning",

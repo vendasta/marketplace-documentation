@@ -1,14 +1,12 @@
 # Activity Stream
 
-Communications with the end user will flow through the Vendasta Activity Stream API. Email notifications will be generated based on data pushed to Activity Stream, and managed on a per User basis from the Vendasta Business Center via the Vendasta Notification System *as stated in the Technical Requirements*.
+Communications with the end user will flow through the Vendasta Activity Stream API. Email notifications will be generated based on data pushed to Activity Stream, and managed on a per User basis from the Vendasta Business App via the Vendasta Notification System *as stated in the Technical Requirements*.
 
 ## What is the Activity Stream
 
-The Activity Stream resides in a Business Center User’s Dashboard. It allows Users to quickly see what’s happening in all the applications they have purchased from the Marketplace. It is also tied into our Notification System, so that anything that appears in the Stream can be pushed out through instant, or digest based emails. By default it will be pushed to all; Notification Recipients can then set their preferences individually.
+The Activity Stream resides in the Business App Inbox. It is a notification hub, which allows Users to quickly see what’s happening in all the applications they have purchased from the Marketplace within their Business Operating System - the Vendasta Business App.
 
-**The Activity Stream is important to your clients - and ours**
-
-Part of the power of the Vendasta platform is to centralize reporting, and provide notification management for the many products and services that our users and yours use on a daily basis. This centralized management is essential for supporting the many user types that have access to your applications through the Vendasta Business Center, and their different communication use cases. This is both an opportunity to display ROI for your clients, and to encourage them to log into the product for further details.
+It is also tied into our email Notification System. Anything that appears in the Stream can be pushed out through instant, or digest based emails which are **automatically branded for the Channel Partner**. By default it will be pushed to all users on the Account; Notification Recipients can then set their preferences individually.
 
 **What should be pushed to the Activity Stream**
 
@@ -16,28 +14,34 @@ This depends on what communication you regularly have with your end users. Curre
 
 **How the Activity Stream & Notification Emails Work**
 
+When an event occurs in a Vendor's Product that the users of the product should know about, the vendor would create an `Activity` representing that event within Vendasta.
+
 ![highlights](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/02/ActivityStream_HighLevel-1.png)
 
-The client communications that are pushed to the Activity Stream firstly appear in the Business Center Activity Stream page, filterable by ‘Activity Type’. This information will also go out to the Notification Recipients on the Account based on their email preferences.
+The end user communications that are pushed to the Activity Stream firstly appear in the Business App Activity Stream within the Inbox page, filterable by 'Activity Type'. This information will also go out to the Notification Recipients on the Account based on their email preferences.
 
-The Activity Type is essentially a Notification Category, that allows for filtering of all the ‘Activity’ that is occurring in a User’s different applications.
+The Activity Type is essentially a Notification Category, that allows for filtering of all the 'Activity' that is occurring in a User’s different applications.
 
 ![new](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/06/ActivityStreamNew.jpg)
 
 
 ## Implementation of the Activity Stream
 
-The Activity Stream serves as a Notification Hub for an Activity Stream in the Business Center Dashboard, while also driving the User Email Notification System.
+The Activity Stream serves as a Notification Hub for an Activity Stream in the Business App Dashboard, while also driving the User Email Notification System.
 
-View the Activity Stream Model in the [API Documentation](https://developers.vendasta.com/swaggerui#/activity/post_activity_)
+[View the Activity Stream Schema](/reference/marketplace-api.yaml/paths/~1activity~1/post)
+
+**UI Tile Body**
+
+TODO
 
 ### Filters
 
-The following fields are strings used as categories and filters. These fields ENUMS must be preconfigured by Vendasta with your required values before you can start using the Activity Stream API:
+The following fields are strings used as categories and filters. These fields ENUMS must be pre configured by Vendasta with your required values before you can start using the Activity Stream API:
 
 **“activity_type” ( required ) - Requires ENUM to be configured**
 
-The activity_type is displayed as a Category Header in the Activity Filter in Business Center, so should be a user friendly string. An activity_type should be configured for each type of Notification that will be pushed for an Application
+The activity_type is displayed as a Category Header in the Activity Filter in Business App, so should be a user-friendly string. An activity_type should be configured for each type of Notification that will be pushed for an Application
 
 ![Activity Type](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/06/ActivityStreamNew.jpg)
 
@@ -45,15 +49,6 @@ The activity_type is displayed as a Category Header in the Activity Filter in Bu
 
 Optional sub categories per "activity_type". These Activity sub categories don't show up in the Activity Stream filters, and only apply to the Notification System Emailing preferences.
 
-### Notification Settings
-
-Notification Settings only affect the emails sent out for a particular Activity Type, or Setting Tag, all Activities sent to the API will appear in the Activity Stream. All Notifications emails are on by default. Users can edit their preferences, or a Partner can bulk edit preferences for all their Users. Partners may add Reporting Only Users, that don't have access to the platform or Marketplace Products directly.
-
-*Notification Settings example from Vendasta’s Reputation Management Application:*
-
-![Notification Settings Example](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/06/Recent-Activity.jpg)
-
-*The Activity Type is "Mention". There are 7 settings_tags for the activitytype "Mention". In this example, a User would still see Somewhat Positive Mention Activities under the ‘Mention’ Category in their Activity Stream, but they would not receive emails for them in their ‘Daily Digest’ report, as the User has it disabled.*
 
 ## Drive Users into your product
 
@@ -61,7 +56,7 @@ Every Activity passed to the Activity Feed is passed with a link. When a User se
 
 ![Deep Linking](https://storage.googleapis.com/wordpress-www-vendasta/developers/2017/06/imageedit_1_7626234665.png)
 
-### Email Templates Options
+### Email Template Options
 
 Contact your Vendasta Representative if you desire email alert templates for your Activity to be structured differently than they are in the default templates seen below. We can use your existing email html templates if you have them, or work with you to create a new dynamic template, for both the Instant Emails, and the Daily Digest.
 

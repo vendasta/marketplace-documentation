@@ -7,17 +7,22 @@
       {
          "type":"item",
          "title":"Overview",
-         "uri":"docs/Getting Started/getting_started.md"
+         "uri":"docs/GettingStarted/getting_started.md"
       },
       {
          "type":"item",
          "title":"Configuring your Products and Services",
-         "uri":"docs/Getting Started/offerings.md"
+         "uri":"docs/GettingStarted/offerings.md"
+      },
+      {
+         "type":"item",
+         "title":"Pricing & Distribution",
+         "uri":"docs/GettingStarted/offerings.md"
       },
       {
          "type":"item",
          "title":"Integration Requirement Checklist",
-         "uri":"docs/Appendix/integration_requirements.md"
+         "uri":"docs/GettingStarted/integration_requirements.md"
       },
       {
          "type":"divider",
@@ -35,13 +40,13 @@
       },
       {
          "type":"item",
-         "title":"Requirement 3: End User Communication",
-         "uri":"docs/Guides/activity_stream.md"
+         "title":"Requirement 3: Reporting",
+         "uri":"docs/Guides/reporting.md"
       },
       {
          "type":"item",
-         "title":"Requirement 4: Reporting",
-         "uri":"docs/Guides/reporting.md"
+         "title":"Requirement 4: End User Communication",
+         "uri":"docs/Guides/activity_stream.md"
       },
       {
          "type":"divider",
@@ -59,7 +64,7 @@
       {
          "type":"item",
          "title":"API Authentication",
-         "uri":"docs/Getting Started/api-authentication.md"
+         "uri":"reference/api-authentication.md"
       },
       {
          "type":"item",
