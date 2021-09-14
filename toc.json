@@ -17,7 +17,7 @@
       {
          "type":"item",
          "title":"Pricing & Distribution",
-         "uri":"docs/GettingStarted/offerings.md"
+         "uri":"docs/GettingStarted/pricing-and-distribution.md"
       },
       {
          "type":"item",
@@ -59,7 +59,7 @@
       },
       {
          "type":"divider",
-         "title":"AUTHENTICATION"
+         "title":"API"
       },
       {
          "type":"item",

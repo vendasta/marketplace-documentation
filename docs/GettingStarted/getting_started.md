@@ -42,11 +42,11 @@ Insert the Vendasta Business App Navigation Bar into your Product via a simple J
 
 **3) Reporting & Proof of Performance**
 
-All Vendor offerings with applicable data are required to upload analytics and attribution metrics to highlight their product's ROI in the Vendasta [Executive Report](./reporting.md). This helps keep your product top of mind, and drives users back into the product via deep linking.
+All Vendor offerings with applicable data are required to upload analytics and attribution metrics to highlight their product's ROI in the Vendasta [Executive Report](../Guides/reporting.md). This helps keep your product top of mind, and drives users back into the product via deep linking.
 
 **4) Communication**
 
-Communication with end users will flow through the Vendasta [Activity Stream](./activity_stream.md), a component of the Business App Inbox. The Activity Stream sends emails automatically to all subscribed users. Vendors may use Vendasta provided templates, or may provide their own templates to automatically be wrapped in each Channel Partner's branding. _Vendors may not send any emails to end users directly. To support platform unity, and Channel Partner branding or whitelabelling, all end user communication must come through the Vendasta Platform._
+Communication with end users will flow through the Vendasta [Activity Stream](../Guides/activity_stream.md), a component of the Business App Inbox. The Activity Stream sends emails automatically to all subscribed users. Vendors may use Vendasta provided templates, or may provide their own templates to automatically be wrapped in each Channel Partner's branding. _Vendors may not send any emails to end users directly. To support platform unity, and Channel Partner branding or whitelabelling, all end user communication must come through the Vendasta Platform._
 
 **5) CRM syncing**
 
@@ -88,7 +88,7 @@ There are several Vendasta dashboards, which we call 'Centers', that you will in
 
 ![Partner Center](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/partner_center_activation-1000.png)
 
-_To learn more about Partner Center visit our [Support Center](https://support.vendasta.com/hc/en-us/categories/360000719993-Partner-Center)_
+_To learn more about Partner Center visit our [Support Center](https://support.vendasta.com/hc/en-us/categories/4406956996375-Partner-Center)_
 
 <!-- theme: info -->
 >* Manage Admin platform access for your team
@@ -100,8 +100,6 @@ _To learn more about Partner Center visit our [Support Center](https://support.v
 ### Vendor Center
 ![Vendor Center](https://storage.googleapis.com/wordpress-www-vendasta/developers/2021/vendor_center_2021_1000.png)
 
-_To learn more about Vendor Center visit our [Support Center](https://support.vendasta.com/hc/en-us/categories/360001580013-Vendor-Center)_
-
 <!-- theme: info -->
 >* Create Products
 >* Configure and manage Products
@@ -112,7 +110,7 @@ _To learn more about Vendor Center visit our [Support Center](https://support.ve
 ### Whitelabelled Business App
 ![Whitelabelled Business App](https://storage.googleapis.com/wordpress-www-vendasta/developers/2021/business_app_2021_1000.png)
 
-_To learn more about Business App visit our [Support Center](https://support.vendasta.com/hc/en-us/categories/360000716114-Business-Center)_
+_To learn more about Business App visit our [Support Center](https://support.vendasta.com/hc/en-us/categories/4406956997015-Business-App)_
 
 <!-- theme: info -->
 >* Test Single Sign On into your Product
