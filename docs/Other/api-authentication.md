@@ -47,8 +47,8 @@ _This is broken down below_
 The header consists of the type of the token, which in our case will always be “JWT”. The other part is the hashing algorithm, which in our case will always be “RS256”.
 ```json
 {
-		"typ": "JWT",
-		"alg": "RS256"
+  "typ": "JWT",
+  "alg": "RS256"
 }
 ```
 
@@ -83,15 +83,14 @@ Sign the encoded format with SHA256withRSA (also known as RSASSA-PKCS1-V1_5-SIGN
 
 Example of a JWT in plain text
 
-```text
-{"alg": "RS256","typ": "JWT"}.{"iss": "MP-123","exp": 1328554385,"iat": 1328550785}.EkN-DOsnsuRjRO6BxXemmJDm3HbxrbRzXglbN2S4sOkopdU4IsDxTI8jO19W_A4K8ZPJijNLis4EZsHeY559a4DFOd50_OqgHGuERTqYZyuhtF39yxJPAjUESwxk2J5k_4zM3O-vtd1Ghyo4IbqKKSy6J9mTniYJPenn5-HIirE
-```
+
+> {"alg": "RS256","typ": "JWT"}.{"iss": "MP-123","exp": 1328554385,"iat": 1328550785}.EkN-DOsnsuRjRO6BxXemmJDm3HbxrbRzXglbN2S4sOkopdU4IsDxTI8jO19W_A4K8ZPJijNLis4EZsHeY559a4DFOd50_OqgHGuERTqYZyuhtF39yxJPAjUESwxk2J5k_4zM3O-vtd1Ghyo4IbqKKSy6J9mTniYJPenn5-HIirE
 
 Example of the same JWT in over the wire format - encoded in url safe base 64.
 
-```base64
 eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiAiTVAtMTIzIiwiZXhwIjogMTMyODU1NDM4NSwiaWF0IjogMTMyODU1MDc4NX0.Adq0I54p0qEc_ioLz2zzhQRaGBcAE7Hf7aslSGW_cJ5fyBkQWeqniCtM6SzxzI0f2k2qk7PLSFNIUJkLlTzte6fyF_JZ8_97meNpFnHWQe_WJilrogLYopqftaB-59Vm-5tMuaKKR8A3oKTLwiLBqrYKaiZEtSaAq5souI2Ttgo
-```
+
+
 
 You can validate the JWT with the following public key(this example won't validate as the issuer doesn't actually exist):
 
