@@ -26,7 +26,7 @@ If you want your Product distributed in the Vendasta Marketplace, then there are
 
 **1) Order Acceptance**
 
-Vendasta provides webhooks and emails that Vendors must use to manage orders, cancellations, and modifications for their Product's subscriptions and provisioning.
+Vendasta provides webhooks and emails that Vendors will use to manage orders, cancellations, and modifications for their Product's subscriptions and provisioning.
 
 **2) Single Sign On (SSO)**
 

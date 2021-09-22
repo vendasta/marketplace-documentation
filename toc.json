@@ -49,6 +49,22 @@
          "uri":"docs/Guides/activity_stream.md"
       },
       {
+      "type": "group",
+      "title": "Requirement 4: End User Communication",
+      "items": [
+        {
+          "type": "item",
+          "title": "Activity Stream Overview",
+          "uri": "docs/Guides/activity_stream_overview.md"
+        },
+        {
+          "type": "item",
+          "title": "Activity Stream Implementation",
+          "uri": "docs/Guides/activity_stream_implementation.md"
+        }
+      ]
+    },
+      {
          "type":"divider",
          "title":"WEBHOOKS"
       },
