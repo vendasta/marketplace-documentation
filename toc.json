@@ -58,7 +58,7 @@
           "uri": "docs/Guides/activity_stream_implementation.md"
         }
       ]
-    },
+      },
       {
          "type":"divider",
          "title":"WEBHOOKS"
@@ -66,7 +66,7 @@
       {
          "type":"item",
          "title":"Marketplace Webhooks",
-         "uri":"reference/marketplace_webhooks.md"
+         "uri":"docs/Other/marketplace_webhooks.md"
       },
       {
          "type":"divider",
@@ -75,7 +75,7 @@
       {
          "type":"item",
          "title":"API Authentication",
-         "uri":"reference/api-authentication.md"
+         "uri":"docs/Other/api-authentication.md"
       },
       {
          "type":"item",
