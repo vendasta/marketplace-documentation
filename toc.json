@@ -44,11 +44,6 @@
          "uri":"docs/Guides/reporting.md"
       },
       {
-         "type":"item",
-         "title":"Requirement 4: End User Communication",
-         "uri":"docs/Guides/activity_stream.md"
-      },
-      {
       "type": "group",
       "title": "Requirement 4: End User Communication",
       "items": [

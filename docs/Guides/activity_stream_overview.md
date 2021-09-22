@@ -8,12 +8,12 @@ The Activity Stream is a notification distribution system, which allows Users to
 
 It is also tied into our email Notification System. Anything that appears in the Stream can be pushed out through instant, or digest based emails which are **automatically branded for the Channel Partner**. By default it will be pushed to all users on the Account; Notification Recipients can then set their preferences individually.
 
-**What should be pushed to the Activity Stream**
+## What should be pushed to the Activity Stream
 
 The Activity Stream is for Account Level notifications that will go to all users on the account. So what should be sent depends on what notifications you already regularly send to your end users. This is not for messaging to Partner Resellers.
 Basic HTML is supported by the `content` field and will render appropriately on the Activity Cards in the UI, but if you have more media heavy reports, you may want to send a message with a link to the report. Even if you don’t have any regular communications we recommend setting up both a welcome message, and a generic Activity Type for any one off communication needs.
 
-**How the Activity Stream & Notification Emails Work**
+## How the Activity Stream & Notification Emails Work
 
 When an event occurs in a Vendor's Product that the users of the product should know about, the vendor would create an `Activity` representing that event within Vendasta.
 

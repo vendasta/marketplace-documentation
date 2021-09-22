@@ -23,7 +23,7 @@ The `link` is a required field. When a User selects ‘View’, it calls the App
 
 ![Deep Linking](https://storage.googleapis.com/wordpress-www-vendasta/developers/2017/06/imageedit_1_7626234665.png)
 
-### Email Template Options
+## Email Template Options
 
 Contact your Vendasta Representative if you desire email alert templates for your Activity to be structured differently than they are in the default templates seen below. We can use your existing email html templates if you have them, or work with you to create a new dynamic template, for both the Instant Emails, and the Daily Digest.
 
