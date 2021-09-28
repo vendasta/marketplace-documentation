@@ -243,7 +243,7 @@ paths:
                   description: 'A unique account ID that can be used to identify and reference an account. IF NOT PROVIDED, use  Associate Customer IDs to add after the fact.'
                 id:
                   type: string
-                  description: A unique ID that can be used to identify and reference a customer. Each app may define their own ID coorisponding to the ID in their system.
+                  description: A unique ID that can be used to identify and reference a customer. Each app may define their own ID corresponding to the ID in their system.
                 email:
                   type: array
                   description: Email address
