@@ -2,6 +2,8 @@ openapi: 3.0.0
 servers:
   - url: 'https://developers.vendasta.com/api/v1'
     description: Production Server
+  - url: 'https://marketplace-proxy-demo.vendasta-internal.com/api/v1'
+    description: Demo Server
 info:
   version: '1.0'
   title: Vendasta Marketplace API V1 Endpoints
@@ -235,25 +237,23 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - account_id
               properties:
                 account_id:
                   type: string
                   description: 'A unique account ID that can be used to identify and reference an account. IF NOT PROVIDED, use  Associate Customer IDs to add after the fact.'
                 id:
                   type: string
-                  description: A unique ID that can be used to identify and reference a customer.
+                  description: A unique ID that can be used to identify and reference a customer. Each app may define their own ID corresponding to the ID in their system.
                 email:
-                  items:
-                    type: string
                   type: array
                   description: Email address
-                phone:
                   items:
                     type: string
+                phone:
                   type: array
                   description: 'Phone number - Must be in [E164](https://www.twilio.com/docs/glossary/what-e164) format'
+                  items:
+                    type: string
                 address:
                   type: string
                   description: Address
@@ -281,6 +281,8 @@ paths:
                 assigned_rep_last_name:
                   type: string
                   description: Last name of the Rep/Salesperson associated with customer
+              required:
+                - account_id
         required: true
   /customer/list-customers:
     post:
@@ -322,9 +324,6 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - account_id
-                - token
               properties:
                 account_id:
                   type: string
@@ -334,14 +333,16 @@ paths:
                   description: Amount of results per page
                 cursor:
                   type: string
-                  description: Cursor
+                  description: If your prior request returned the maximum number of records allowed by `page_size` the response will have included a cursor value that can be provided here to get the next batch.
                 sort_options:
                   $ref: '#/components/schemas/sort_options'
                 search_term:
                   type: string
-                  description: Search term
+                  description: 'When provided the list of customers will be filtered to only those where the search term is found in one of the `first_name`, `last_name`, `email` or `phone` fields. '
                 filters:
                   $ref: '#/components/schemas/filters'
+              required:
+                - account_id
         required: true
   /customer/get-customer:
     post:
@@ -1174,14 +1175,26 @@ components:
       scheme: bearer
   schemas:
     sort_options:
-      properties:
-        direction:
-          type: integer
-          description: '0 = Ascending, 1 = Descending'
-        field:
-          type: integer
-          description: '0 = Sort on Name, 1 = Sort on Created time'
       type: object
+      description: Optionally specify a field to sort the results by and a direction
+      properties:
+        field:
+          type: string
+          description: Which field should the list be sorted on?
+          enum:
+            - Name
+            - Created
+            - FirstName
+            - LastName
+        direction:
+          type: string
+          description: What direction should the field be sorted in?
+          enum:
+            - Ascending
+            - Descending
+      required:
+        - field
+        - direction
     pending_activation:
       type: object
       properties:
@@ -1196,13 +1209,35 @@ components:
         created_date:
           type: string
     filters:
+      type: object
       properties:
         source:
+          type: array
+          description: Only include contacts that were created from one of the specified app ids.
           items:
             type: string
+            example: MP-QGFFBCCZMLQPZ5F8HTKGKPSV3P3STGKV
+        created:
+          type: object
+          description: Only return contacts that were created between the specified times.
+          properties:
+            begin_range:
+              type: string
+              format: date-time
+            end_range:
+              type: string
+              format: date-time
+        tag:
           type: array
-      type: object
+          description: Only return contacts with at least one of the specified tags. See `nagate_tags`.
+          items:
+            type: string
+        negate_tags:
+          type: boolean
+          description: When true contacts who have any of the specified tags will not be returned.
+          default: false
     return_customer:
+      type: object
       properties:
         city:
           type: string
@@ -1216,22 +1251,23 @@ components:
           type: string
         customer_id:
           type: string
+          description: The platform assigned ID used to identify this contact record.
         phone:
+          type: array
           items:
             type: string
-          type: array
         state:
           type: string
         address:
           type: string
         email:
+          type: array
           items:
             type: string
-          type: array
         origins:
+          type: array
           items:
             type: string
-          type: array
         assigned_rep_first_name:
           type: string
         assigned_rep_last_name:
@@ -1239,8 +1275,10 @@ components:
         permission_to_contact:
           type: string
           format: date-time
+          description: The last time the contact granted permission to contact them.
         vendor_customer_id:
           type: string
+          description: The ID you specified when creating the contact. This will likely coorispond to an ID in your system. If not provided it will be set to the `customer_id`.
         created:
           type: string
           format: date-time
@@ -1250,7 +1288,6 @@ components:
         deleted:
           type: string
           format: date-time
-      type: object
     executive_report_data:
       required:
         - template_type
