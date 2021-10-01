@@ -1275,7 +1275,7 @@ components:
         permission_to_contact:
           type: string
           format: date-time
-          description: The last time the contact granted permission to contact them.
+          description: The last time the product or business indicated that this contact granted them permission to contact them.
         vendor_customer_id:
           type: string
           description: The ID you specified when creating the contact. This will likely coorispond to an ID in your system. If not provided it will be set to the `customer_id`.
