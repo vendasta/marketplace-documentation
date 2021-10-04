@@ -1,6 +1,6 @@
 # Session Transfer Introduction
 
-_Our previous session transfer implementation has been deprecated in favor of [OAuth2](/vendors/oauth2). Please use OAuth2 going forward._
+_Our previous session transfer implementation has been deprecated in favor of [OAuth2](docs/Guides/oauth2.md). Please use OAuth2 going forward._
 
 Seamless Session Transfer is one of the most important components of any Marketplace application. It ensures a seamless flow from the Vendasta Marketplace to the application and back again. Marketplace Applications are only permitted to use the user’s session to store the user’s ID and locale. Any other information must be available in the URL itself, which will produce a contextual url which can identify the target resource if a User bookmarks the url, or accesses it in an unauthenticated manner.
 

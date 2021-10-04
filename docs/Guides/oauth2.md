@@ -1,20 +1,5 @@
 # Vendasta Identity and API access via OAuth2 3-Legged Flow
 
-* [Overview](#overview)
-* [Configuring your integration in Vendor Center](#configuring-your-integration-in-vendor-center)
-* [Implementing Client-side OAuth2 in your app](#implementing-client-side-oauth2-in-your-app)
-  * [Client Configuration](#client-configuration)
-    * [Contextualizing your Auth URL](#contextualizing-your-auth-url)
-  * [Prompts](#prompts)
-  * [Backend Clients:](#backend-clients)
-  * [Frontend Clients:](#frontend-clients)
-  * [Scopes](#scopes)
-  * [Special Scopes](#special-scopes)
-  * [Access Tokens](#access-tokens)
-  * [ID Tokens](#id-tokens)
-  * [Refresh Tokens](#refresh-tokens)
-  * [User Info Endpoint](#user-info-endpoint)
-
 ## Overview
 
 This guide aims to help you configure your application to use Vendasta’s Identity Gateway as an Identity Provider for your application. This will allow you to identify users entering your application from the Vendasta platform and will allow you to call Vendasta APIs on their behalf.
@@ -30,9 +15,14 @@ This guide is for implementing a **3-legged OAuth** flow. The distinction betwee
 
 ## Configuring your integration in Vendor Center
 
-Your integration is configured in Vendor Center, under Integration > SSO Settings, including the entry URL,   logout URL, and OAuth2 configuration which will provide the client ID and client secret.
+Your integration is configured in Vendor Center, under Integration > SSO Settings, including the Entry URL, Logout URL, and OAuth2 configuration which will provide the client ID and client secret.
 
 ![Session Settings Diagram](https://storage.googleapis.com/wordpress-www-vendasta/developers/2021/SSO_settings.png)
+
+|                                  |                                                                                                                    |
+|----------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| **Entry URL**                       | User is redirected to this url when they click on the Product icon in the End User dashboard. The account_id is injected into the placeholder on the url, and should be passed on to the Authorization URL to trigger the start of SSO. |
+| **Logout URL**            | Eventually will be used to trigger service provider logout. For now Vendors can stick to handling sessions within their own app, and not worry about syncing logout with Business App.  |
 
 ## Implementing Client-side OAuth2 in your app
 
@@ -77,11 +67,11 @@ In the case that you have a partner ID, you may use it in place of an account id
 
 Our Authorization URL supports each of the following values for the `prompt` query parameter
 
-|             |                                                                                                                                                                                                                                                                                |
-|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|||
+|-------------|--------------------------|
 | **none**    | Do not prompt the user for consent or to log in. Will result in an error if the user does not have an active session or has not previously provided consent. This is useful for acquiring fresh tokens for a user who has logged in recently and likely has an active session. |
-| **login**   | Prompt the user to log in, ignoring an existing session if one exists.                                                                                                                                                                                                         |
-| **consent** | Prompt the user to provide consent for accessing the requested scopes. `prompt=consent` is required when requesting the `offline_access` scope.                                                                                                                                |
+| **login**   | Prompt the user to log in, ignoring an existing session if one exists.  |
+| **consent** | Prompt the user to provide consent for accessing the requested scopes. `prompt=consent` is required when requesting the `offline_access` scope. |
 
 
 
@@ -105,8 +95,7 @@ Certain scopes have a special meaning, or are distinct from those used for API a
 |                  |                                                                                                                                                                       |
 |------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `openid`         | **Required:** this scope MUST be included when performing an OpenID connect flow.                                                                                     |
-| `offline_access` | This scope requests that a **refresh token** be returned to your application alongside your **access token**. See the **Refresh Token** section for more information. |
-| `email`          | Grants access to view a user’s email address using the **user-info** endpoint. See the **User Info Endpoint** section for more information.                           |
+| `offline_access` | This scope requests that a **refresh token** be returned to your application alongside your **access token**. See the **Refresh Token** section for more information. |                         |
 | `profile`        | Grants access to view a user’s name, locale, and Vendasta roles using the **user-info** endpoint. See the **User Info Endpoint** section for more information.        |
 
 ### Access Tokens
@@ -184,7 +173,7 @@ The amount of information returned is determined by the scopes which your applic
 
 |           |                                                                                                                                                                                                                                   |
 |-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `email`   | Include the user’s email address. Do not use a user's email address as an ID, as more than one user may have the same email address. Please use the `sub` field returned by the user-info endpoint to uniquely identify the user. |
+| `email`   | **Email is currently excluded from this implementation.** Please use the `sub` field returned by the user-info endpoint to uniquely identify the user. |
 | `profile` | Grants access to view a user’s name, locale, and Vendasta roles using the user-info endpoint. See the User Info Endpoint section for more information.                                                                            |
 | `openid`  | Include the User ID (a.k.a. `sub`), and namespace.                                                                                                                                                                                |
 
@@ -206,6 +195,59 @@ The amount of information returned is determined by the scopes which your applic
         "digital_agent",
         "smb"
     ],
-    "created_at": 1566245652
+    "created_at": 1566245652,
+    "product_navbar_data_url": "https://www.smblogin.com/api/user/U-b10e6de6-ee43-429c-ac26-b3cb81ef6f5f/products-navigation-bar-data/"
 }
 ```
+<div class="background-accent remember">
+
+**Security note**
+
+From OIDC spec point [5.3.2](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo) - "NOTE: Due to the possibility of token substitution attacks (see [Section 16.11](https://openid.net/specs/openid-connect-core-1_0.html#TokenSubstitution)), the UserInfo Response is not guaranteed to be about the End-User identified by the sub (subject) element of the ID Token. The sub Claim in the UserInfo Response MUST be verified to exactly match the sub Claim in the ID Token; if they do not match, the UserInfo Response values MUST NOT be used."
+
+</div>
+
+## Navigation Bar
+
+The Vendasta NavBar provides a seamless navigation experience for users to switch between your marketplace application, other applications, and their Business Center.  User logout will also be served by this bar, and hidden from your dashboard.
+
+![](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/03/NavBar2-1024x160.jpg)
+
+
+
+### Implementation
+
+Include the script tag below before the closing body tag of your HTML to allow for rendering of the Navigation bar. **All** the data- attributes in the script tag are required to be passed as when loading the application. The Navbar should load on every page of the application.
+
+It is recommended that you build the entire script tag before injecting it into the page rather than injecting the custom params individually. This will avoid a race condition where the script runs before the parameters are present, resulting in an empty navbar frame.
+
+**HTML TEMPLATE**
+
+```html
+<!-- include the following script tag before the closing body tag to render the navigation bar in your app -->
+<script src="//www.cdnstyles.com/static/product_navbar/v1/product_navbar.js"
+        data-url="{{ product_navbar_data_url }}"
+        data-account-id="{{ account_id }}"
+        data-app-id="{{ app_id }}">
+</script>
+
+OR if including target-element-class
+
+<!-- include the following script tag before the closing body tag to render the navigation bar in your app -->
+<script src="//www.cdnstyles.com/static/product_navbar/v1/product_navbar.js"
+        data-url="{{ product_navbar_data_url }}"
+        data-account-id="{{ account_id }}"
+        data-app-id="{{ app_id }}"
+        target-element-class="{{target_element_class}}">
+</script>
+```
+
+
+Script parameter details:
+
+|           |                                                                                                                                                                                                                                   |
+|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `vendasta.com/marketplace/product_navbar_data_url`   | This is the endpoint the product navbar script will use to retrieve the data to populate the Vendasta navigation bar. To be retrived via the OIDC User-Info endpoint. |
+| `data-account-id` | The unique ID for a Vendasta Account. This is passed to the Service Provider via the Entry URL.                                                                      |
+| `data-app-id`  | The unique ID for a Vendor Product. Found in the url when looking at Product details while in Vendor Center ![](https://storage.googleapis.com/wordpress-www-vendasta/developers/2021/app_id_location.png)|
+| `target-element-class(optional)`  | This field can help overcome css conflicts with the NavBar. It allows you to specify an element that has a **unique** class. If the element with this class exists on the page at the time the NavBar is called to render the bar, it will place the bar directly above the target element|

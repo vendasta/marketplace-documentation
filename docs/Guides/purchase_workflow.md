@@ -1,4 +1,4 @@
-# Activation Workflow
+# Provisioning Workflow
 
 An activation is considered to have been successful when a sku has been added to an _Account_ and the activation has been approved by the Vendor, or by Vendasta on behalf of the Vendor.
 
@@ -21,11 +21,11 @@ There are two steps to making a trial available to be activated.
 2. As a Channel Partner, set the Trial to be available in Business App via _Marketplace -> Manage Product -> App -> Product Settings_:
 ![Make Trial Available](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/trial_config_800.png)
 
-The Vendor is responsible for the trial's lifecycle, including:
+The Vendor is responsible for the trial lifecycle, including:
 
-1. What version of the product is activated for the duration of the trial
-2. Any communications via the [Activity Stream](/vendors/integration/activity-stream) with calls to action, informing users of the trials state, or when it ends
-3. Behavior after the trial ends 
+1. If Editions are used, informing Vendasta as to which Edition of the product should be trialed.
+2. Any communications via the [Activity Stream](/vendors/integration/activity-stream) with calls to action, informing users of the trials state, when it ends, and encouraging upgrades.
+3. Behavior after the trial ends.
 
 
 
@@ -33,7 +33,7 @@ The Vendor is responsible for the trial's lifecycle, including:
 
 There are many ways a sku can be activated. For testing purposes, the easiest method is via Partner Center
 
-Activate products from the "Account Details" screen. To access this page, go to Partner Center > Businesses > Accounts and click on the account name.
+Activate products from the "Account Details" screen. To access this page, go to [Partner Center > Businesses > Accounts](https://partners.vendasta.com/manage-accounts) and click on the account name.
 ![Activate Products](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/activation_route_800.png)
 
 Activation Options:
@@ -62,12 +62,18 @@ The Edition Change will trigger a purchase email to be sent, which will contain 
 
 An activation can be in one of 4 states for any given Account:
 
-|Lifecycle| Events
-| --------------|:----|
-|![Product Lifecycle Graphic](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/11/product_lifecycle3-296x300.png)|<ol><li>**Purchase Event:** An order has been completed, and the skus from the order have been [activated](https://support.vendasta.com/hc/en-us/articles/360033743333) on an Account.</li> <li>**Resolve Pending Activation Event:** Depending on the sku configuration, either Vendasta, or the Vendor confirms that the product is now active by calling the 'Resolve Pending Activation' endpoint in the Accounts API. This can be accomplished automatically via the API, or via the Vendor Center Accounts page -> Pending Activations(_this is hidden when there are no pending activations_).</li><li>**Cancellation Event:** A sku has been [canceled](https://support.vendasta.com/hc/en-us/articles/206621228) for a given Account, and the activation goes into a 'Pending Cancellation State'. This can be undone if the user changes their mind. **(Vendors are not currently alerted when a Cancellation Event occurs)**</li><li>**Deactivation Event:** Product is fully deactivated at the end of it's billing cycle if it is pending cancellation, or immediately upon cancellation if the sku _Billing Frequency_ is set to 'One Time'. </li></ol>
+![Product Lifecycle Graphic](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/11/product_lifecycle3-296x300.png)
 
-## Purchase Event Alert Options
-Notification of a purchase and the purchase data may be received by the Vendor via Webhook AND/OR Email. These notifications are triggered when your Product, or Add-on is activated on an Account
+**#1 Purchase Event:** An order has been completed, and the provisioning event triggered to be sent to the Vendor. There are multiple ways an activation could be triggered. It may be triggered by either a Reseller Admin, or a user from an end business. [Submitting an order as a Reseller Admin](https://support.vendasta.com/hc/en-us/articles/4406958134807) is the easiest way to test the triggering of an _Provisioning Event_.
+
+**#2 Resolve Pending Activation Event:** Depending on the sku configuration, either Vendasta, or the Vendor confirms that the product is now active by calling the 'Resolve Pending Activation' endpoint in the Accounts API. This can be accomplished automatically via the API, or via the Vendor Center Accounts page -> Pending Activations(_this is hidden when there are no pending activations_).
+
+**#3 Cancellation Event:** A sku has been [canceled](https://support.vendasta.com/hc/en-us/articles/206621228) for a given Account, and the activation goes into a _Pending De-Provisioning State_. This can be undone if the user changes their mind. Vendors may optionally subscribe to this event.
+
+**#4 Deactivation Event:** Product is fully deactivated at the end of it's billing cycle if it is pending cancellation, or immediately upon cancellation if the sku _Billing Frequency_ is set to 'One Time'.
+
+## Receiving order & provisioning events
+Notification of a purchase and the purchase data included in the message may be received by the Vendor via Webhook AND/OR Email. These notifications are triggered when your Product, or Add-on is activated on an Account
 
 <div class="background-accent remember">
 
