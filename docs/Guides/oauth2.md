@@ -183,6 +183,7 @@ The amount of information returned is determined by the scopes which your applic
 {
     "sub": "U-b10e6de6-ee43-429c-ac26-b3cb81ef6f5f",
     "email": "mary@example.com",
+    "email_verified": true,
     "namespace": "ABC",
     "name": "Mary Smith",
     "given_name": "Mary",
