@@ -190,12 +190,14 @@ The amount of information returned is determined by the scopes which your applic
     "family_name": "Smith",
     "locale": "en",
     "updated_at": 1611083679,
+    "namespace": "ABC",
     "roles": [
         "partner",
         "sales_person",
         "digital_agent",
         "smb"
     ],
+    "legacy_user_id": "UID-1234",
     "created_at": 1566245652,
     "product_navbar_data_url": "https://www.smblogin.com/api/user/U-b10e6de6-ee43-429c-ac26-b3cb81ef6f5f/products-navigation-bar-data/"
 }
