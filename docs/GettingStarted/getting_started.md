@@ -1,5 +1,5 @@
 # Getting Started
-Welcome to the Vendasta Marketplace Documentation!
+Welcome to the Vendasta Marketplace Documentation! 
 
 This Guide will cover the benefits of placing your offerings in the Vendasta Marketplace, take you through the Vendasta Dashboards that you will be working with, provide an overview of creating a Marketplace Offering, and detail the basic usage of the Marketplace API & Webhooks. 
 Once you've completed this section, you will be ready to move on to the Integration Guide, which will step through the [integration requirements](./integration_requirements.md) in more detail.
