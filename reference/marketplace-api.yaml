@@ -1635,6 +1635,8 @@ components:
           type: string
         email:
           type: string
+        email_verified:
+          type: boolean
         accounts:
           items:
             type: string
