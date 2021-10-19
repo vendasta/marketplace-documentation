@@ -2,61 +2,6 @@
 
 An activation is considered to have been successful when a sku has been added to an _Account_ and the activation has been approved by the Vendor, or by Vendasta on behalf of the Vendor.
 
-## Activation Types
-
-### Trial Activation
-Trials are currently activated via self serve in the Business App
-
-![Trial Activation](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/trial_800.png)
-
-<div class="background-accent info short">
-
-Trials will be sent on the purchase webhook with the `action` parameter set to _provisioned-trial_
-</div>
-
-There are two steps to making a trial available to be activated.
-
-1. As a Vendor, configure the Trial in Vendor Center. This is configured in the _Pricing & Trials_ section in the _App Info_ tab
-
-2. As a Channel Partner, set the Trial to be available in Business App via _Marketplace -> Manage Product -> App -> Product Settings_:
-![Make Trial Available](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/trial_config_800.png)
-
-The Vendor is responsible for the trial lifecycle, including:
-
-1. If Editions are used, informing Vendasta as to which Edition of the product should be trialed.
-2. Any communications via the [Activity Stream](/vendors/integration/activity-stream) with calls to action, informing users of the trials state, when it ends, and encouraging upgrades.
-3. Behavior after the trial ends.
-
-
-
-### Product or Add-on Activation
-
-There are many ways a sku can be activated. For testing purposes, the easiest method is via Partner Center
-
-Activate products from the "Account Details" screen. To access this page, go to [Partner Center > Businesses > Accounts](https://partners.vendasta.com/manage-accounts) and click on the account name.
-![Activate Products](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/activation_route_800.png)
-
-Activation Options:
-
-![Activation Example](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/product_activation_labels.png)
-
-<div class="background-accent info short">
-
-* Product, and Add-on purchases will be sent to their respective purchase webhooks with the `provisioned` action.
-* If you have configured _Editions_ then the `edition_id` will be populated in the purchase payload, and present in the purchase email.
-</div>
-
-### Edition Change
-
-![Edition Change](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/edition_change.gif)
-
-_Edition Change from Partner Center Account Details Page_
-
-<div class="background-accent info short">
-
-The Edition Change will trigger a purchase email to be sent, which will contain the `edition_id`, as well as the Purchase Webhook with the `change-edition` action.
-</div>
-
 
 ## Product Lifecycle
 
@@ -117,6 +62,62 @@ Apps & Add-ons have individual Purchase webhooks. Both of these Webhooks are con
 |`account-->id`| This is the unique Vendasta ID representing a Vendasta Account. There should be a 1:1 relationship between a Vendasta Account and an instance of the Vendor Product. This field has the key 'id', and is found within the account object in the purchase webhook json. |
 |`activation_id` | This is a unique activation tracking id, it will be required to [resolve a Pending Activation](https://developers.vendasta.com/swaggerui#/account/post_activation_resolve_).|
 |`order_form_submission_id` |This is a unique id for tracking order form data from an Activation.
+
+
+## Activation Types
+
+### Trial Activation
+Trials are currently activated via self serve in the Business App
+
+![Trial Activation](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/trial_800.png)
+
+<div class="background-accent info short">
+
+Trials will be sent on the purchase webhook with the `action` parameter set to _provisioned-trial_
+</div>
+
+There are two steps to making a trial available to be activated.
+
+1. As a Vendor, configure the Trial in Vendor Center. This is configured in the _Pricing & Trials_ section in the _App Info_ tab
+
+2. As a Channel Partner, set the Trial to be available in Business App via _Marketplace -> Manage Product -> App -> Product Settings_:
+![Make Trial Available](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/trial_config_800.png)
+
+The Vendor is responsible for the trial lifecycle, including:
+
+1. If Editions are used, informing Vendasta as to which Edition of the product should be trialed.
+2. Any communications via the [Activity Stream](/vendors/integration/activity-stream) with calls to action, informing users of the trials state, when it ends, and encouraging upgrades.
+3. Behavior after the trial ends.
+
+
+
+### Product or Add-on Activation
+
+There are many ways a sku can be activated. For testing purposes, the easiest method is via Partner Center
+
+Activate products from the "Account Details" screen. To access this page, go to [Partner Center > Businesses > Accounts](https://partners.vendasta.com/manage-accounts) and click on the account name.
+![Activate Products](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/activation_route_800.png)
+
+Activation Options:
+
+![Activation Example](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/product_activation_labels.png)
+
+<div class="background-accent info short">
+
+* Product, and Add-on purchases will be sent to their respective purchase webhooks with the `provisioned` action.
+* If you have configured _Editions_ then the `edition_id` will be populated in the purchase payload, and present in the purchase email.
+</div>
+
+### Edition Change
+
+![Edition Change](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/edition_change.gif)
+
+_Edition Change from Partner Center Account Details Page_
+
+<div class="background-accent info short">
+
+The Edition Change will trigger a purchase email to be sent, which will contain the `edition_id`, as well as the Purchase Webhook with the `change-edition` action.
+</div>
 
 ## Testing
 
