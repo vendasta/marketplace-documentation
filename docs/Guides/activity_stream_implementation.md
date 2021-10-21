@@ -1,6 +1,6 @@
 # Implementation of the Activity Stream
 
-[View the Activity Stream Schema](/reference/marketplace-api.yaml/paths/~1activity~1/post)
+[View the Activity Stream Schema](https://developers.vendasta.com/vendor/c2NoOjE2NTY5NDA3-activity)
 
 ## Filters
 
