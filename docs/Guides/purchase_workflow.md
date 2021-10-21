@@ -43,7 +43,7 @@ Purchase notification emails will always be sent to any recipients configured. Y
 
 _Vendor Center -> Product -> Product Info -> Product Activation->Notifications_
 
-![Add Notification Recipients](../../media/images/provisioning/notification_recipients.png)
+![Add Notification Recipients](../../assets/images/provisioning/notification_recipients.png)
 
 Activation email notifications can be sent in conjunction with the webhooks to keep your team in the loop. If your offering has a dashboard, and you are providing SSO it is not recommended to use email as the sole source of your product provisioning as it is a manual process. The email will contain the order form, but doesn't include all of the Account data that the webhook does.
 
@@ -57,41 +57,48 @@ See the [Webhooks Page](../Other/marketplace_webhooks.md) for details on the pay
 
 Apps & Add-ons have individual Purchase webhooks. Both of these Webhooks are configured on the Integration page of the Parent App. The Cancellation Webhook is an alert only, and no action is expected based on its optional receipt.
 
-![Purchase Webhook Configuration](../../media/images/provisioning/provisioning_config.png)
+![Purchase Webhook Configuration](../../assets/images/provisioning/provisioning_config.png)
 
 
+## Mapping Accounts
+
+Vendors are responsible for maintaining a mapping between the Vendasta Account, and the equivalent entity on their side.
+
+|Field| Description
+| --------------|:----|
+|`account-->id`| This is the unique Vendasta ID representing a Vendasta Account(typically an individual business location). There should be a 1:1 relationship between a Vendasta Account and an instance of the Vendor Product. This field has the key 'id', and is found within the account object in the purchase webhook json payload. |
+|`activation_id` | This is a unique activation tracking id, it will be required to resolve a Pending Activation.|
+|`order_form_submission_id` |This is a unique id for tracking order form data from an Activation.
 
 ## Possible Workflows
 
-It is recommended that if webhooks are being used to utilize the `Pending Activation Workflow`
+It is recommended that if webhooks are being used to utilize the _Pending Activation Workflow_
 
 This workflow is configured via the `Use "Pending Activation" workflow` checkbox in the _Product activation_ section of the _Product Info_ page.
 
 1) When the webhook is received always respond with a 200 indicating a successful response
+2) Execute whatever steps are needed to provision product
+3) Resolve the pending activation via the _Resolve a Pending Activation` API endpoint in the Accounts API.
 
-![Activation Workflow](https://storage.googleapis.com/wordpress-www-vendasta/developers/2019/Activation%20Workflow.png)
+</br>
 
-
-
-### Mapping Accounts
-
-|Field| Description
-| --------------|:----|
-|`action`|  _provision/de-provision/trial/change-edition_ The action field indicates which payload type you are receiving. The Purchase Webhook is sent for purchase and deactivation events, as well as for trial activations, and edition changes.|
-|`account-->id`| This is the unique Vendasta ID representing a Vendasta Account. There should be a 1:1 relationship between a Vendasta Account and an instance of the Vendor Product. This field has the key 'id', and is found within the account object in the purchase webhook json. |
-|`activation_id` | This is a unique activation tracking id, it will be required to [resolve a Pending Activation](https://developers.vendasta.com/swaggerui#/account/post_activation_resolve_).|
-|`order_form_submission_id` |This is a unique id for tracking order form data from an Activation.
-
+**Full Purchase Workflow**
+![Activation Workflow](../../assets/images/provisioning/activation_workflow.png)
 
 ## Activation Types
 
-### Trial Activation
-Trials are currently activated via self serve in the Business App
+The action field on the Purchase Webhook indicates which payload type you are receiving. 
 
-![Trial Activation](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/trial_800.png)
+`action`  _provision/de-provision/provisioned-trial/change-edition_
 
 <!-- theme: info -->
->Trials activations will be sent on the purchase webhook with the `action` parameter set to _provisioned-trial_
+>Note that Add-ons only have the _provisioned & de-provisioned_ actions, as they are not compatible with Editons or Trials.
+
+
+### Trial Activation
+Trials are currently activated from within in the Business App.
+
+![Trial Activation](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/trial_800.png)
 
 There are two steps to making a trial available to be activated.
 
@@ -130,11 +137,11 @@ Activation Options:
 _Edition Change from Partner Center Account Details Page_
 
 <!-- theme: info -->
->The Edition Change will trigger a purchase email to be sent, which will contain the `edition_id`, as well as the Purchase Webhook with the `change-edition` action.
+>The `edition_id` will be included in the data for whatever purchase notification is configured.
 
 ## Testing
 
-See the [Receiving Marketplace Payloads](/vendors/getting-started/receive-payload) page for details on using the testing tool in Vendor Center for sending mock activations. If you require order form data to provision your sku, you should test the activations from Partner Center, as the mock data will not suffice. 
+There is a testing tab on the far right for sending mock purchase data to your purchase urls. If you require order form data to provision your sku, you should test the activations from Partner Center, as the mock data will not suffice. 
 You can create as many test Accounts as you want in Partner Center, and activate and deactivate your own offerings as much as you desire.
 
 ---
