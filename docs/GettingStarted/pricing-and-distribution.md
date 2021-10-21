@@ -6,7 +6,7 @@ If you are a Software Vendor, an ISV, or a Channel Partner that wants to expand 
 
 There is a simple revenue share based on the wholesale price of your products. Options are available for Vendor transaction fees to be rendered by _**percentage of the wholesale price**_, or based on a reseller model, where Vendasta is considered a reseller of the Vendor product. Vendasta manages billing of Channel Partners for product activations, and dispenses payment to Vendor monthly.
 
-![product wholesale price](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/wholesaleprice.png)
+![product wholesale price](../../assets/images/pricing/wholesale_price.png)
 
 With this in mind, set your wholesale price and recommended retail so that Channel Partners are enticed to offer your product, and it has a healthy margin.  We recommend setting your wholesale price to allow Channel Partners at least 30% margin on the Recommended Retail Price. Remember, the higher the margin the more attractive it becomes for Channel Partners to sell.
 
@@ -14,7 +14,7 @@ For details on how to set up the pricing for your offerings, please review the P
 
 **Distribution**
 
-Once your Product has met all integration requirements, and has been reviewed and Productroved by Vendasta, your Product will be distributed to the Vendasta Channel Partner network to be discovered and sold.
+Once your Product has met all integration requirements, and has been reviewed and approved by Vendasta, your Product will be distributed to the Vendasta Channel Partner network to be discovered and sold.
 
 ---
 **Next:** [Requirements Checklist](./integration_requirements.md)
