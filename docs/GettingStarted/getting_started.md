@@ -46,7 +46,7 @@ All Vendor offerings with applicable data are required to upload analytics and a
 
 **4) Communication**
 
-Communication with end users will flow through the Vendasta [Activity Stream](https://developers.vendasta.com/vendor/ZG9jOjIxNzMyNTMx-activity-stream-overview), a component of the Business App Inbox. The Activity Stream sends emails automatically to all subscribed users. Vendors may use Vendasta provided templates, or may provide their own templates to automatically be wrapped in each Channel Partner's branding. _Vendors may not send any emails to end users directly. To support platform unity, and Channel Partner branding or whitelabelling, all end user communication must come through the Vendasta Platform._
+Communication with end users will flow through the Vendasta [Activity Stream](/vendor/activity-stream-overview), a component of the Business App Inbox. The Activity Stream sends emails automatically to all subscribed users. Vendors may use Vendasta provided templates, or may provide their own templates to automatically be wrapped in each Channel Partner's branding. _Vendors may not send any emails to end users directly. To support platform unity, and Channel Partner branding or whitelabelling, all end user communication must come through the Vendasta Platform._
 
 **5) CRM syncing**
 
