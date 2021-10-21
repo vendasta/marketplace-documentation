@@ -1,40 +1,49 @@
 # Provisioning Workflow
 
-An activation is considered to have been successful when a sku has been added to an _Account_ and the activation has been approved by the Vendor, or by Vendasta on behalf of the Vendor.
-
+``` mermaid
+flowchart LR
+  OA([Order Accepted])-->P(Purchases from Order sent to Vendor)
+  -->R(Pending Activation Resolved)-->A(Product Avaialble within Platform)
+```
 
 ## Product Lifecycle
 
 An activation can be in one of 4 states for any given Account:
 
-![Product Lifecycle Graphic](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/11/product_lifecycle3-296x300.png)
+``` mermaid
+flowchart LR
+  I([Inactive])--#1-->P(Pending Message Delivery)-->PV(Pending on Activation Resolution)--#2-->A(Active)--#3-->PD(Pending De-Provision - Cancelled)--#4-->I
+```
 
-**#1 Purchase Event:** An order has been completed, and the provisioning event triggered to be sent to the Vendor. There are multiple ways an activation could be triggered. It may be triggered by either a Reseller Admin, or a user from an end business. [Submitting an order as a Reseller Admin](https://support.vendasta.com/hc/en-us/articles/4406958134807) is the easiest way to test the triggering of an _Provisioning Event_.
+_*See [Activation Types](./purchase_workflow.md#activation-types) for details on all possible events_
 
-**#2 Resolve Pending Activation Event:** Depending on the sku configuration, either Vendasta, or the Vendor confirms that the product is now active by calling the 'Resolve Pending Activation' endpoint in the Accounts API. This can be accomplished automatically via the API, or via the Vendor Center Accounts page -> Pending Activations(_this is hidden when there are no pending activations_).
+**#1 Purchase Event:** An order has been approved, either automatically or by an Admin user, which triggers the provisioning event sending the configured purchase alerts for the skus purchased to the Vendor. There are multiple ways an activation could be triggered. It may be triggered by either a Reseller Admin, or a user from an end business. [Submitting an order as a Reseller Admin](https://support.vendasta.com/hc/en-us/articles/4406958134807) is the easiest way to test the triggering of a _Provisioning Event_.
+
+**#2 Resolve Pending Activation Event:** Depending on the sku configuration, either Vendasta, or the Vendor confirms that the product is now active by calling the 'Resolve Pending Activation' endpoint in the Accounts API. This can be accomplished automatically via the API, or via the Vendor Center Accounts page -> Pending Activations sub tab(_this is hidden when there are no pending activations_).
 
 **#3 Cancellation Event:** A sku has been [canceled](https://support.vendasta.com/hc/en-us/articles/206621228) for a given Account, and the activation goes into a _Pending De-Provisioning State_. This can be undone if the user changes their mind. Vendors may optionally subscribe to this event.
 
-**#4 Deactivation Event:** Product is fully deactivated at the end of it's billing cycle if it is pending cancellation, or immediately upon cancellation if the sku _Billing Frequency_ is set to 'One Time'.
+**#4 Deactivation Event:** A de-provison alert is sent to the Vendor. 
+* If the Product is in a pending de-provision state, then the product is fully deactivated at the end of it's billing cycle.
+* If the sku _Billing Frequency_ is set to 'One Time', de-provision event occurs immedialty after cancellation event.
+
+
+<!-- theme: warning -->
+>_Please Note:_
+>* An Add-on can only be active when its parent Product is active.
+>* When a product is deactivated, all of its Add-ons are automatically deactivated. 
+
 
 ## Receiving order & provisioning events
 Notification of a purchase and the purchase data included in the message may be received by the Vendor via Webhook AND/OR Email. These notifications are triggered when your Product, or Add-on is activated on an Account
-
-<div class="background-accent remember">
-
-_Please Note:_
-
-* An Add-on can only be active when its parent Product is active.
-* When a product is deactivated, all of its Add-ons are automatically deactivated.
-</div>
 
 ### Email Notification
 
 Purchase notification emails will always be sent to any recipients configured. You may add as many notification recipients as you like:
 
-_Vendor Center -> App -> App Info -> Product Activation->Notifications_
+_Vendor Center -> Product -> Product Info -> Product Activation->Notifications_
 
-![Add Notification Recipients](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/Notifications_800.png)
+![Add Notification Recipients](../../media/images/provisioning/notification_recipients.png)
 
 Activation email notifications can be sent in conjunction with the webhooks to keep your team in the loop. If your offering has a dashboard, and you are providing SSO it is not recommended to use email as the sole source of your product provisioning as it is a manual process. The email will contain the order form, but doesn't include all of the Account data that the webhook does.
 
@@ -42,17 +51,27 @@ Activation email notifications can be sent in conjunction with the webhooks to k
 
 The Purchase Webhooks will receive the basic data that is available on the Account, as well as the order form data if an order form is configured for the Application.
 
-See the [Webhooks Page](/vendors/web-hooks#product-purchase-hook) for details on the payloads. 
+See the [Webhooks Page](../Other/marketplace_webhooks.md) for details on the payloads.
 
-## Pending Activation & Possible Workflows
+**Configuration**
+
+Apps & Add-ons have individual Purchase webhooks. Both of these Webhooks are configured on the Integration page of the Parent App. The Cancellation Webhook is an alert only, and no action is expected based on its optional receipt.
+
+![Purchase Webhook Configuration](../../media/images/provisioning/provisioning_config.png)
+
+
+
+## Possible Workflows
+
+It is recommended that if webhooks are being used to utilize the `Pending Activation Workflow`
+
+This workflow is configured via the `Use "Pending Activation" workflow` checkbox in the _Product activation_ section of the _Product Info_ page.
+
+1) When the webhook is received always respond with a 200 indicating a successful response
 
 ![Activation Workflow](https://storage.googleapis.com/wordpress-www-vendasta/developers/2019/Activation%20Workflow.png)
 
-## Configuration
 
-Apps & Add-ons have individual Purchase webhooks. Both of these Webhooks are configured on the Integration page of the Parent App.
-
-![Purchase Webhook Configuration](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/11/PurchaseWebhooks.jpg)
 
 ### Mapping Accounts
 
@@ -71,10 +90,8 @@ Trials are currently activated via self serve in the Business App
 
 ![Trial Activation](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/trial_800.png)
 
-<div class="background-accent info short">
-
-Trials will be sent on the purchase webhook with the `action` parameter set to _provisioned-trial_
-</div>
+<!-- theme: info -->
+>Trials activations will be sent on the purchase webhook with the `action` parameter set to _provisioned-trial_
 
 There are two steps to making a trial available to be activated.
 
@@ -102,11 +119,9 @@ Activation Options:
 
 ![Activation Example](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/product_activation_labels.png)
 
-<div class="background-accent info short">
-
-* Product, and Add-on purchases will be sent to their respective purchase webhooks with the `provisioned` action.
-* If you have configured _Editions_ then the `edition_id` will be populated in the purchase payload, and present in the purchase email.
-</div>
+<!-- theme: info -->
+>* Product, and Add-on purchases will be sent to their respective purchase webhooks with the `provisioned` action.
+>* If you have configured _Editions_ then the `edition_id` will be populated in the purchase payload, and present in the purchase email.
 
 ### Edition Change
 
@@ -114,10 +129,8 @@ Activation Options:
 
 _Edition Change from Partner Center Account Details Page_
 
-<div class="background-accent info short">
-
-The Edition Change will trigger a purchase email to be sent, which will contain the `edition_id`, as well as the Purchase Webhook with the `change-edition` action.
-</div>
+<!-- theme: info -->
+>The Edition Change will trigger a purchase email to be sent, which will contain the `edition_id`, as well as the Purchase Webhook with the `change-edition` action.
 
 ## Testing
 
