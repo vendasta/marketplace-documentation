@@ -146,4 +146,4 @@ You can create as many test Accounts as you want in Partner Center, and activate
 
 ---
 
-**Next:** [Session Transfer](/vendors/integration/session-transfer)
+**Next:** [Session Transfer](oauth2.md)
