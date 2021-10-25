@@ -145,4 +145,4 @@ Add-ons do not currently have a versioning system. Any updates you make to your 
 
 ---
 
-**Next:** [Pricing & Distribution](https://developers.vendasta.com/vendor/ZG9jOjIxMDYwOTE0-pricing-and-distribution)
+**Next:** [Pricing & Distribution](pricing-and-distribution.md)
