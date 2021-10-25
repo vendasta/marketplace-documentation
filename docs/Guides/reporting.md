@@ -1,8 +1,5 @@
 # Executive Report
 
-<!-- theme: warning -->
->This is the documentation for the legacy Executive Report. There is a new system that will soon replace this one. **Please refer to the [vAnaltyics Alpha Documentation](https://docs.google.com/document/d/1PEQ42E-aCUBOLOTB8zgz8hHfNFKXXz39pDmQp5lvufI/edit#) for any new integrations.**
-
 ## Usage
 
 Depending on Vendor data availability the Executive Report may be populated for the weekly, and/or monthly periods. It is suggested to provide data for both the weekly & monthly periods to provide regular metrics as well as a higher level view of the data.

@@ -2,7 +2,7 @@
 
 Adapt your Product or Services to be Marketplace Offerings. You have 3 SKU types to work with.
 
-![Product Creation](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/offering_structure_noborder.png)
+
 
 You manage all of your offerings from Vendor Center.  
 
@@ -19,11 +19,11 @@ This will represent a _Base Offering_ - Whether that be a Digital Product, a Ser
 <!-- theme: info -->
 >_**Simple steps for your first test Activation**_
 >1. Create Product
->2. Publish Product - This makes the Product available in Partner Center. That is all publishing does - This will not allow other Resellers to see your product!
+>2. Publish Product - This makes the Product available in Partner Center. That is all publishing does - This will not allow other Resellers to see your product! A green checkbox will appear under the _Distributed_ column once your product has been released to the Marketplace.
 >3. Create a Test Account
 >4. Activate your new product on the test Account.
 
-&nbsp;
+![Product Creation](../../assets/images/getting_started/product_creation.png)
 
 **Trials**
 
@@ -47,7 +47,7 @@ _Product Info-->Advanced Settings dropdown_
 
 If your _Base Offering_ has multiple plans or versions you can configure it to have any number of `Editions` to represent all product variations.
 
-![Edition Setup Example](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/editions-768.png)
+![Edition Setup Example](../../assets/images/getting_started/edition_configuration.png)
 
 <!-- theme: info -->
 >_Tips:_
@@ -120,7 +120,7 @@ For a detailed breakdown of how to build out a Marketplace Order Form check out 
 ## Publishing
 
 **Publishing Status**
-![publishing status](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/publish_status.png)
+![publishing status](../../assets/images/getting_started/Publishing Status.png)
 
 Publishing your Product will allow it to be found in the [Discover Products page](https://partners.vendasta.com/marketplace/products) via Search or by checking 'Show My Products' in the filter.
 

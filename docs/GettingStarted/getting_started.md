@@ -1,5 +1,5 @@
 # Getting Started
-Welcome to the Vendasta Marketplace Documentation!
+Welcome to the Vendasta Marketplace Documentation! 
 
 This Guide will cover the benefits of placing your offerings in the Vendasta Marketplace, take you through the Vendasta Dashboards that you will be working with, provide an overview of creating a Marketplace Offering, and detail the basic usage of the Marketplace API & Webhooks. 
 Once you've completed this section, you will be ready to move on to the Integration Guide, which will step through the [integration requirements](./integration_requirements.md) in more detail.
@@ -17,7 +17,7 @@ For **Free** anyone can become a Vendasta Channel Partner, upload their offering
 
 Once comfortable with the platform, next unlock a powerful new sales channel by distributing your offerings to the Vendasta Marketplace. This will extend your own sales team by exposing your products to Vendasta's entire network of Channel Partners!
 
-![Discover Products](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/partner_center_discover_750.png)
+![Discover Products](../../assets/images/getting_started/discover_products.png)
 
 
 ## High Level Requirements
@@ -87,7 +87,7 @@ There are several Vendasta dashboards, which we call 'Centers', that you will in
 
 ### Partner Center
 
-![Partner Center](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/partner_center_activation-1000.png)
+![Partner Center](../../assets/images/getting_started/partner_center.png)
 
 _To learn more about Partner Center visit our [Support Center](https://support.vendasta.com/hc/en-us/categories/4406956996375-Partner-Center)_
 
@@ -99,7 +99,7 @@ _To learn more about Partner Center visit our [Support Center](https://support.v
 >* Access the End User Business App via sso, which we call 'Impersonation'
 
 ### Vendor Center
-![Vendor Center](https://storage.googleapis.com/wordpress-www-vendasta/developers/2021/vendor_center_2021_1000.png)
+![Vendor Center](../../assets/images/getting_started/vendor_center.png)
 
 <!-- theme: info -->
 >* Create Products
@@ -109,7 +109,7 @@ _To learn more about Partner Center visit our [Support Center](https://support.v
 >* View, and Accept or Reject orders of your Product
 
 ### Whitelabelled Business App
-![Whitelabelled Business App](https://storage.googleapis.com/wordpress-www-vendasta/developers/2021/business_app_2021_1000.png)
+![Whitelabelled Business App](../../assets/images/getting_started/business_app.png)
 
 _To learn more about Business App visit our [Support Center](https://support.vendasta.com/hc/en-us/categories/4406956997015-Business-App)_
 
