@@ -1,14 +1,17 @@
 # Configuring your Products and Services
 
-Adapt your Product or Services to be Marketplace Offerings. You have 3 SKU types to work with.
+Your offering, whether it be a digital product, a service, or a physical product is represented by a `Product` in the Vendasta Marketplace. The product may have multiple plans or service levels, which we call `Editions`. A product may also have multiple `Add-ons`, which belong to a single parent product alone, and have no relation to the product's `Editions`.
 
-
-
-You manage all of your offerings from Vendor Center.  
+``` mermaid
+erDiagram
+    PRODUCT ||--o{ EDITION : has
+    PRODUCT ||--o{ ADD-ON : has
+```
 
 <!-- theme: info -->
+>You manage all of your offerings from Vendor Center.  
+>
 >_**Access Vendor Center**_ by logging in directly in at <a href="https://vendors.vendasta.com" target="_blank">https://vendors.vendasta.com</a>, or navigate from Partner Center using the top navbar App icon beside your name.
-
 
 ## Product
 
@@ -18,10 +21,10 @@ This will represent a _Base Offering_ - Whether that be a Digital Product, a Ser
 
 <!-- theme: info -->
 >_**Simple steps for your first test Activation**_
->1. Create Product
->2. Publish Product - This makes the Product available in Partner Center. That is all publishing does - This will not allow other Resellers to see your product! A green checkbox will appear under the _Distributed_ column once your product has been released to the Marketplace.
->3. Create a Test Account
->4. Activate your new product on the test Account.
+>1. Create a Product - This can be done via the [Vendor Center Homescreen](https://vendors.vendasta.com), or Partner Center [Products Page](https://partners.vendasta.com/marketplace/manage-products)
+>2. [Publish Product](./offerings.md#publishing) - This makes the Product available in Partner Center. That is all publishing does - This will not allow other Resellers to see your product! A green checkbox will appear under the _Distributed_ column once your product has been released to the Marketplace.
+>3. [Create a Test Account](https://partners.vendasta.com/business/search)
+>4. [Activate your new product](https://support.vendasta.com/hc/en-us/articles/4406958134807-Activate-products-for-your-customers) on the test Account.
 
 ![Product Creation](../../assets/images/getting_started/product_creation.png)
 
@@ -119,25 +122,36 @@ For a detailed breakdown of how to build out a Marketplace Order Form check out 
 
 ## Publishing
 
-**Publishing Status**
-![publishing status](../../assets/images/getting_started/Publishing Status.png)
+**Publishing Status is controlled in Vendor Center**
+![publishing status](../../assets/images/getting_started/publishing_status.png)
 
-Publishing your Product will allow it to be found in the [Discover Products page](https://partners.vendasta.com/marketplace/products) via Search or by checking 'Show My Products' in the filter.
+The Publishing status controls the visibility of your Product (and its Add-ons) in your Partner Center. **This does not affect whether other Resellers can see your product - that is the Distribution Status, which is controlled by Vendasta.**
 
 **Draft Mode**
 
-Your Product will start in draft mode when created in Vendor Center. Draft mode allows you to work on your Product without it being able to be seen by the rest of your company in Partner Center. If you create a Product via Partner Center, draft mode will be skipped, and the product will be immediately _Published_ & _Enabled_ allowing it to be used right away. 
+Draft mode allows you to work on your Product without it being able to be seen by the rest of your company in Partner Center. 
 
-<div class="background-accent remember">
+
+If you create your product in _Vendor Center_, it will start in draft mode. If you create it within _Partner Center_, you will be given a choice as to whether you would like to publish it immediatly, or continue editing in draft mode:
+
+![PC Product create](../../assets/images/getting_started/pc_product_create.png)
+
 
 _Move to Draft:_
 
- You may only move an Product from a Published State back to Draft if it has been [Disabled](https://support.vendasta.com/hc/en-us/articles/115001596367#h_cf09ba71-da66-4723-8b6d-b0072f540079). 
-</div>
+ You may only move an Product from a Published State back to Draft if it has been set to [Stop Selling](https://support.vendasta.com/hc/en-us/articles/4406952901015#h_cf09ba71-da66-4723-8b6d-b0072f540079) in _Partner Center_. 
 
 **Integration Testing**
 
 It is suggested that if you are utilizing any of the advanced integration features that you publish your Product so that you may do integration testing since most tests require the Product to be active on an Account.
+
+
+### Versioning
+**Products**
+<!-- theme: warning -->
+>While not distributed there is no versioning. Once a product is distributed all changes are made in a draft state, and need to be reveiwed by a Vendasta team member, approved and pushed live. 
+>
+>Please ensure you alert a Vendasta team member if you have made changes to your distributed Product, and need them pushed live.
 
 **Add-ons**
 

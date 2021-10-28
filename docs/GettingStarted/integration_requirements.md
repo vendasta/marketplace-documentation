@@ -26,8 +26,8 @@ Supply mode of payment desired. Options are: AMEX or ACH. If ACH is requested, a
 **Support Contact Information** 
 
 Update contact information in Vendor Center:
-* 'Vendor Contact Information' for sales related support. *Product Info-->The Basics-->Vendor Contact Email*
-* 'Need Help?' for technical or general support. *Marketing-->Need help?*
+* Vendor Contact Information for sales related support. _Product Info-->The Basics-->Vendor Contact Email_
+* 'Need Help?' for technical or general support. _Marketing-->Need help?_
 
 
 <!-- theme: warning -->
@@ -55,13 +55,13 @@ Vendor system implements the provisioning webhook, and at minimum the provisione
 
 **SSO Integration** 
 
-** Applicable if an End User dashboard exists for Vendor offering. We don’t currently support Reseller Dashboards. Reseller dashboard functionality is managed through the integration*
+*_Applicable if an End User dashboard exists for Vendor offering. We don’t currently support Reseller Dashboards. Reseller dashboard functionality is managed through the integration_
 
 OAuth2.0 or OpenIdConnect SSO must be enabled from the Vendasta Business App to the Product dashboard.
 
 **Dashboard Adjustments** 
 
-** Required if SSO has been implemented* 
+*_Required if SSO has been implemented_
 
 * Navbar integrated into the SMB Dashboard
 * This replaces Vendor's user logout, which should be hidden
@@ -77,7 +77,7 @@ Application has a valid SSL, and all communications during SSO use the https pro
 
 **Executive Report** 
 
-** Applicable if Vendor Dashboard contains analytics, or if reports are sent to customers*
+*_Applicable if Vendor Dashboard contains analytics, or if reports are sent to customers_
 
 Raw data is pushed to the Vendasta vAnalytics API. Vendasta aggregates and displays data based on pre-determined charting templates.
 
