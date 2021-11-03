@@ -82,6 +82,21 @@ If the body of the response of a 300-400 level status is formatted correctly we 
 
 The purchase webhook is called every time billing information about an account changes in regards to your product. The relevant changes are the **provisioned**, **change-edition**, and **de-provisioned** events, which are specified in the 'action' field. Note that the order_form section will be null if no order form is specified for your product.
 
+Details:
+
+- **webhook_id** _An identifier for the webhook describing its function._
+- **action** _A description of the action that triggered the webhook being sent._
+- **account** _A nested structure representing the business the product has been purchased for including identification, location, and contact information._
+- **order_form** _A collection of information added to an order form filled out while purchasing the product. Will be null if the product has no order form specified._
+- **partner_id** _A unique id specific to the partner selling to the business account._
+- **market_id** _An identifier indicating the area that a partner is marketing to. Usually used to specify different geographic regions._
+- **activation_id:** _Unique id specific to each instance of an activated product._
+- **order_form_submission_id** _A unique identifier specific to the order form that was filled out. Will be empty if there is no order form.
+- **vendor_order_id** _A unique identifier for the order the product was purchased in._
+- **custom_price** _A nested structure representing what is being spent on the product at activation. The structure contains values for currency, frequency of billing and the spending amount in cents._
+- **edition_id** _A unique identifier for the edition of the product being purchased. Will be empty if product does not have separate editions._
+- **app_id** _A unique identifier for the product._
+
 SAMPLE DECODED PAYLOAD - Provisioned:
 
 ```json
@@ -172,6 +187,11 @@ SAMPLE DECODED PAYLOAD - Provisioned:
         "activation_id": "02e9929d-35f2-4c70-988f-5650b183ef9f",
         "order_form_submission_id": "OFS-9f2e1a82-51d6-4a79-ba4b-a8347de14e53",
         "vendor_order_id": "ORD-XXXXXXXXXX",
+        "custom_price": {
+          "currency":"USD",
+          "value": 50000,
+          "frequency":"MONTHLY"
+        },
         "edition_id": "EDITION-123",
         "app_id": "MP-123"
     }
@@ -272,10 +292,19 @@ The Add-ons purchase webhook is called every time billing information about an a
 
 Details:
 
+- **account** _A nested structure representing the business the product has been purchased for including identification, location, and contact information._
+- **order_form** _A collection of information added to an order form filled out while purchasing the Add-on. Will be null if the product has no order form specified._
+- **market_id** _An identifier indicating the area that a partner is marketing to. Usually used to specify different geographic regions._
 - **addon_id:** _Unique id, specific to the Add-on being activated._
 - **activation_id:** _Unique id specific to each instance of an activated Add-on._
-- **activation_time:** _The time that an Add-on was or is to be activated. This is to allow for delayed activation._ 
+- **order_form_submission_id** _A unique identifier specific to the order form that was filled out. Will be empty if there is no order form.
+- **custom_price** _A nested structure representing what is being spent on the product at activation. The structure contains values for currency, frequency of billing and the spending amount in cents._
+- **webhook_id** _An identifier for the webhook describing its function._
+- **action** _A description of the action that triggered the webhook being sent._
+- **activation_time:** _The time that an Add-on was or is to be activated. This is to allow for delayed activation._
 - **deactivation_time:** _The time that an Add-on should be deactivated in the future. This must be observed and acted on come the given time._
+- **partner_id** _A unique id specific to the partner selling to the business account._
+- **app_id** _A unique identifier for the product._
 
 SAMPLE DECODED PAYLOAD - Provisioned:
 
@@ -326,6 +355,11 @@ SAMPLE DECODED PAYLOAD - Provisioned:
    "addon_id":"A-604152205",
    "activation_id": "02e9929d-35f2-4c70-988f-5650b183ef9d",
    "order_form_submission_id": "OFS-9f2e1a82-51d6-4a79-ba4b-a8347de14c53",
+   "custom_price": {
+     "currency":"USD",
+     "value": 50000,
+     "frequency":"MONTHLY"
+   },
    "webhook_id":"purchase",
    "action":"provisioned",
    "activation_time":"2017-07-24T14:39:55.117426664Z",
@@ -339,10 +373,18 @@ SAMPLE DECODED PAYLOAD - De-Provisioned:
 
 Details:
 
-- **addon_id:** _Unique id, specific to the Add-on being activated._
+- **account** _A nested structure representing the business the product has been purchased for including identification, location, and contact information._
+- **order_form** _A collection of information added to an order form filled out while purchasing the Add-on. Will be null for de-provisioning webhooks._
+- **market_id** _An identifier indicating the area that a partner is marketing to. Usually used to specify different geographic regions._
+- **addon_id:** _Unique id, specific to the Add-on being activated._
 - **activation_id:** _Unique id specific to each instance of an activated Add-on._
-- **activation_time:** _The time that the Add-on was activated._
-- **deactivation_time:** _The time that the Add-on was deactivated. This is informational._
+- **order_form_submission_id** _A unique identifier specific to the order form that was filled out. Will be empty if there is no order form.
+- **webhook_id** _An identifier for the webhook describing its function._
+- **action** _A description of the action that triggered the webhook being sent._
+- **activation_time:** _The time that an Add-on was or is to be activated. This is to allow for delayed activation._
+- **deactivation_time:** _The time that an Add-on should be deactivated in the future. This must be observed and acted on come the given time._
+- **partner_id** _A unique id specific to the partner selling to the business account._
+- **app_id** _A unique identifier for the product._
 
 ```json
 {  
@@ -382,6 +424,8 @@ Details:
 - **activation_id:** _Unique id specific to each instance of an activated product._
 - **activation_time:** _The time that the product was activated._
 - **deactivation_time:** _The time that the product should be deactivated in the future. This must be observed and acted on come the given time._
+- **cancellation_choices:** _List of preset reasons the user can select during the cancellation. (Product is too expensive, Customer reached end of contract, etc)_
+- **cancellation_comment:** _User submitted reason for the cancellation._
 
 SAMPLE DECODED PAYLOAD - Cancel:
 
@@ -402,7 +446,9 @@ SAMPLE DECODED PAYLOAD - Cancel:
     "deactivation_time": "2017-08-23T14:39:55.117426664Z",
     "partner_id": "VNDR",
     "app_id": "MP-123",
-    "vendor_order_id": "ORD-123"
+    "vendor_order_id": "ORD-123",
+    "cancellation_choices": ["Product is too expensive"],
+    "cancellation_comment": "This is why we cancelled the product"
   }
 }
 ```
