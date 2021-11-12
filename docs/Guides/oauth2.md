@@ -2,15 +2,15 @@
 
 ## Overview
 
-This guide aims to help you configure your application to use Vendasta’s Identity Gateway as an Identity Provider for your application. This will allow you to identify users entering your application from the Vendasta platform and will allow you to call Vendasta APIs on their behalf.
+This guide aims to help you configure your application to use Vendasta’s Identity Gateway as an Identity Provider for your application. This will allow you to identify users entering your application from the Vendasta platform and will in future API iterations allow you to call Vendasta APIs on their behalf.
 
 Vendasta implements the [OpenID Connect Core specification](https://openid.net/specs/openid-connect-core-1_0.html), which includes a complete [OAuth 2.0 Authorization Framework](https://tools.ietf.org/html/rfc6749) integration.
 
 This guide is for implementing a **3-legged OAuth** flow. The distinction between 2-legged and 3-legged flows is as follows:
 
-|                                             | **Access Level Provided**                                                                         | **Setup Required**                                                                         |
-|---------------------------------------------|---------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
-| **2-legged flow (Partner Service Account)** | Access to high-level Vendasta workflow APIs, but no access to **user data** or **business data**. | Allocating a Partner Service Account. Configuring an OAuth2 2-legged client.               |
+|                                             | **Access Level Provided**  | **Setup Required** |
+|---------------------------------------------|----------------------------|--------------------|
+| **2-legged flow (Partner Service Account)** | Access to high-level Vendasta workflow APIs, but no access to **user data** or **business data**. | Allocating a Partner Service Account. Configuring an OAuth2 2-legged client.             
 | **3-legged flow (this guide)**              | Access to **user data** and **business data** associated with the user performing the flow.       | Follow this guide. Requires an end user to initiate the flow to provide access to the app. |
 
 ## Configuring your integration in Vendor Center
@@ -19,10 +19,51 @@ Your integration is configured in Vendor Center, under Integration > SSO Setting
 
 ![Session Settings Diagram](https://storage.googleapis.com/wordpress-www-vendasta/developers/2021/SSO_settings.png)
 
-|                                  |                                                                                                                    |
-|----------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| **Entry URL**                       | User is redirected to this url when they click on the Product icon in the End User dashboard. The account_id is injected into the placeholder on the url, and should be passed on to the Authorization URL to trigger the start of SSO. |
-| **Logout URL**            | Eventually will be used to trigger service provider logout. For now Vendors can stick to handling sessions within their own app, and not worry about syncing logout with Business App.  |
+|||
+|-|-|
+| **Entry URL**  | User is redirected to this url when they click on the Product icon in the End User dashboard. The account_id is injected into the placeholder on the url, and should be passed on to the Authorization URL to trigger the start of SSO. 
+| **Logout URL** | Eventually will be used to trigger service provider logout. For now Vendors can stick to handling sessions within their own app, and not worry about syncing logout with Business App. 
+
+## Navigation Bar
+
+The Vendasta NavBar provides a seamless navigation experience for users to switch between your marketplace application, other applications, and their Business Center.  User logout will also be served by this bar, and hidden from your dashboard. **Implementation of the Navigation Bar is required if your integration includes SSO.**
+
+![](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/03/NavBar2-1024x160.jpg)
+
+Include the script tag below before the closing body tag of your HTML to allow for rendering of the Navigation bar. **All** the data- attributes in the script tag are required to be passed as when loading the application. The Navbar should load on every page of the application.
+
+It is recommended that you build the entire script tag before injecting it into the page rather than injecting the custom params individually. This will avoid a race condition where the script runs before the parameters are present, resulting in an empty navbar frame.
+
+**HTML TEMPLATE**
+
+```html
+<!-- include the following script tag before the closing body tag to render the navigation bar in your app -->
+<script src="//www.cdnstyles.com/static/product_navbar/v1/product_navbar.js"
+        data-url="{{ product_navbar_data_url }}"
+        data-account-id="{{ account_id }}"
+        data-app-id="{{ app_id }}">
+</script>
+
+OR if including target-element-class
+
+<!-- include the following script tag before the closing body tag to render the navigation bar in your app -->
+<script src="//www.cdnstyles.com/static/product_navbar/v1/product_navbar.js"
+        data-url="{{ product_navbar_data_url }}"
+        data-account-id="{{ account_id }}"
+        data-app-id="{{ app_id }}"
+        target-element-class="{{target_element_class}}">
+</script>
+```
+
+Script parameter details:
+
+|||
+|-|-|
+| `vendasta.com/marketplace/product_navbar_data_url`| This is the endpoint the product navbar script will use to retrieve the data to populate the Vendasta navigation bar. To be retrived via the OIDC User-Info endpoint.
+| `data-account-id`                                 | The unique ID for a Vendasta Account. This is passed to the Service Provider via the Entry URL. 
+| `data-app-id`                                     | The unique ID for a Vendor Product. Found in the Vendor Center URL when in the context of a Product.
+| `target-element-class(optional)`                  | This field can help overcome css conflicts with the NavBar. It allows you to specify an element that has a **unique** class. If the element with this class exists on the page at the time the NavBar is called to render the bar, it will place the bar directly above the target element|
+
 
 ## Implementing Client-side OAuth2 in your app
 
@@ -35,24 +76,25 @@ The first decision you will need to make is where you will implement your author
 
 Both OpenID Connect and OAuth2 are standardized workflows, which means most programming languages have at least one library available to aid your implementation whether you choose to implement the workflow on the frontend or on your backend webserver.
 
-You can find a list of compliant OAuth2 libraries [here](https://oauth.net/code/). Please select a **Client Library** in your language of choice.
-
-Whichever client library you select, please consult the included documentation for the library of your choice to supplement this guide.
+<!-- theme: info -->
+>You can find a list of compliant OAuth2 libraries [here](https://oauth.net/code/). Please select a **Client Library** in your language of choice.
+>
+>Whichever client library you select, please consult the included documentation for the library of your choice to supplement this guide.
 
 ### Client Configuration
 
 Follow your client’s installation guide, entering the following information when prompted:
 
-|                                  |                                                                                                                    |
-|----------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| **Issuer**                       | `https://iam-prod.apigateway.co`                                                                                   |
-| **Authorization URL**            | `https://sso-api-prod.apigateway.co/oauth2/auth?account_id=<account_id>` (see [Contextualizing your Auth URL](#contextualizing-your-auth-url)) |
-| **Token URL**                    | `https://sso-api-prod.apigateway.co/oauth2/token`                                                                  |
-| **Logout/End Session URL**       | `https://sso-api-prod.apigateway.co/oauth2/logout`                                                                 |
-| **JWKS URL (optional)**          | `https://iam-prod.apigateway.co/oauth2/v1/certs`                                                                   |
-| **User Info URL (optional)**     | `https://sso-api-prod.apigateway.co/oauth2/user-info`                                                              |
-| **Client ID**                    | Obtained when creating your OAuth2 configuration within the Vendasta Platform                                      |
-| **Client Secret (backend only)** | Obtained when creating your OAuth2 configuration within the Vendasta Platform                                      |
+|                                  |                                                                              |
+|----------------------------------|------------------------------------------------------------------------------|
+| **Issuer**                       | `https://iam-prod.apigateway.co`                                             |
+| **Authorization URL**            | `https://sso-api-prod.apigateway.co/oauth2/auth?account_id=<account_id>` (see Contextualizing your Auth URL below)                                                                              |
+| **Token URL**                    | `https://sso-api-prod.apigateway.co/oauth2/token`                            |
+| **Logout/End Session URL**       | `https://sso-api-prod.apigateway.co/oauth2/logout`                           |
+| **JWKS URL (optional)**          | `https://iam-prod.apigateway.co/oauth2/v1/certs`                             |
+| **User Info URL (optional)**     | `https://sso-api-prod.apigateway.co/oauth2/user-info`                        |
+| **Client ID**                    | Obtained when creating your OAuth2 configuration within the Vendasta Platform|
+| **Client Secret (backend only)** | Obtained when creating your OAuth2 configuration within the Vendasta Platform|
 
 #### Contextualizing your Auth URL
 
@@ -92,14 +134,13 @@ In order to call APIs on behalf of a user, you must specify which **scopes** you
 
 Certain scopes have a special meaning, or are distinct from those used for API access.
 
-|                  |                                                                                                                                                                       |
-|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `openid`         | **Required:** this scope MUST be included when performing an OpenID connect flow.                                                                                     |
-| `offline_access` | This scope requests that a **refresh token** be returned to your application alongside your **access token**. See the **Refresh Token** section for more information. |                         |
-| `profile`        | Grants access to view a user’s name, locale, and Vendasta roles using the **user-info** endpoint. See the **User Info Endpoint** section for more information.        |
+|                 |                                                                                                 |
+|-----------------|-------------------------------------------------------------------------------------------------|
+| `openid`        | **Required:** this scope MUST be included when performing an OpenID connect flow.               |
+| `offline_access`| This scope requests that a **refresh token** be returned to your application alongside your **access token**. See the **Refresh Token** section for more information.                                           |
+| `profile`       | Grants access to view a user’s name, locale, and Vendasta roles using the **user-info** endpoint. See the **User Info Endpoint** section for more information.                                                        |
 
 ### Access Tokens
-
 
 Access tokens expire **30 minutes** from the time of issue. They will need to be refreshed regularly using one of the following techniques:
 
@@ -171,11 +212,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL
 
 The amount of information returned is determined by the scopes which your application requested during its authorization flow as follows:
 
-|           |                                                                                                                                                                                                                                   |
-|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `email`   | **Email is currently excluded from this implementation.** Please use the `sub` field returned by the user-info endpoint to uniquely identify the user. |
-| `profile` | Grants access to view a user’s name, locale, and Vendasta roles using the user-info endpoint. See the User Info Endpoint section for more information.                                                                            |
-| `openid`  | Include the User ID (a.k.a. `sub`), and namespace.                                                                                                                                                                                |
+|           |                                                                                                      |
+|-----------|------------------------------------------------------------------------------------------------------|
+| `email`   | **Email is currently excluded from this implementation.** Please use the `sub` field returned by the user-info endpoint to uniquely identify the user.                                                                  |
+| `profile` | Grants access to view a user’s name, locale, and Vendasta roles using the user-info endpoint. See the User Info Endpoint section for more information.                                                                   |
+| `openid`  | Include the User ID (a.k.a. `sub`), and namespace.                                                   |
 
 **All user info claims aside from those specified in the [OpenID Core specification](https://openid.net/specs/openid-connect-core-1_0.html#UserInfoResponse) are subject to change without notice and should only be used for debugging purposes.**
 
@@ -209,48 +250,3 @@ The amount of information returned is determined by the scopes which your applic
 From OIDC spec point [5.3.2](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo) - "NOTE: Due to the possibility of token substitution attacks (see [Section 16.11](https://openid.net/specs/openid-connect-core-1_0.html#TokenSubstitution)), the UserInfo Response is not guaranteed to be about the End-User identified by the sub (subject) element of the ID Token. The sub Claim in the UserInfo Response MUST be verified to exactly match the sub Claim in the ID Token; if they do not match, the UserInfo Response values MUST NOT be used."
 
 </div>
-
-## Navigation Bar
-
-The Vendasta NavBar provides a seamless navigation experience for users to switch between your marketplace application, other applications, and their Business Center.  User logout will also be served by this bar, and hidden from your dashboard.
-
-![](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/03/NavBar2-1024x160.jpg)
-
-
-
-### Implementation
-
-Include the script tag below before the closing body tag of your HTML to allow for rendering of the Navigation bar. **All** the data- attributes in the script tag are required to be passed as when loading the application. The Navbar should load on every page of the application.
-
-It is recommended that you build the entire script tag before injecting it into the page rather than injecting the custom params individually. This will avoid a race condition where the script runs before the parameters are present, resulting in an empty navbar frame.
-
-**HTML TEMPLATE**
-
-```html
-<!-- include the following script tag before the closing body tag to render the navigation bar in your app -->
-<script src="//www.cdnstyles.com/static/product_navbar/v1/product_navbar.js"
-        data-url="{{ product_navbar_data_url }}"
-        data-account-id="{{ account_id }}"
-        data-app-id="{{ app_id }}">
-</script>
-
-OR if including target-element-class
-
-<!-- include the following script tag before the closing body tag to render the navigation bar in your app -->
-<script src="//www.cdnstyles.com/static/product_navbar/v1/product_navbar.js"
-        data-url="{{ product_navbar_data_url }}"
-        data-account-id="{{ account_id }}"
-        data-app-id="{{ app_id }}"
-        target-element-class="{{target_element_class}}">
-</script>
-```
-
-
-Script parameter details:
-
-|           |                                                                                                                                                                                                                                   |
-|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `vendasta.com/marketplace/product_navbar_data_url`   | This is the endpoint the product navbar script will use to retrieve the data to populate the Vendasta navigation bar. To be retrived via the OIDC User-Info endpoint. |
-| `data-account-id` | The unique ID for a Vendasta Account. This is passed to the Service Provider via the Entry URL.                                                                      |
-| `data-app-id`  | The unique ID for a Vendor Product. Found in the url when looking at Product details while in Vendor Center ![](https://storage.googleapis.com/wordpress-www-vendasta/developers/2021/app_id_location.png)|
-| `target-element-class(optional)`  | This field can help overcome css conflicts with the NavBar. It allows you to specify an element that has a **unique** class. If the element with this class exists on the page at the time the NavBar is called to render the bar, it will place the bar directly above the target element|
