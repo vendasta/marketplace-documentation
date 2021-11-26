@@ -17,4 +17,4 @@ For details on how to set up the pricing for your offerings, please review the P
 Once your Product has met all integration requirements, and has been reviewed and approved by Vendasta, your Product will be distributed to the Vendasta Channel Partner network to be discovered and sold.
 
 ---
-**Next:** [Requirements Checklist](./integration_requirements.md)
+**Next:** [Requirements Checklist](https://developers.vendasta.com/vendor/ZG9jOjE3MTE3MDg2-integration-requirement-checklist)

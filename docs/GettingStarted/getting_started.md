@@ -123,4 +123,4 @@ _To learn more about Business App visit our [Support Center](https://support.ven
 ---
 You should now have a basic understanding of the Vendasta ecosystem. You will always have the Marketplace team at your disposal, so if you need clarification on something, or have any suggestions on how to improve this documentation, let us know via the feedback button on the right hand side of Vendor Center.
 
-**Next:** [Configuring your Products & Services](./offerings.md)
+**Next:** [Configuring your Products & Services](https://developers.vendasta.com/vendor/ZG9jOjE3MTE3MDg1-overview)
