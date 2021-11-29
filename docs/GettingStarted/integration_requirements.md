@@ -19,9 +19,11 @@ Scheduled meeting with operations team to discuss pricing, billing, payments, su
 
 **Payment Method** 
 
-*Payouts occur monthly, by the 15th.* 
+*Payouts monthly, and will be completed by the 15th of the month* 
 
-Supply mode of payment desired. Options are: AMEX or ACH. If ACH is requested, a banking information form will be provided.  
+*Credit Card* - A secure link to accept payments is required for credit card payments. The payment request must be submitted to marketplace@vendasta.com no later than 10 days after the monthly statement remittance from Vendasta is received. AMEX must be an accepted form of payment.
+
+*ACH* - A bank letter will be required for ACH payments. A bank letter can be requested from your bank if you don’t have one already. It must include the bank account information on bank letterhead. Note, at our discretion Vendasta may withhold payment if the bank fees are higher than the payment. Once the total accumulated payment is of a substantial amount, the entire sum will be paid at once.
 
 **Support Contact Information** 
 
