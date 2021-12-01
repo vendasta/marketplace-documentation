@@ -15,7 +15,7 @@ flowchart LR
   I([Inactive])--#1-->P(Pending Message Delivery)-->PV(Pending on Activation Resolution)--#2-->A(Active)--#3-->PD(Pending De-Provision - Cancelled)--#4-->I
 ```
 
-_*See [Activation Types](./purchase_workflow.md#activation-types) for details on all possible events_
+_*See **Activation Types** below for details on all possible events_
 
 **#1 Purchase Event:** An order has been approved, either automatically or by an Admin user, which triggers the provisioning event sending the configured purchase alerts for the skus purchased to the Vendor. There are multiple ways an activation could be triggered. It may be triggered by either a Reseller Admin, or a user from an end business. [Submitting an order as a Reseller Admin](https://support.vendasta.com/hc/en-us/articles/4406958134807) is the easiest way to test the triggering of a _Provisioning Event_.
 
@@ -66,7 +66,7 @@ Vendors are responsible for maintaining a mapping between the Vendasta Account, 
 
 |Field| Description
 | --------------|:----|
-|`account-->id`| This is the unique Vendasta ID representing a Vendasta Account(typically an individual business location). There should be a 1:1 relationship between a Vendasta Account and an instance of the Vendor Product. This field has the key 'id', and is found within the account object in the purchase webhook json payload. |
+|`account-->id`| This is the unique Vendasta ID representing a Vendasta Account(typically an individual business location). There should be a 1:1 relationship between a Vendasta Account and an instance of the Vendor Product. This field has the key 'id', and is found within the account object in the purchase webhook json payload. ```Format: AG-XXXXXXXX``` |
 |`activation_id` | This is a unique activation tracking id, it will be required to resolve a Pending Activation.|
 |`order_form_submission_id` |This is a unique id for tracking order form data from an Activation.
 
