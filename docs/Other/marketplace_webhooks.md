@@ -659,6 +659,7 @@ SAMPLE DECODED PAYLOAD:
     "app_id": "MP-123",
     "addon_id": "A-123",
     "effective_date": "Fri, 17 Jan 2021 17:59:47 -0000",
+    "event_time": "Sat, 18 Jan 2021 13:00:01 -0000",
     "requested_value": 30000,
     "currency" : "USD",
     "billing_frequency": "Monthly",
