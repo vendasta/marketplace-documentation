@@ -635,3 +635,37 @@ SAMPLE DECODED PAYLOAD - Delete:
   }
 }
 ```
+
+## Spend Change Request Webhook
+
+The spend change request webhook is called every time a spend change is requested for one of the vendor's products.
+
+SAMPLE DECODED PAYLOAD:
+
+```json
+{
+  "iss": "Vendasta Marketplace",
+  "iat": 1457560237,
+  "exp": 1457560297,
+  "vendasta.com/marketplace/webhook": {
+    "webhook_id": "service-change-request",
+    "action": "spend-change",
+    "account_id": "AG-123456",
+    "partner_id": "ABC",
+    "market_id": "Saskatoon",
+    "activation_id": "02e9929d-35f2-4c70-988f-5650b183ef9f",
+    "change_request_id": "SCR-30ccd1f5-edd0-42ef-b540-b76e7417bba5",
+    "edition_id": "EDITION-123",
+    "app_id": "MP-123",
+    "addon_id": "A-123",
+    "effective_date": "Fri, 17 Jan 2021 17:59:47 -0000",
+    "event_time": "Sat, 18 Jan 2021 13:00:01 -0000",
+    "requested_value": 30000,
+    "currency" : "USD",
+    "billing_frequency": "Monthly",
+    "requester_email": "abc123@vendasta.com",
+    "requester_note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  }
+}
+```
+
