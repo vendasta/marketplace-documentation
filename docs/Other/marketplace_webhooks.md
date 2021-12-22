@@ -93,7 +93,7 @@ Details:
 - **activation_id:** _Unique id specific to each instance of an activated product._
 - **order_form_submission_id** _A unique identifier specific to the order form that was filled out. Will be empty if there is no order form.
 - **vendor_order_id** _A unique identifier for the order the product was purchased in._
-- **custom_price** _A nested structure representing what is being spent on the product at activation. The structure contains values for currency, frequency of billing and the spending amount in cents._
+- **variable_price** _A nested structure representing what is being spent on the product at activation. The structure contains values for currency, frequency of billing and the spending amount in cents._
 - **edition_id** _A unique identifier for the edition of the product being purchased. Will be empty if product does not have separate editions._
 - **app_id** _A unique identifier for the product._
 
@@ -199,7 +199,7 @@ SAMPLE DECODED PAYLOAD - Provisioned:
       "activation_id":"02e9929d-35f2-4c70-988f-5650b183ef9f",
       "order_form_submission_id":"OFS-9f2e1a82-51d6-4a79-ba4b-a8347de14e53",
       "vendor_order_id":"ORD-XXXXXXXXXX",
-      "custom_price":{
+      "variable_price":{
          "currency":"USD",
          "value":50000,
          "frequency":"MONTHLY"
@@ -310,7 +310,7 @@ Details:
 - **addon_id:** _Unique id, specific to the Add-on being activated._
 - **activation_id:** _Unique id specific to each instance of an activated Add-on._
 - **order_form_submission_id** _A unique identifier specific to the order form that was filled out. Will be empty if there is no order form.
-- **custom_price** _A nested structure representing what is being spent on the product at activation. The structure contains values for currency, frequency of billing and the spending amount in cents._
+- **variable_price** _A nested structure representing what is being spent on the product at activation. The structure contains values for currency, frequency of billing and the spending amount in cents._
 - **webhook_id** _An identifier for the webhook describing its function._
 - **action** _A description of the action that triggered the webhook being sent._
 - **activation_time:** _The time that an Add-on was or is to be activated. This is to allow for delayed activation._
@@ -367,7 +367,7 @@ SAMPLE DECODED PAYLOAD - Provisioned:
    "addon_id":"A-604152205",
    "activation_id": "02e9929d-35f2-4c70-988f-5650b183ef9d",
    "order_form_submission_id": "OFS-9f2e1a82-51d6-4a79-ba4b-a8347de14c53",
-   "custom_price": {
+   "variable_price": {
      "currency":"USD",
      "value": 50000,
      "frequency":"MONTHLY"
