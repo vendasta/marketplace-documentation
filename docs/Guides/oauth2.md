@@ -22,7 +22,7 @@ Your integration is configured in Vendor Center, under Integration > SSO Setting
 |||
 |-|-|
 | **Entry URL**  | User is redirected to this url when they click on the Product icon in the End User dashboard. The account_id is injected into the placeholder on the url, and should be passed on to the Authorization URL to trigger the start of SSO. 
-| **Logout URL** | Eventually will be used to trigger service provider logout. For now Vendors can stick to handling sessions within their own app, and not worry about syncing logout with Business App. 
+| **Logout URL** | A webhook for back channel logout of service provider session. 
 
 ## Navigation Bar
 
