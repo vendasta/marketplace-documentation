@@ -79,6 +79,59 @@ paths:
           schema:
             type: string
       summary: Get Account
+  '/account/{account_id}/richdata':
+    get:
+      tags:
+        - account
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/account_richdata'
+        '201':
+          description: Created
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+        '404':
+          description: Account not found
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+      summary: Get Account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
+    parameters:
+      - schema:
+          type: string
+        name: account_id
+        in: path
+        required: true
   '/account/{account_id}/settings':
     get:
       tags:
@@ -1537,6 +1590,326 @@ components:
         service_area_business_flag:
           type: boolean
       type: object
+    account_richdata:
+      description: ''
+      type: object
+      properties:
+        brands_carried:
+          type: array
+          items:
+            required: []
+            properties: {}
+        call_tracking_number:
+          type: array
+          items:
+            required: []
+            properties: {}
+        common_name:
+          type: array
+          items:
+            required: []
+            properties: {}
+        deleted_flag:
+          type: boolean
+        contact_first_name: {}
+        images:
+          type: object
+          properties:
+            logo:
+              type: string
+              minLength: 1
+            primary:
+              type: string
+              minLength: 1
+          required:
+            - logo
+            - primary
+        timezone:
+          type: string
+          minLength: 1
+        work_number:
+          type: array
+          items:
+            required: []
+            properties: {}
+        partner_id:
+          type: string
+          minLength: 1
+        id:
+          type: string
+          minLength: 1
+        city:
+          type: string
+          minLength: 1
+        zip:
+          type: string
+          minLength: 1
+        market_id:
+          type: string
+          minLength: 1
+        twitter_url:
+          type: string
+          minLength: 1
+        state:
+          type: string
+          minLength: 1
+        company_name:
+          type: string
+          minLength: 1
+        latitude:
+          type: number
+        foursquare_url:
+          type: string
+          minLength: 1
+        service_area_business_flag:
+          type: boolean
+        address2:
+          type: string
+          minLength: 1
+        tax_ids:
+          type: array
+          items:
+            required: []
+            properties: {}
+        website:
+          type: string
+          minLength: 1
+        rss_url:
+          type: string
+          minLength: 1
+        updated:
+          type: string
+          minLength: 1
+        description:
+          type: string
+          minLength: 1
+        deleted: {}
+        facebook_url:
+          type: string
+          minLength: 1
+        fax_number:
+          type: string
+          minLength: 1
+        short_description:
+          type: string
+          minLength: 1
+        contact_email: {}
+        address:
+          type: string
+          minLength: 1
+        youtube_url:
+          type: string
+          minLength: 1
+        instagram_url:
+          type: string
+          minLength: 1
+        key_person:
+          type: array
+          items:
+            required: []
+            properties: {}
+        pinterest_url:
+          type: string
+          minLength: 1
+        contact_last_name: {}
+        cell_number:
+          type: string
+          minLength: 1
+        customer_identifier:
+          type: string
+          minLength: 1
+        created:
+          type: string
+          minLength: 1
+        linkedin_url:
+          type: string
+          minLength: 1
+        longitude:
+          type: number
+        sales_person_id:
+          type: string
+          minLength: 1
+        toll_free_number:
+          type: string
+          minLength: 1
+        googleplus_url: {}
+        services_offered:
+          type: array
+          items:
+            required: []
+            properties: {}
+        hours_of_operation:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            required:
+              - closes
+              - opens
+            properties:
+              closes:
+                type: string
+                minLength: 1
+              opens:
+                type: string
+                minLength: 1
+              day_of_week:
+                type: array
+                items:
+                  required: []
+                  properties: {}
+              description: {}
+        landmark:
+          type: string
+          minLength: 1
+        country:
+          type: string
+          minLength: 1
+      required:
+        - brands_carried
+        - call_tracking_number
+        - common_name
+        - deleted_flag
+        - images
+        - timezone
+        - work_number
+        - partner_id
+        - id
+        - city
+        - zip
+        - market_id
+        - twitter_url
+        - state
+        - company_name
+        - latitude
+        - foursquare_url
+        - service_area_business_flag
+        - address2
+        - tax_ids
+        - website
+        - rss_url
+        - updated
+        - description
+        - facebook_url
+        - fax_number
+        - short_description
+        - address
+        - youtube_url
+        - instagram_url
+        - key_person
+        - pinterest_url
+        - cell_number
+        - customer_identifier
+        - created
+        - linkedin_url
+        - longitude
+        - sales_person_id
+        - toll_free_number
+        - services_offered
+        - hours_of_operation
+        - landmark
+        - country
+      x-examples:
+        example-1:
+          brands_carried:
+            - Catan Studio
+            - Starling games
+          call_tracking_number:
+            - '18005555555'
+          common_name:
+            - KingMe
+          deleted_flag: false
+          contact_first_name: null
+          images:
+            logo: 'https://media-prod.apigateway.co/image/get/4d684615-b530-420f-b4b1-b82ebcee894e'
+            primary: 'https://media-prod.apigateway.co/image/get/7533de51-4ef9-4f9d-b0b5-672145c7b5bb'
+          timezone: America/Regina
+          work_number:
+            - +1 306-652-5464
+          partner_id: VNDR
+          id: AG-M3PB8CJP2J
+          city: Saskatoon
+          zip: S7M 0X6
+          market_id: default
+          twitter_url: 'https://www.twitter.com/kingme'
+          state: SK
+          company_name: King Me Boardgamery and Cafe
+          latitude: 52.1259659
+          foursquare_url: 'https://www.foursquare.com/kingme'
+          service_area_business_flag: false
+          address2: '42'
+          tax_ids:
+            - food
+            - 'restaurants:cafes'
+          website: 'https://www.kingmeboardgamery.com/'
+          rss_url: 'http://iamawesome.com'
+          updated: 'Fri, 10 Sep 2021 19:49:53 -0000'
+          description: 'Come and play boardgames with your friends while eating and drinking, and free popcorn'
+          deleted: null
+          facebook_url: 'https://www.facebook.com/kingmeboardgamery/'
+          fax_number: '1800343433258298'
+          short_description: Board game cafe
+          contact_email: null
+          address: 527 20th Street West
+          youtube_url: 'https://www.youtube.com/kingmeboardgamery'
+          instagram_url: 'https://www.instagram.com/kingme'
+          key_person: []
+          pinterest_url: 'https://www.pinterest.com/kingme'
+          contact_last_name: null
+          cell_number: '3065555555'
+          customer_identifier: kingme-test
+          created: 'Fri, 17 Jan 2020 17:59:47 -0000'
+          linkedin_url: 'https://www.linkedin.com/kingme'
+          longitude: -106.6776856
+          sales_person_id: UID-d1985535-f7f2-4529-ab47-2932110c46fe
+          toll_free_number: '18004444444'
+          googleplus_url: null
+          services_offered:
+            - board games
+            - popcorn
+          hours_of_operation:
+            - closes: '22:00:00'
+              opens: '12:00:00'
+              day_of_week:
+                - Sunday
+              description: null
+            - closes: '23:00:00'
+              opens: '17:00:00'
+              day_of_week:
+                - Monday
+              description: null
+            - closes: '23:00:00'
+              opens: '17:00:00'
+              day_of_week:
+                - Tuesday
+              description: null
+            - closes: '23:00:00'
+              opens: '17:00:00'
+              day_of_week:
+                - Wednesday
+              description: null
+            - closes: '01:00:00'
+              opens: '15:00:00'
+              day_of_week:
+                - Thursday
+              description: null
+            - closes: '01:00:00'
+              opens: '15:00:00'
+              day_of_week:
+                - Friday
+              description: null
+            - closes: '01:00:00'
+              opens: '10:00:00'
+              day_of_week:
+                - Saturday
+              description: null
+            - closes: null
+              opens: null
+              day_of_week:
+                - PublicHolidays
+              description: Open 24 hours
+          landmark: 20th Street
+          country: CA
     account_settings:
       required:
         - account_id
