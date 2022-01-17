@@ -82,99 +82,131 @@ If the body of the response of a 300-400 level status is formatted correctly we 
 
 The purchase webhook is called every time billing information about an account changes in regards to your product. The relevant changes are the **provisioned**, **change-edition**, and **de-provisioned** events, which are specified in the 'action' field. Note that the order_form section will be null if no order form is specified for your product.
 
+Details:
+
+- **webhook_id** _An identifier for the webhook describing its function._
+- **action** _A description of the action that triggered the webhook being sent._
+- **account** _A nested structure representing the business the product has been purchased for including identification, location, and contact information._
+- **order_form** _A collection of information added to an order form filled out while purchasing the product. Will be null if the product has no order form specified._
+- **partner_id** _A unique id specific to the partner selling to the business account._
+- **market_id** _An identifier indicating the area that a partner is marketing to. Usually used to specify different geographic regions._
+- **activation_id:** _Unique id specific to each instance of an activated product._
+- **order_form_submission_id** _A unique identifier specific to the order form that was filled out. Will be empty if there is no order form.
+- **vendor_order_id** _A unique identifier for the order the product was purchased in._
+- **variable_price** _A nested structure representing what is being spent on the product at activation. The structure contains values for currency, frequency of billing and the spending amount in cents._
+- **edition_id** _A unique identifier for the edition of the product being purchased. Will be empty if product does not have separate editions._
+- **app_id** _A unique identifier for the product._
+
 SAMPLE DECODED PAYLOAD - Provisioned:
 
 ```json
 {
-    "iss": "Vendasta Marketplace",
-    "iat": 1457560237,
-    "exp": 1457560297,
-    "vendasta.com/marketplace/webhook": {
-        "webhook_id": "purchase",
-        "action": "provisioned",
-        "account": {
-            "call_tracking_number": [
-                "18005555555"
-            ],
-            "deleted_flag": false,
-            "contact_first_name": null,
-            "common_name": [
-                "KingMe"
-            ],
-            "timezone": "America/Regina",
-            "work_number": [
-                "+1 306-652-5464"
-            ],
-            "partner_id": "VNDR",
-            "id": "AG-M3PB8CJP2J",
-            "city": "Saskatoon",
-            "zip": "S7M 0X6",
-            "market_id": "default",
-            "deleted": null,
-            "state": "SK",
-            "company_name": "King Me Boardgamery and Cafe",
-            "latitude": 52.1259659,
-            "foursquare_url": "https://www.foursquare.com/kingme",
-            "service_area_business_flag": false,
-            "facebook_url": "https://www.facebook.com/kingmeboardgamery/",
-            "tax_ids": [
-                "food",
-                "restaurants:cafes"
-            ],
-            "website": "https://www.kingmeboardgamery.com/",
-            "rss_url": "http://iamawesome.com",
-            "updated": "Mon, 29 Mar 2021 23:25:25 -0000",
-            "twitter_url": "https://www.twitter.com/kingme",
-            "address2": "42",
-            "fax_number": "1800343433258298",
-            "contact_email": null,
-            "address": "527 20th Street West",
-            "youtube_url": "https://www.youtube.com/kingmeboardgamery",
-            "instagram_url": "https://www.instagram.com/kingme",
-            "key_person": [],
-            "pinterest_url": "https://www.pinterest.com/kingme",
-            "contact_last_name": null,
-            "cell_number": "3065555555",
-            "customer_identifier": "kingme-test",
-            "created": "Fri, 17 Jan 2020 17:59:47 -0000",
-            "linkedin_url": "https://www.linkedin.com/kingme",
-            "longitude": -106.6776856,
-            "sales_person_id": "UID-d1985535-f7f2-4529-ab47-2932110c46fe",
-            "googleplus_url": null,
-            "country": "CA"
-        },
-       "order_form": {
-          "contact_phone_number": "",
-          "business_phone_number": "(999) 999-5555",
-          "salesperson_name": "Jane Doe",
-          "business_account_group_id": "AG-XXXXXXXX",
-          "checbox_question": true,
-          "contact_email": "",
-          "salesperson_phone_number": [],
-          "salesperson_email": "person@vendasta.com",
-          "business_name": "Name",
-          "contact_name": "",
-          "business_address": "123 some st, San Francisco, CA, US, 94111",
-          "question_number_two": "2",
-          "files_for_upload": [
-              {"name": "uploadedfilename.ext",
-              "url": "https://example.com/A%20file%20with%20spaces.ext"},
-              {"name": "uploadedpicturename.jpg",
-              "url": "https://example.com/pathtofile/"}
-          ],
-          "drop_down_question": {
-             "value": "Yes",
-             "label": "Yes"
-          }
-        },
-        "partner_id": "ABC",
-        "market_id": "Saskatoon",
-        "activation_id": "02e9929d-35f2-4c70-988f-5650b183ef9f",
-        "order_form_submission_id": "OFS-9f2e1a82-51d6-4a79-ba4b-a8347de14e53",
-        "vendor_order_id": "ORD-XXXXXXXXXX",
-        "edition_id": "EDITION-123",
-        "app_id": "MP-123"
-    }
+   "iss":"Vendasta Marketplace",
+   "iat":1457560237,
+   "exp":1457560297,
+   "vendasta.com/marketplace/webhook":{
+      "webhook_id":"purchase",
+      "action":"provisioned",
+      "account":{
+         "call_tracking_number":[
+            "18005555555"
+         ],
+         "deleted_flag":false,
+         "contact_first_name":null,
+         "common_name":[
+            "KingMe"
+         ],
+         "timezone":"America/Regina",
+         "work_number":[
+            "+1 306-652-5464"
+         ],
+         "partner_id":"VNDR",
+         "id":"AG-M3PB8CJP2J",
+         "city":"Saskatoon",
+         "zip":"S7M 0X6",
+         "market_id":"default",
+         "deleted":null,
+         "state":"SK",
+         "company_name":"King Me Boardgamery and Cafe",
+         "latitude":52.1259659,
+         "foursquare_url":"https://www.foursquare.com/kingme",
+         "service_area_business_flag":false,
+         "facebook_url":"https://www.facebook.com/kingmeboardgamery/",
+         "tax_ids":[
+            "food",
+            "restaurants:cafes"
+         ],
+         "website":"https://www.kingmeboardgamery.com/",
+         "rss_url":"http://iamawesome.com",
+         "updated":"Mon, 29 Mar 2021 23:25:25 -0000",
+         "twitter_url":"https://www.twitter.com/kingme",
+         "address2":"42",
+         "fax_number":"1800343433258298",
+         "contact_email":null,
+         "address":"527 20th Street West",
+         "youtube_url":"https://www.youtube.com/kingmeboardgamery",
+         "instagram_url":"https://www.instagram.com/kingme",
+         "key_person":[
+            
+         ],
+         "pinterest_url":"https://www.pinterest.com/kingme",
+         "contact_last_name":null,
+         "cell_number":"3065555555",
+         "customer_identifier":"kingme-test",
+         "created":"Fri, 17 Jan 2020 17:59:47 -0000",
+         "linkedin_url":"https://www.linkedin.com/kingme",
+         "longitude":-106.6776856,
+         "sales_person_id":"UID-d1985535-f7f2-4529-ab47-2932110c46fe",
+         "googleplus_url":null,
+         "country":"CA"
+      },
+      "order_form":{
+         "contact_phone_number":"",
+         "business_phone_number":"(999) 999-5555",
+         "salesperson_name":"Jane Doe",
+         "business_account_group_id":"AG-XXXXXXXX",
+         "checbox_question":true,
+         "contact_email":"",
+         "salesperson_phone_number":[
+            
+         ],
+         "salesperson_email":"person@vendasta.com",
+         "business_name":"Name",
+         "contact_name":"",
+         "business_address":"123 some st, San Francisco, CA, US, 94111",
+         "question_number_two":"2",
+         "files_for_upload":[
+            {
+               "name":"uploadedfilename.ext",
+               "url":"https://example.com/A%20file%20with%20spaces.ext"
+            },
+            {
+               "name":"uploadedpicturename.jpg",
+               "url":"https://example.com/pathtofile/"
+            }
+         ],
+         "drop_down_question":{
+            "value":"Yes",
+            "label":"Yes"
+         },
+         "end_user_field_type":{
+            "value":"{\"firstName\":\"Rand\",\"lastName\":\"al'Thor\",   \"email\":\"dragon.reborn@gmail.com\",\"id\":\"UID-372e0708-ab65-493f-8d47-665cbca4b65a\"}",
+            "label":"Rand al'Thor (dragon.reborn@gmail.com)"
+         }
+      },
+      "partner_id":"ABC",
+      "market_id":"Westlands",
+      "activation_id":"02e9929d-35f2-4c70-988f-5650b183ef9f",
+      "order_form_submission_id":"OFS-9f2e1a82-51d6-4a79-ba4b-a8347de14e53",
+      "vendor_order_id":"ORD-XXXXXXXXXX",
+      "variable_price":{
+         "currency":"USD",
+         "value":50000,
+         "frequency":"MONTHLY"
+      },
+      "edition_id":"EDITION-123",
+      "app_id":"MP-123"
+   }
 }
 ```
 <div class="background-accent remember">
@@ -272,10 +304,19 @@ The Add-ons purchase webhook is called every time billing information about an a
 
 Details:
 
+- **account** _A nested structure representing the business the product has been purchased for including identification, location, and contact information._
+- **order_form** _A collection of information added to an order form filled out while purchasing the Add-on. Will be null if the product has no order form specified._
+- **market_id** _An identifier indicating the area that a partner is marketing to. Usually used to specify different geographic regions._
 - **addon_id:** _Unique id, specific to the Add-on being activated._
 - **activation_id:** _Unique id specific to each instance of an activated Add-on._
-- **activation_time:** _The time that an Add-on was or is to be activated. This is to allow for delayed activation._ 
+- **order_form_submission_id** _A unique identifier specific to the order form that was filled out. Will be empty if there is no order form.
+- **variable_price** _A nested structure representing what is being spent on the product at activation. The structure contains values for currency, frequency of billing and the spending amount in cents._
+- **webhook_id** _An identifier for the webhook describing its function._
+- **action** _A description of the action that triggered the webhook being sent._
+- **activation_time:** _The time that an Add-on was or is to be activated. This is to allow for delayed activation._
 - **deactivation_time:** _The time that an Add-on should be deactivated in the future. This must be observed and acted on come the given time._
+- **partner_id** _A unique id specific to the partner selling to the business account._
+- **app_id** _A unique identifier for the product._
 
 SAMPLE DECODED PAYLOAD - Provisioned:
 
@@ -326,6 +367,11 @@ SAMPLE DECODED PAYLOAD - Provisioned:
    "addon_id":"A-604152205",
    "activation_id": "02e9929d-35f2-4c70-988f-5650b183ef9d",
    "order_form_submission_id": "OFS-9f2e1a82-51d6-4a79-ba4b-a8347de14c53",
+   "variable_price": {
+     "currency":"USD",
+     "value": 50000,
+     "frequency":"MONTHLY"
+   },
    "webhook_id":"purchase",
    "action":"provisioned",
    "activation_time":"2017-07-24T14:39:55.117426664Z",
@@ -339,10 +385,18 @@ SAMPLE DECODED PAYLOAD - De-Provisioned:
 
 Details:
 
-- **addon_id:** _Unique id, specific to the Add-on being activated._
+- **account** _A nested structure representing the business the product has been purchased for including identification, location, and contact information._
+- **order_form** _A collection of information added to an order form filled out while purchasing the Add-on. Will be null for de-provisioning webhooks._
+- **market_id** _An identifier indicating the area that a partner is marketing to. Usually used to specify different geographic regions._
+- **addon_id:** _Unique id, specific to the Add-on being activated._
 - **activation_id:** _Unique id specific to each instance of an activated Add-on._
-- **activation_time:** _The time that the Add-on was activated._
-- **deactivation_time:** _The time that the Add-on was deactivated. This is informational._
+- **order_form_submission_id** _A unique identifier specific to the order form that was filled out. Will be empty if there is no order form.
+- **webhook_id** _An identifier for the webhook describing its function._
+- **action** _A description of the action that triggered the webhook being sent._
+- **activation_time:** _The time that an Add-on was or is to be activated. This is to allow for delayed activation._
+- **deactivation_time:** _The time that an Add-on should be deactivated in the future. This must be observed and acted on come the given time._
+- **partner_id** _A unique id specific to the partner selling to the business account._
+- **app_id** _A unique identifier for the product._
 
 ```json
 {  
@@ -382,6 +436,8 @@ Details:
 - **activation_id:** _Unique id specific to each instance of an activated product._
 - **activation_time:** _The time that the product was activated._
 - **deactivation_time:** _The time that the product should be deactivated in the future. This must be observed and acted on come the given time._
+- **cancellation_choices:** _List of preset reasons the user can select during the cancellation. (Product is too expensive, Customer reached end of contract, etc)_
+- **cancellation_comment:** _User submitted reason for the cancellation._
 
 SAMPLE DECODED PAYLOAD - Cancel:
 
@@ -402,7 +458,9 @@ SAMPLE DECODED PAYLOAD - Cancel:
     "deactivation_time": "2017-08-23T14:39:55.117426664Z",
     "partner_id": "VNDR",
     "app_id": "MP-123",
-    "vendor_order_id": "ORD-123"
+    "vendor_order_id": "ORD-123",
+    "cancellation_choices": ["Product is too expensive"],
+    "cancellation_comment": "This is why we cancelled the product"
   }
 }
 ```
@@ -577,3 +635,38 @@ SAMPLE DECODED PAYLOAD - Delete:
   }
 }
 ```
+
+## Spend Change Request Webhook
+
+The spend change request webhook is called every time a spend change is requested for one of the vendor's products.
+
+SAMPLE DECODED PAYLOAD:
+
+```json
+{
+  "exp": 1639759270,
+  "iat": 1639759210,
+  "iss": "Vendasta Marketplace",
+  "vendasta.com/marketplace/webhook": {
+    "account_id": "AG-CTGP3S111",
+    "action": "spend-change",
+    "activation_id": "54c42bf3-15ee-43a9-8b59-ff2761de21e",
+    "addon_id": "",
+    "app_id": "MP-VR6THPZ3HK3SM7J5BM7DVR427GKKK",
+    "billing_frequency": "Monthly",
+    "change_request_id": "SCR-12990f0e-c74e-40f0-8380-f15f7b1d6a37",
+    "currency": "USD",
+    "edition_id": "",
+    "effective_date": "2022-01-10T17:37:59.89203658Z",
+    "event_time": "2021-12-17T16:40:09.187494398Z",
+    "market_id": "default",
+    "partner_id": "PID1",
+    "requested_value": 10000,
+    "requester_email": "requester@email.com",
+    "requester_note": "",
+    "webhook_id": "service-change-request",
+    "webhook_url": "https://webhook.site/1ia8u8e8-7ba7-4019-9156-1ia8u8e8"
+  }
+}
+```
+

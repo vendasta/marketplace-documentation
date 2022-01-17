@@ -891,11 +891,7 @@ paths:
         content:
           application/json:
             schema:
-              required:
-                - category
-                - account_id
-                - report_date
-                - report_data
+              type: object
               properties:
                 category:
                   type: string
@@ -907,7 +903,6 @@ paths:
                     - WEBSITE
                     - SEO
                     - ADVERTISING
-                    - CONTENT_AND_EXPERIENCE
                 account_id:
                   type: string
                   description: A unique account ID that can be used to identify and reference an account.
@@ -919,7 +914,11 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/executive_report_data'
-              type: object
+              required:
+                - category
+                - account_id
+                - report_date
+                - report_data
   /executive_report/monthly/:
     post:
       tags:

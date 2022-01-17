@@ -10,11 +10,11 @@ There is a simple revenue share based on the wholesale price of your products. O
 
 With this in mind, set your wholesale price and recommended retail so that Channel Partners are enticed to offer your product, and it has a healthy margin.  We recommend setting your wholesale price to allow Channel Partners at least 30% margin on the Recommended Retail Price. Remember, the higher the margin the more attractive it becomes for Channel Partners to sell.
 
-For details on how to set up the pricing for your offerings, please review the Pricing section under the _Product Info_ tab, then refer to the Marketplace <a href="https://docs.google.com/document/d/1NL_u4CFMoBw0p1t3UKvyQJsd6f-UX51Qj92P0wvvA2M/edit" target="_blank">Billing Models Guide</a>
+For details on how to set up the pricing for your offerings, please review the Pricing section under the _Product Info_ tab, then refer to the Marketplace <a href="https://docs.google.com/presentation/d/1cxp-EreI21uRp08BCekEpA82iUEXafXqbx1960zEspc/edit?usp=sharing" target="_blank">Billing Models Guide</a>
 
 **Distribution**
 
 Once your Product has met all integration requirements, and has been reviewed and approved by Vendasta, your Product will be distributed to the Vendasta Channel Partner network to be discovered and sold.
 
 ---
-**Next:** [Requirements Checklist](./integration_requirements.md)
+**Next:** [Requirements Checklist](https://developers.vendasta.com/vendor/ZG9jOjE3MTE3MDg2-integration-requirement-checklist)
