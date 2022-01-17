@@ -111,7 +111,7 @@ paths:
           name: account_id
           schema:
             type: string
-      summary: Get Account
+      summary: Get Account - Rich Data
       requestBody:
         content:
           application/json:
@@ -126,6 +126,7 @@ paths:
             schema:
               type: object
               properties: {}
+      description: Retreive extended account data such as hours of operation and images.
     parameters:
       - schema:
           type: string
@@ -891,7 +892,11 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              required:
+                - category
+                - account_id
+                - report_date
+                - report_data
               properties:
                 category:
                   type: string
@@ -914,11 +919,7 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/executive_report_data'
-              required:
-                - category
-                - account_id
-                - report_date
-                - report_data
+              type: object
   /executive_report/monthly/:
     post:
       tags:
