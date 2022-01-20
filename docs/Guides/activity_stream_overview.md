@@ -15,15 +15,15 @@ Basic HTML is supported by the `content` field and will render appropriately on 
 
 ## How the Activity Stream & Notification Emails Work
 
-When an event occurs in a Vendor's Product that the users of the product should know about, the vendor would create an `Activity` representing that event within Vendasta.
+When an event occurs in a Vendor's Product that the users of the product should know about, the Vendor will create an `Activity` representing that event within the Business App Activity Stream.
 
-![highlights](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/02/ActivityStream_HighLevel-1.png)
+![highlights](../../assets/images/guides/activitystream/activitystream_activity.png)
 
-The end user communications that are pushed to the Activity Stream firstly appear in the Business App Activity Stream within the Inbox page, filterable by 'Activity Type'. This information will also go out to the Notification Recipients on the Account based on their email preferences.
+The end user communications that are pushed to the Activity Stream firstly appear in the Business App Activity Stream, filterable by 'Activity Type'. This information will also go out to the Notification Recipients on the Account based on their email preferences.
 
-The `Activity Type` is essentially a Notification Category, that allows for filtering of all the 'Activity' that is occurring in a User’s different applications.
+The `Activity Type` is essentially a Notification Category, that allows for filtering of all the `Activities` that are occurring in a Business's active applications.
 
-![new](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/06/ActivityStreamNew.jpg)
+![new](../../assets/images/guides/activitystream/activitystream_activitytype.png)
 
 
 
