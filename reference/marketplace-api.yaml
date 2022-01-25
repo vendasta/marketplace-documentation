@@ -2020,24 +2020,19 @@ components:
           type: string
       type: object
     activity:
-      required:
-        - account_id
-        - activity_id
-        - activity_type
-        - created
-        - link
-        - title
+      type: object
       properties:
         activity_id:
           type: string
         account_id:
           type: string
+          description: A unique account ID that can be used to identify and reference an account.
         created:
           type: string
         settings_tags:
+          type: array
           items:
             type: string
-          type: array
         title:
           type: string
         content:
@@ -2048,9 +2043,15 @@ components:
           type: string
         activity_type:
           type: string
-        template_date:
+        template_data:
           type: object
-      type: object
+      required:
+        - activity_id
+        - account_id
+        - created
+        - title
+        - link
+        - activity_type
     session_transfer_url:
       required:
         - session_transfer_url
