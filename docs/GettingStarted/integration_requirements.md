@@ -1,6 +1,6 @@
 # Integration Requirement Checklist
 
-Every Product that is integrated into the Marketplace will have to follow the points outlined below before it can be approved and launched to all channel partners. Please read through these points carefully and don't hesitate to contact us with any questions. We will help you with templates and guidance throughout the process.
+Every Product that is integrated into the Marketplace will have to follow the points outlined below **before it can be approved and launched to all channel partners.** Please read through these points carefully and don't hesitate to contact us with any questions. We will help you with templates and guidance throughout the process.
 
 ## Legal
 
@@ -41,6 +41,8 @@ Update contact information in Vendor Center:
 
 
 ## Technical
+
+***All requirements need to be implemented prior to the distribution of your product to the Vendasta reseller network.***
 
 ### Requirement 1: Provisioning Workflow
 
@@ -104,8 +106,7 @@ The term *‘Vendasta’* is not mentioned anywhere in the dashboard, error code
 
 ## Marketing
 
-<!-- theme: warning -->
->Please Review the [Marketing Guidelines Document](https://docs.google.com/document/d/15XmlwdsE5QeAxHVhZTb3RE6wkRHQbtRLgjTo4GuaCeg/edit?usp=sharing)
+Please Review the [Marketing Guidelines Document](https://docs.google.com/document/d/15XmlwdsE5QeAxHVhZTb3RE6wkRHQbtRLgjTo4GuaCeg/edit?usp=sharing)
 
 **Training**
 - One pager reference about the solution
@@ -116,4 +117,6 @@ The term *‘Vendasta’* is not mentioned anywhere in the dashboard, error code
 <!-- theme: info -->
 >_Please Note:_
 >
->Once your Product has been released, changes made to it in Vendor Center require approval and publishing from a Vendasta Admin before those changes are reflected in Marketplace. You must let a Vendasta Admin know when you have updates that you want reviewed and published.
+>Once your Product has been released, changes made to it in Vendor Center require approval and publishing from a Vendasta Admin before those changes are reflected in Marketplace. 
+>
+>Please request a review from the Compare Products tab
