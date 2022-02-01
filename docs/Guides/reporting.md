@@ -1,5 +1,9 @@
 # Executive Report
 
+<!-- theme: warning -->
+> There is a new closed API for the Executive Report.
+> Please discuss your reporting with vendor support before starting an integration.
+
 ## Usage
 
 Depending on Vendor data availability the Executive Report may be populated for the weekly, and/or monthly periods. It is suggested to provide data for both the weekly & monthly periods to provide regular metrics as well as a higher level view of the data.
@@ -28,8 +32,6 @@ Each example below is a single anonymous card template snippit. There is a full 
 
 ### Basic Number & Number With Change Card
 
-![number-card](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/04/Executive-Report-1.jpg)
-
 The Number With Change Card provides more rich & valuable historical data over the Basic Number card by displaying a value with the change from last period, and where the value was when tracking began. It is highly recommended if the Vendor has the period comparison data to use this card over the Basic.
 
 Example:
@@ -50,8 +52,6 @@ Example:
 ```
 
 ### Info List Card
-
-![info-list-card](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/05/info_list.png)
 
 The Info List card is a flexible list card, with an area on the left for an image and text, and coloured text & an Icon on the right hand side.
 
@@ -88,8 +88,6 @@ Example:
 ```
 
 ### Bar Chart Card
-
-![bar-chart-card](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/05/bar_chart.png)
 
 The Bar Chart Card displays a horizontal Bar Chart, with a maximum of 5 bars. Bar values & fill percentage are set independently; this along with the chart values being strings makes this card very flexible. As with the example below if it's desired that the percentages be visable, they could be added to the value string.
 
@@ -132,8 +130,6 @@ Example:
 ```
 
 ### Word Cloud Card
-
-![word-cloud-card](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/06/Screen-Shot-2018-06-04-at-5.27.12-PM.png)
 
 The Word Cloud Card is a dual scale word cloud that displays words and phrases larger or smaller based on a scale from 1-1000, and a sentiment colour scale from 1-1000, which will display the word as red for lower than 400, blue from 400-700, and green for 700+.
 
@@ -208,8 +204,6 @@ Example:
 ```
 
 ### Line Graph Card
-
-![line-graph-card](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/06/execreport_linegraph.png)
 
 Displays a line graph of progress over time. The x axis values are to be provided as milliseconds since epoch, and the chart will auto scale based on the times provided. Multiple lines are supported - add additional anonymous line objects to the line_graph array.
 
@@ -293,8 +287,6 @@ Example:
 ```
 
 ### Call to Action Card
-
-![call-to-action-card](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/05/Screen-Shot-2018-05-28-at-1.53.19-PM.png)
 
 The call to action card displays a message along with a prominant button to direct the user to a location where they can act on the CTA.
 Example:

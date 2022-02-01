@@ -17,7 +17,7 @@ This guide is for implementing a **3-legged OAuth** flow. The distinction betwee
 
 Your integration is configured in Vendor Center, under Integration > SSO Settings, including the Entry URL, Logout URL, and OAuth2 configuration which will provide the client ID and client secret.
 
-![Session Settings Diagram](https://storage.googleapis.com/wordpress-www-vendasta/developers/2021/SSO_settings.png)
+![Session Settings Diagram](../../assets/images/guides/sso/sso_marketplace_settings.png)
 
 |||
 |-|-|
@@ -28,7 +28,7 @@ Your integration is configured in Vendor Center, under Integration > SSO Setting
 
 The Vendasta NavBar provides a seamless navigation experience for users to switch between your marketplace application, other applications, and their Business Center.  User logout will also be served by this bar, and hidden from your dashboard. **Implementation of the Navigation Bar is required if your integration includes SSO.**
 
-![](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/03/NavBar2-1024x160.jpg)
+![](../../assets/images/guides/sso/navbar.png)
 
 Include the script tag below before the closing body tag of your HTML to allow for rendering of the Navigation bar. **All** the data- attributes in the script tag are required to be passed as when loading the application. The Navbar should load on every page of the application.
 

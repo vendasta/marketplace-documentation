@@ -10,8 +10,6 @@ The following fields are strings used as categories and filters. These fields EN
 
 The activity_type is displayed as a Category Header in the Activity Filter in Business App, so should be a user-friendly string. An activity_type should be configured for each type of Notification that will be pushed for an Application
 
-![Activity Type](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/06/ActivityStreamNew.jpg)
-
 **"settings_tags" (optional) - Requires ENUM to be configured if being used**
 
 Optional sub categories per "activity_type". These Activity sub categories don't show up in the Activity Stream filters, and only apply to the Notification System Emailing preferences.
