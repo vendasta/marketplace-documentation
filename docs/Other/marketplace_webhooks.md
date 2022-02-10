@@ -6,8 +6,6 @@ All of the webhooks used in the Vendasta marketplace take security and privacy a
 
 Webhooks are registered by placing your url in the Integration page of your App in Vendor Center. API registration is not available.
 
-![vendor-center-webhooks](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/03/VDC_Webhooks-1024x461.jpg)
-
 ## Receiving Webhooks
 
 **Payload Details**
@@ -657,7 +655,7 @@ SAMPLE DECODED PAYLOAD:
     "change_request_id": "SCR-12990f0e-c74e-40f0-8380-f15f7b1d6a37",
     "currency": "USD",
     "edition_id": "",
-    "effective_date": "2022-01-10T17:37:59.89203658Z",
+    "effective_date": "2022-01-10T17:37:59.892036587Z",
     "event_time": "2021-12-17T16:40:09.187494398Z",
     "market_id": "default",
     "partner_id": "PID1",

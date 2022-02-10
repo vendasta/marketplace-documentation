@@ -17,9 +17,9 @@ Optional sub categories per "activity_type". These Activity sub categories don't
 
 ## Drive Users into your product
 
-The `link` is a required field. When a User selects ‘View’, it calls the Application's Entry URL passing the 'link' as the 'nextUrl' parameter.  This is why the implementation of the nextUrl parameter for your SSO Entry URL is important. The nextUrl allows for deeplinking (directing a user to a page relevant to your Notification). Encode the nextUrl in the state parameter for OAuth SSO, and retrieve it when passed to your redirect_uri.
+The `link` is a required field. When a User selects ‘View’, it calls the Application's Entry URL passing the 'link' as the 'nextUrl' parameter. This redirect can also occur from within an instant email. The nextUrl allows for deeplinking (directing a user to a page relevant to your Notification). Encode the nextUrl in the state parameter for OAuth SSO, and retrieve it when passed to your redirect_uri.
 
-![Deep Linking](https://storage.googleapis.com/wordpress-www-vendasta/developers/2017/06/imageedit_1_7626234665.png)
+![Deep Linking](../../assets/images/guides/activitystream/activity_deeplink.png)
 
 ## Email Template Options
 
@@ -29,7 +29,7 @@ Contact your Vendasta Representative if you desire email alert templates for you
 
 Default Structure:
 
-![Example Instant Notification Email](https://storage.googleapis.com/wordpress-www-vendasta/developers/2017/06/Instant-Notification.png)
+![Example Instant Notification Email](../../assets/images/guides/activitystream/InstantActivity_Template.png)
 
 **Digest Template**
 
