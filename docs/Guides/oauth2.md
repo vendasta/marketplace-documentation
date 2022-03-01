@@ -1,4 +1,4 @@
-# Vendasta Identity and API access via OAuth2 3-Legged Flow
+# Vendasta Identity access via OAuth2 3-Legged Flow
 
 ## Overview
 
