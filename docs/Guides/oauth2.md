@@ -13,7 +13,34 @@ This guide is for implementing a **3-legged OAuth** flow. The distinction betwee
 | **2-legged flow (Partner Service Account)** | Access to high-level Vendasta workflow APIs, but no access to **user data** or **business data**. | Allocating a Partner Service Account. Configuring an OAuth2 2-legged client.             
 | **3-legged flow (this guide)**              | Access to **user data** and **business data** associated with the user performing the flow.       | Follow this guide. Requires an end user to initiate the flow to provide access to the app. |
 
-## Configuring your integration in Vendor Center
+## Step 1: Choosing the type of implementation for your App
+
+The first decision you will need to make is where you will implement your authorization flow:
+
+1. **(Recommended)** Backend workflow: implement the workflow within your secure webserver
+2. Frontend workflow: implement the workflow using Javascript within a Single Page Application
+
+**We recommend implementing your authorization flow on the backend in most cases as it is easier to setup, secure, and use. However, Single Page Applications would likely prefer a Frontend Workflow so that tokens can be more easily refreshed.**
+
+Both OpenID Connect and OAuth2 are standardized workflows, which means most programming languages have at least one library available to aid your implementation whether you choose to implement the workflow on the frontend or on your backend webserver.
+
+<!-- theme: info -->
+>You can find a list of compliant OAuth2 libraries [here](https://oauth.net/code/). Please select a **Client Library** in your language of choice.
+>
+>Whichever client library you select, please consult the included documentation for the library of your choice to supplement this guide.
+
+### Backend Clients:
+
+Clients running on a backend web-server will use their **client secret** for verification.
+
+### Frontend Clients:
+
+* Frontend clients should use the [PKCE flow](https://developer.okta.com/blog/2019/08/22/okta-authjs-pkce/?utm_campaign=text_website_all_multiple_dev_dev_oauth-pkce_null&utm_source=oauthio&utm_medium=cpc), it is recommended that you find an OAuth2 library which supports this feature.
+* The **implicit grant flow** is considered insecure and should be avoided. 
+
+## Step 2: Configuring your Client & Library
+
+### Configuring your integration in Vendor Center
 
 Your integration is configured in Vendor Center, under Integration > SSO Settings, including the Entry URL, Logout URL, and OAuth2 configuration which will provide the client ID and client secret.
 
@@ -24,62 +51,10 @@ Your integration is configured in Vendor Center, under Integration > SSO Setting
 | **Entry URL**  | User is redirected to this url when they click on the Product icon in the End User dashboard. The account_id is injected into the placeholder on the url, and should be passed on to the Authorization URL to trigger the start of SSO. 
 | **Logout URL** | A webhook for back channel logout of service provider session. 
 
-## Navigation Bar
-
-The Vendasta NavBar provides a seamless navigation experience for users to switch between your marketplace application, other applications, and their Business Center.  User logout will also be served by this bar, and hidden from your dashboard. **Implementation of the Navigation Bar is required if your integration includes SSO.**
-
-![](../../assets/images/guides/sso/navbar.png)
-
-Include the script tag below before the closing body tag of your HTML to allow for rendering of the Navigation bar. **All** the data- attributes in the script tag are required to be passed as when loading the application. The Navbar should load on every page of the application.
-
-It is recommended that you build the entire script tag before injecting it into the page rather than injecting the custom params individually. This will avoid a race condition where the script runs before the parameters are present, resulting in an empty navbar frame.
-
-**HTML TEMPLATE**
-
-```html
-<!-- include the following script tag before the closing body tag to render the navigation bar in your app -->
-<script src="//www.cdnstyles.com/static/product_navbar/v1/product_navbar.js"
-        data-url="{{ product_navbar_data_url }}"
-        data-account-id="{{ account_id }}"
-        data-app-id="{{ app_id }}">
-</script>
-
-OR if including target-element-class
-
-<!-- include the following script tag before the closing body tag to render the navigation bar in your app -->
-<script src="//www.cdnstyles.com/static/product_navbar/v1/product_navbar.js"
-        data-url="{{ product_navbar_data_url }}"
-        data-account-id="{{ account_id }}"
-        data-app-id="{{ app_id }}"
-        target-element-class="{{target_element_class}}">
-</script>
-```
-
-Script parameter details:
-
-|||
-|-|-|
-| `vendasta.com/marketplace/product_navbar_data_url`| This is the endpoint the product navbar script will use to retrieve the data to populate the Vendasta navigation bar. To be retrived via the OIDC User-Info endpoint.
-| `data-account-id`                                 | The unique ID for a Vendasta Account. This is passed to the Service Provider via the Entry URL. 
-| `data-app-id`                                     | The unique ID for a Vendor Product. Found in the Vendor Center URL when in the context of a Product.
-| `target-element-class(optional)`                  | This field can help overcome css conflicts with the NavBar. It allows you to specify an element that has a **unique** class. If the element with this class exists on the page at the time the NavBar is called to render the bar, it will place the bar directly above the target element|
 
 
-## Implementing Client-side OAuth2 in your app
 
-The first decision you will need to make is where you will implement your authorization flow:
 
-1. **(Recommended)** Backend workflow: implement the workflow within your secure webserver
-1. Frontend workflow: implement the workflow using Javascript within a Single Page Application
-
-**We recommend implementing your authorization flow on the backend in most cases as it is easier to setup, secure, and use. However, Single Page Applications should likely prefer a Frontend Workflow so that tokens can be more easily refreshed.**
-
-Both OpenID Connect and OAuth2 are standardized workflows, which means most programming languages have at least one library available to aid your implementation whether you choose to implement the workflow on the frontend or on your backend webserver.
-
-<!-- theme: info -->
->You can find a list of compliant OAuth2 libraries [here](https://oauth.net/code/). Please select a **Client Library** in your language of choice.
->
->Whichever client library you select, please consult the included documentation for the library of your choice to supplement this guide.
 
 ### Client Configuration
 
@@ -96,14 +71,19 @@ Follow your client’s installation guide, entering the following information wh
 | **Client ID**                    | Obtained when creating your OAuth2 configuration within the Vendasta Platform|
 | **Client Secret (backend only)** | Obtained when creating your OAuth2 configuration within the Vendasta Platform|
 
-#### Contextualizing your Auth URL
 
-Vendasta users may belong to any one of our many partners, and each partner may select one of many different login methods.
-In order to direct the user to the login which is appropriate for their account, we need to know which account they are attempting to access.
-Most OAuth2 libraries will allow you to add additional context to your Authorization URL with query parameters, before initiating an OAuth2 flow,
-provide options to your OAuth2 library to set the account ID to the `account_id` query parameter.
+## Step 3: Session Transfer Workflow
 
-In the case that you have a partner ID, you may use it in place of an account id by specifying it in the `partner_id` query parameter.
+## Authorization URL Configuration
+The library that you chose to use likely had a function for generating the OAuth Authorization URL.
+
+
+
+### Contextualizing your Auth URL
+
+Vendasta users may belong to any one of our many partners, and each partner may select one of many different login methods. Additionally user access is white-labeled. The branding to be displayed to them can be by `market_id`.
+Thus in order to direct the user to the login screen that is specific to their account, we need to know which account they are attempting to access.
+Most OAuth2 libraries will allow you to add additional context to your Authorization URL with query parameters, before initiating an OAuth2 flow, provide options to your OAuth2 library to set the account ID to the `account_id` query parameter.
 
 ### Prompts
 
@@ -117,14 +97,7 @@ Our Authorization URL supports each of the following values for the `prompt` que
 
 
 
-### Backend Clients:
 
-Clients running on a backend web-server will use their **client secret** for verification.
-
-### Frontend Clients:
-
-* Frontend clients should use the [PKCE flow](https://developer.okta.com/blog/2019/08/22/okta-authjs-pkce/?utm_campaign=text_website_all_multiple_dev_dev_oauth-pkce_null&utm_source=oauthio&utm_medium=cpc), it is recommended that you find an OAuth2 library which supports this feature.
-* The **implicit grant flow** is considered insecure and should be avoided. 
 
 ### Scopes
 
@@ -250,3 +223,48 @@ The amount of information returned is determined by the scopes which your applic
 From OIDC spec point [5.3.2](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo) - "NOTE: Due to the possibility of token substitution attacks (see [Section 16.11](https://openid.net/specs/openid-connect-core-1_0.html#TokenSubstitution)), the UserInfo Response is not guaranteed to be about the End-User identified by the sub (subject) element of the ID Token. The sub Claim in the UserInfo Response MUST be verified to exactly match the sub Claim in the ID Token; if they do not match, the UserInfo Response values MUST NOT be used."
 
 </div>
+
+
+## Step X - Dashboard Modifications
+
+### Navigation Bar
+
+The Vendasta NavBar provides a seamless navigation experience for users to switch between your marketplace application, other applications, and their Business Center.  User logout will also be served by this bar, and hidden from your dashboard. **Implementation of the Navigation Bar is required if your integration includes SSO.**
+
+![](../../assets/images/guides/sso/navbar.png)
+
+Include the script tag below before the closing body tag of your HTML to allow for rendering of the Navigation bar. **All** the data- attributes in the script tag are required to be passed as when loading the application. The Navbar should load on every page of the application.
+
+It is recommended that you build the entire script tag before injecting it into the page rather than injecting the custom params individually. This will avoid a race condition where the script runs before the parameters are present, resulting in an empty navbar frame.
+
+**HTML TEMPLATE**
+
+```html
+<!-- include the following script tag before the closing body tag to render the navigation bar in your app -->
+<script src="//www.cdnstyles.com/static/product_navbar/v1/product_navbar.js"
+        data-url="{{ product_navbar_data_url }}"
+        data-account-id="{{ account_id }}"
+        data-app-id="{{ app_id }}">
+</script>
+
+OR if including target-element-class
+
+<!-- include the following script tag before the closing body tag to render the navigation bar in your app -->
+<script src="//www.cdnstyles.com/static/product_navbar/v1/product_navbar.js"
+        data-url="{{ product_navbar_data_url }}"
+        data-account-id="{{ account_id }}"
+        data-app-id="{{ app_id }}"
+        target-element-class="{{target_element_class}}">
+</script>
+```
+
+Script parameter details:
+
+|||
+|-|-|
+| `vendasta.com/marketplace/product_navbar_data_url`| This is the endpoint the product navbar script will use to retrieve the data to populate the Vendasta navigation bar. To be retrived via the OIDC User-Info endpoint.
+| `data-account-id`                                 | The unique ID for a Vendasta Account. This is passed to the Service Provider via the Entry URL. 
+| `data-app-id`                                     | The unique ID for a Vendor Product. Found in the Vendor Center URL when in the context of a Product.
+| `target-element-class(optional)`                  | This field can help overcome css conflicts with the NavBar. It allows you to specify an element that has a **unique** class. If the element with this class exists on the page at the time the NavBar is called to render the bar, it will place the bar directly above the target element|
+
+## Testing
