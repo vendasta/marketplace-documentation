@@ -1589,6 +1589,16 @@ components:
           type: string
         service_area_business_flag:
           type: boolean
+        tags:
+          type: array
+          items:
+            type: string
+        seo_category:
+          type: array
+          items:
+            type: string
+        email:
+          type: string
       type: object
     account_richdata:
       description: ''
@@ -1765,6 +1775,82 @@ components:
         country:
           type: string
           minLength: 1
+        tags:
+          type: array
+          items:
+            type: string
+        seo_category:
+          type: array
+          items:
+            type: string
+        email:
+          type: string
+        service_availability:
+          type: object
+          properties:
+            delivery:
+              type: string
+              enum:
+                - Y
+                - N
+            no_contact_delivery:
+              type: string
+              enum:
+                - Y
+                - N
+            in_store_pickup:
+              type: string
+              enum:
+                - Y
+                - N
+            curbside_pickup:
+              type: string
+              enum:
+                - Y
+                - N
+            appointments_only:
+              type: string
+              enum:
+                - Y
+                - N
+            closed_status:
+              type: string
+              enum:
+                - Unspecified
+                - Open
+                - Limited
+                - Temporary
+                - Permanent
+            closed_status_date:
+              type: string
+              format: date
+        payment_methods:
+          type: array
+          items:
+            type: string
+            enum:
+              - American Express
+              - Android Pay
+              - Apple Pay
+              - Cash
+              - Check
+              - Debit
+              - Diners Club
+              - Discover
+              - MasterCard
+              - PayPal
+              - Samsung Pay
+              - Store Card
+              - Travelers Checks
+              - Visa
+              - CCS
+              - Sodexo
+              - GoPay
+              - V PAY
+              - Financing
+              - Invoice
+              - PaySec
+              - Bitcoin
       required:
         - brands_carried
         - call_tracking_number
@@ -1809,6 +1895,11 @@ components:
         - hours_of_operation
         - landmark
         - country
+        - tags
+        - seo_category
+        - email
+        - payment_methods
+        - service_availability
       x-examples:
         example-1:
           brands_carried:
