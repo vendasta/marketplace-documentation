@@ -1,12 +1,12 @@
-# Webhooks
+# Overview
 
 All of the webhooks used in the Vendasta marketplace take security and privacy as primary concerns. Thus Marketplace webhooks are sent over HTTPS, and payloads are signed by the Vendasta Marketplace so applications can verify the authenticity of all payloads. In order to make this process secure, extensible, and simple for developers we have chosen to use the [JWT Format](https://jwt.io/introduction/) signed by an RSA key for the Marketplace Webhooks.
 
-## Registering Webhooks
+## Webhook Registration
 
-Webhooks are registered by placing your url in the Integration page of your App in Vendor Center. API registration is not available.
+Webhooks are registered by placing a url in the Integration page of an App in [Vendor Center](https://vendors.vendasta.com). API registration is not available.
 
-## Receiving Webhooks
+## Webhook Format
 
 **Payload Details**
 
@@ -16,6 +16,19 @@ body: JWT signed base64 string sent as plaintext raw in the POST body
 ```
 Auth0 has libraries for most popular languages to help speed up integrations that interact with JWTs: [https://jwt.io/#libraries-io](https://jwt.io/#libraries-io)
 
+
+**Testing**
+
+The best way to initially test receiving a webhook payload from Vendasta is to use the Testing Page in Vendor Center. 
+
+The Testing Page will load the **Purchase Webhook** URLs you have entered in the Integration Page by default, but you can set them to whatever url you would like. This tool only send purchase webhook dummy payloads.
+
+To review a test payload try a webhook testing service like [Webhook.Site](https://webhook.site) or [RequestBin by Pipedream](https://requestbin.com/). Copy the unique url they give, and enter it into the on the testing page, and select "SEND TEST APP WEBHOOK" -
+Review the results on the Webhook Tester page. It will have received a dummy payload. To see the contents, place the JWT token into the Encoded text area of the [jwt.io debugger](https://jwt.io). 
+
+_You will see that it indicates that you have an Invalid Signature since no Public Key is in place yet - see Validation below_
+
+If you need to test with custom order form data, you will need to test activate the product within the platform as the testing page doesn't support order forms.
 
 **Validation**
 
@@ -33,23 +46,10 @@ uC4SYhRy1dsBQ0S8SgcNQR4hBsx5UxERE8uknBW1TtvoyaqMp/HNWZRCNnuDNcfH
 -----END PUBLIC KEY-----
 ```
 
-You can quickly test whether a token's signature is valid using the [jwt.io debugger](https://jwt.io) used in Step 1. Enter the Marketplace Public key into the public key box on the right, and then re-paste the token into the Encode text area. You will see the graphic below change to 'Signature Verified'.
+You can quickly test whether a token's signature is valid using the [jwt.io debugger](https://jwt.io). Enter the Marketplace Public key into the public key box on the right, and then re-paste the token into the Encode text area. You should see the graphic below change to 'Signature Verified'.
 
 
-**Testing**
-
-The best way to initially test receiving a purchase payload from Vendasta is to use the Testing Page in Vendor Center. The Testing Page will load the Purchase Webhook URLs you have entered in the Integration Page by default, but you can set them to whatever url you would like.
-
-For your first test, try a service like [Webhook.Site](https://webhook.site) or [RequestBin by Pipedream](https://requestbin.com/). Copy the unique url they give, and enter it into the on the testing page, and select "SEND TEST APP WEBHOOK":
-
-![](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/10/webhooktesting.jpg)
-
-Review the results on the Webhook Tester page. It will have received a dummy payload. To see the contents, place the JWT token into the Encoded text area of the [jwt.io debugger](https://jwt.io). You will see that it indicates that you have an Invalid Signature since no Public Key is in place yet.
-
-## Webhook Timing
-If your App has Add-ons configured, and the App is activated at the same time as one or more Add-ons, the webhook for the parent App will always arrive first. Payloads to your configured endpoint of any subsequent Add-ons on the order will arrive as little as 500ms apart. This is regardless of whether this was multiple instances of a multi-purchasable Add-on, or activations of seperate Add-ons.
-
-### Message Delivery Failure
+## Error Handling
 
 **Timeout OR 500 level response status**
 
@@ -60,13 +60,21 @@ If your App has Add-ons configured, and the App is activated at the same time as
 
 If your system is down, the retry mechanism will allow for you to receive the message once it is back up. Otherwise, it will serve to alert you that a problem exists without inundating your endpoint with traffic.
 
-**Purchase Webhooks: 300-400 level response status**
+### Provisioning Errors
 
-There will be no retry for the purchase webhooks when called with the 'action' value of 'provisioned'. The Partner will be alerted that the activation attempt failed. If your App Activation may be rejected for expected reasons please manage this through the Pending Activation Workflow rather than via webhook response.
+<!-- theme: warning -->
+> #### Best Practice
+>If your App has need to reject an Activation for expected reasons please manage this through the Pending Activation Workflow rather than via the purchase webhook response. Always respond with a 200 to the webhook, and utilize the [Resolve a Pending Activation](https://developers.vendasta.com/vendor/b3A6MTY1Njk0Mjg-resolve-a-pending-activation) ednpoint to resolve the activation with a approval or rejection.
+>
 
-![activation-rejection](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/09/Activation_Rejection.jpg)
+**Purchase Webhooks: 3xx-4xx response status**
 
-If the body of the response of a 300-400 level status is formatted correctly we will provide the partner with the human readable message that you specify. A good message here can provide the partner with the information they require to fix the error, making it more likely for them to try the activation again. 
+For unexpected 3xx-4xx responses there will be no retry for the purchase webhooks. The activation will be resolved as `rejected` and the Partner will be alerted that the activation attempt failed. End Users currently aren't informed of activation failures. 
+
+![activation-rejection](../../assets/images/webhooks/activation_rejection.png)
+
+
+ If the body of the response of a 300-400 level status is formatted as below we will provide the partner with the human readable message that you specify. 
 
 ```json
 {
@@ -76,7 +84,11 @@ If the body of the response of a 300-400 level status is formatted correctly we 
 }
 ```
 
-## Product Purchase Hook
+
+
+## Webhook List
+
+### Product Purchase Hook
 
 The purchase webhook is called every time billing information about an account changes in regards to your product. The relevant changes are the **provisioned**, **change-edition**, and **de-provisioned** events, which are specified in the 'action' field. Note that the order_form section will be null if no order form is specified for your product.
 
@@ -95,7 +107,13 @@ Details:
 - **edition_id** _A unique identifier for the edition of the product being purchased. Will be empty if product does not have separate editions._
 - **app_id** _A unique identifier for the product._
 
-SAMPLE DECODED PAYLOAD - Provisioned:
+
+<!--
+type: tab
+title: Provision Event
+-->
+
+`provisioned` action - SAMPLE DECODED PAYLOAD
 
 ```json
 {
@@ -207,13 +225,17 @@ SAMPLE DECODED PAYLOAD - Provisioned:
    }
 }
 ```
-<div class="background-accent remember">
+<!-- theme: info -->
+>_Please Note:_
+>
+>Only core account data is included in the `provisioned` webhook payload. If you need extended account data it can be retrieved via the [Get Account Rich Data](https://developers.vendasta.com/vendor/b3A6MzYxMzM5OTI-get-account-rich-data) endpoint.
 
-_Please Note:_
-* If you need extended Account Data it can be retrieved by adding /richdata to the end of the [Get Account](https://developers.vendasta.com/swaggerui#/account/get_account__account_id_) path
-</div>
+<!--
+type: tab
+title: Edition Change Event
+-->
 
-SAMPLE DECODED PAYLOAD - Edition Changed:
+`change-edition` action - SAMPLE DECODED PAYLOAD
 
 ```json
 {
@@ -240,7 +262,12 @@ SAMPLE DECODED PAYLOAD - Edition Changed:
 }
 ```
 
-SAMPLE DECODED PAYLOAD - De-Provisioned:
+<!--
+type: tab
+title: De-provision Event
+-->
+
+`de-provisioned` action - SAMPLE DECODED PAYLOAD
 
 ```json
 {
@@ -265,7 +292,12 @@ SAMPLE DECODED PAYLOAD - De-Provisioned:
 }
 ```
 
-SAMPLE DECODED PAYLOAD - Trial:
+<!--
+type: tab
+title: Trial Provision Event
+-->
+
+`provisioned-trial` action - SAMPLE DECODED PAYLOAD
 
 ```json
 {
@@ -295,8 +327,9 @@ SAMPLE DECODED PAYLOAD - Trial:
 }
 ```
 
+<!-- type: tab-end -->
 
-## Add-Ons Purchase Hook
+### Add-Ons Purchase Hook
 
 The Add-ons purchase webhook is called every time billing information about an account changes in regards to the Add-ons for your product. The relevant changes are the **provisioned**, and **de-provisioned** events, which are specified in the 'action' field. Note that the order_form section will be null if no order form is specified for your product.
 
@@ -316,14 +349,30 @@ Details:
 - **partner_id** _A unique id specific to the partner selling to the business account._
 - **app_id** _A unique identifier for the product._
 
-SAMPLE DECODED PAYLOAD - Provisioned:
+
+<!--
+type: tab
+title: Add-on Provision Event
+-->
+
+`provisioned` action - SAMPLE DECODED PAYLOAD
 
 ```json
 {  
    "iss":"Vendasta Marketplace",
    "iat":1500498639,
    "exp":1500498699,
-   "vendasta.com/marketplace/webhook":{  
+   "vendasta.com/marketplace/webhook":{
+   "market_id":"testmarket",
+   "addon_id":"A-604152205",
+   "activation_id": "02e9929d-35f2-4c70-988f-5650b183ef9d",
+   "order_form_submission_id": "OFS-9f2e1a82-51d6-4a79-ba4b-a8347de14c53",
+   "webhook_id":"purchase",
+   "action":"provisioned",
+   "activation_time":"2017-07-24T14:39:55.117426664Z",
+   "deactivation_time":null,
+   "partner_id":"VNDR",
+   "app_id": "MP-123"
    "account":{  
       "partner_id":"VNDR",
       "id":"AG-XXXXXXXX",
@@ -361,40 +410,20 @@ SAMPLE DECODED PAYLOAD - Provisioned:
          "label":"Yes"
       }
    },
-   "market_id":"testmarket",
-   "addon_id":"A-604152205",
-   "activation_id": "02e9929d-35f2-4c70-988f-5650b183ef9d",
-   "order_form_submission_id": "OFS-9f2e1a82-51d6-4a79-ba4b-a8347de14c53",
    "variable_price": {
      "currency":"USD",
      "value": 50000,
      "frequency":"MONTHLY"
-   },
-   "webhook_id":"purchase",
-   "action":"provisioned",
-   "activation_time":"2017-07-24T14:39:55.117426664Z",
-   "deactivation_time":null,
-   "partner_id":"VNDR",
-   "app_id": "MP-123"
+   }
 }
 ```
 
-SAMPLE DECODED PAYLOAD - De-Provisioned:
+<!--
+type: tab
+title: De-Provision Event
+-->
 
-Details:
-
-- **account** _A nested structure representing the business the product has been purchased for including identification, location, and contact information._
-- **order_form** _A collection of information added to an order form filled out while purchasing the Add-on. Will be null for de-provisioning webhooks._
-- **market_id** _An identifier indicating the area that a partner is marketing to. Usually used to specify different geographic regions._
-- **addon_id:** _Unique id, specific to the Add-on being activated._
-- **activation_id:** _Unique id specific to each instance of an activated Add-on._
-- **order_form_submission_id** _A unique identifier specific to the order form that was filled out. Will be empty if there is no order form.
-- **webhook_id** _An identifier for the webhook describing its function._
-- **action** _A description of the action that triggered the webhook being sent._
-- **activation_time:** _The time that an Add-on was or is to be activated. This is to allow for delayed activation._
-- **deactivation_time:** _The time that an Add-on should be deactivated in the future. This must be observed and acted on come the given time._
-- **partner_id** _A unique id specific to the partner selling to the business account._
-- **app_id** _A unique identifier for the product._
+`de-provisioned` action - SAMPLE DECODED PAYLOAD
 
 ```json
 {  
@@ -424,7 +453,10 @@ Details:
 }
 ```
 
-## Cancelation Webhook
+<!-- type: tab-end -->
+
+
+### Cancelation Webhook
 
 The Cancelation webhook is called when a product gets cancelled. The relevant changes are the **cancel**, and **undo-cancel** events, which are specified in the 'action' field. Note that the original activation time, time of the action, and time of deactivation or renewal will be included.
 
@@ -437,7 +469,12 @@ Details:
 - **cancellation_choices:** _List of preset reasons the user can select during the cancellation. (Product is too expensive, Customer reached end of contract, etc)_
 - **cancellation_comment:** _User submitted reason for the cancellation._
 
-SAMPLE DECODED PAYLOAD - Cancel:
+<!--
+type: tab
+title: Cancellation Event
+-->
+
+`cancel` action - SAMPLE DECODED PAYLOAD
 
 ```json
 {
@@ -451,19 +488,24 @@ SAMPLE DECODED PAYLOAD - Cancel:
     "activation_id": "02e9929d-35f2-4c70-988f-5650b183ef9d",
     "webhook_id": "Cancel-Product",
     "action": "cancel",
-    "activation_time": "2017-07-24T14:39:55.117426664Z",
-    "cancellation_time": "2017-07-31T5:47:52.114326789Z",
-    "deactivation_time": "2017-08-23T14:39:55.117426664Z",
+    "activation_time": "2021-07-24T14:39:55.117426664Z",
+    "cancellation_time": "2021-07-31T5:47:52.114326789Z",
+    "deactivation_time": "2021-08-23T14:39:55.117426664Z",
     "partner_id": "VNDR",
     "app_id": "MP-123",
     "vendor_order_id": "ORD-123",
-    "cancellation_choices": ["Product is too expensive"],
+    "cancellation_choices": ["Shifted to another product in the marketplace"],
     "cancellation_comment": "This is why we cancelled the product"
   }
 }
 ```
 
-SAMPLE DECODED PAYLOAD - Undo-Cancel:
+<!--
+type: tab
+title: Undo Cancellation Event
+-->
+
+`undo-cancel` action - SAMPLE DECODED PAYLOAD
 
 Details:
 
@@ -493,9 +535,9 @@ Details:
   }
 }
 ```
+<!-- type: tab-end -->
 
-
-## Logout Webhook
+### Logout Webhook
 
 The logout webhook is called every time a user’s session is invalidated by timeout or from a user taking an actual logout action. This webhook instructs the application to remove the specified session from it’s session store. The session_id provided matches the id provided to the [Session URL](/vendors/session-middleware#session-url) when the session was first transferred. For security reasons this is a one-way hash of the user’s actual Vendasta session ID.
 
@@ -518,7 +560,7 @@ SAMPLE DECODED PAYLOAD:
 
 *note that user_id can be different lengths
 
-## Account Webhook
+### Account Update Webhook
 
 The account webhook is called every time account information changes. This can include changes to the address, phone number, etc. that we track for the account. This endpoint is useful for applications to keep a local cache of accounts. This can be important for making responsive applications.
 
@@ -542,11 +584,23 @@ SAMPLE DECODED PAYLOAD:
 }
 ```
 
-## User Webhook
+### User Permission Webhook
 
-The user webhook is called every time permission is granted/revoked for an account that uses any of your products. This endpoint is useful for applications wanting to keep a local cache of users and the accounts they have access to. This webhook will be triggered for both the `permission-granted` and `permission-revoked` events, which are specified in the 'action' field. Note that it does not notify all the new users associated to an account that just activated the product.
+The user permission webhook is called every time permission is granted/revoked for an account that uses any of your products. This endpoint is useful for applications wanting to keep a local cache of users and the accounts they have access to. This webhook will be triggered for both the `permission-granted` and `permission-revoked` events, which are specified in the 'action' field. 
 
-SAMPLE DECODED PAYLOAD - Permission-Granted:
+
+<!-- theme: info -->
+
+> #### User Versioning
+>
+> The `user_id` in the Marketplace v1 API & Webhooks is the `legacy_user_id` returned from the [OpenIdConnect SSO](https://developers.vendasta.com/vendor/ZG9jOjE2NTY5Mzky-requirement-2-sso-o-auth2-3-legged-flow#user-info-endpoint) `user-info` endpoint.
+
+<!--
+type: tab
+title: Permission Granted Event
+-->
+
+`permission-granted` action - SAMPLE DECODED PAYLOAD
 
 ```json
 {
@@ -567,7 +621,12 @@ SAMPLE DECODED PAYLOAD - Permission-Granted:
 }
 ```
 
-SAMPLE DECODED PAYLOAD - Permission-Revoked:
+<!--
+type: tab
+title: Permission Revoked Event
+-->
+
+`permission-granted` action - SAMPLE DECODED PAYLOAD
 
 ```json
 {
@@ -588,9 +647,16 @@ SAMPLE DECODED PAYLOAD - Permission-Revoked:
 }
 ```
 
-## Customer Webhook
+<!-- type: tab-end -->
 
-The customer webhook is called every time a customer is created, or deleted in _Customer List_.
+<!-- theme: warning -->
+> #### Assumption Alert!
+>
+> This webhook is for syncing of users only. Observation of this webhook does not replace the need to call the [Check User Access to an Account](https://developers.vendasta.com/vendor/b3A6MTY1Njk0MzI-check-user-access-to-an-account) endpoint to validate a user's authorization after session transfer completes before redirecting the user to your dashboard.
+
+### Customer Webhook
+
+The customer webhook is called every time a customer is created, or deleted in an Account's _Customer List_.
 
 SAMPLE DECODED PAYLOAD - Create:
 
@@ -634,7 +700,12 @@ SAMPLE DECODED PAYLOAD - Delete:
 }
 ```
 
-## Spend Change Request Webhook
+### Spend Change Request Webhook
+
+<!-- theme: info -->
+
+> #### Applicability
+> This webhook is only applicable if the Application is utilizing the 'Variable Spend' billing model.
 
 The spend change request webhook is called every time a spend change is requested for one of the vendor's products.
 
