@@ -1,8 +1,8 @@
-# Vendasta Identity access via OAuth2 3-Legged Flow
+# SSO: OAuth2 3-Legged Flow
 
 ## Overview
 
-This guide aims to help you configure your application to use Vendasta’s Identity Gateway as an Identity Provider for your application. This will allow you to identify users entering your application from the Vendasta platform and will in future API iterations allow you to call Vendasta APIs on their behalf.
+This guide aims to help you configure your application to use Vendasta’s Identity Gateway as an Identity Provider for your application. This will allow you to identify users entering your application from the Vendasta platform and will *in future API iterations* allow you to call Vendasta APIs on their behalf.
 
 Vendasta implements the [OpenID Connect Core specification](https://openid.net/specs/openid-connect-core-1_0.html), which includes a complete [OAuth 2.0 Authorization Framework](https://tools.ietf.org/html/rfc6749) integration.
 
@@ -13,9 +13,9 @@ This guide is for implementing a **3-legged OAuth** flow. The distinction betwee
 | **2-legged flow (Partner Service Account)** | Access to high-level Vendasta workflow APIs, but no access to **user data** or **business data**. | Allocating a Partner Service Account. Configuring an OAuth2 2-legged client.             
 | **3-legged flow (this guide)**              | Access to **user data** and **business data** associated with the user performing the flow.       | Follow this guide. Requires an end user to initiate the flow to provide access to the app. |
 
-## Step 1: Choosing the type of implementation for your App
+## Step 1: Technology Review
 
-The first decision you will need to make is where you will implement your authorization flow:
+Your first decision you will need to make is where you will implement your authorization flow:
 
 1. **(Recommended)** Backend workflow: implement the workflow within your secure webserver
 2. Frontend workflow: implement the workflow using Javascript within a Single Page Application
@@ -29,36 +29,49 @@ Both OpenID Connect and OAuth2 are standardized workflows, which means most prog
 >
 >Whichever client library you select, please consult the included documentation for the library of your choice to supplement this guide.
 
-### Backend Clients:
+**Backend Clients**
 
-Clients running on a backend web-server will use their **client secret** for verification.
+Clients running on a backend web-server will use their **client secret** for verification. Client secret generation is covered in the next section.
 
-### Frontend Clients:
+**Frontend Clients**
 
-* Frontend clients should use the [PKCE flow](https://developer.okta.com/blog/2019/08/22/okta-authjs-pkce/?utm_campaign=text_website_all_multiple_dev_dev_oauth-pkce_null&utm_source=oauthio&utm_medium=cpc), it is recommended that you find an OAuth2 library which supports this feature.
-* The **implicit grant flow** is considered insecure and should be avoided. 
+Frontend clients should use the [PKCE(Proof Key for Code Exchange) flow](https://developer.okta.com/blog/2019/08/22/okta-authjs-pkce/?utm_campaign=text_website_all_multiple_dev_dev_oauth-pkce_null&utm_source=oauthio&utm_medium=cpc). It is recommended that you find an OAuth2 library which supports this feature. *[PKCE Spec Details](https://oauth.net/2/pkce/)*
 
-## Step 2: Configuring your Client & Library
+<!-- theme: warning -->
+>**Security Note**
+>
+>Recent advancements in user privacy controls in browsers blocking access to third-party cookies mean you may need to employ [additional efforts](https://auth0.com/docs/secure/tokens/refresh-tokens/refresh-token-rotation) to keep your flow secure.
+>
+>The **implicit grant flow** is considered insecure and should be avoided. 
 
-### Configuring your integration in Vendor Center
 
-Your integration is configured in Vendor Center, under Integration > SSO Settings, including the Entry URL, Logout URL, and OAuth2 configuration which will provide the client ID and client secret.
+## Step 2: Configuring Client & Library or Service
 
+Your SSO integration is configured in *[Vendor Center](https://vendors.vendasta.com)-->Product-->Integration Page-->Access and SSO*
+
+### Generate your OAuth Client
+
+Toggle 'Enable SSO' on, then click `Create Configuration`
+![](../../assets/images/guides/sso/OAuth_client_generation.png)
+
+|||
+|-|-|
+| **Logout URL - COMING SOON**  |  Front end logout url (*Not yet functional - may be left blank*). Will pop open a hidden iframe and redirect to this url.  **For back channel logouts, please utilize the logout webhook in the main *Access and SSO* section.**
+| **Redirect URI** | Specifies the callback location where the authorization was sent. This value must match the redirect_uri used to generate the original authorization_code.
+
+
+### Configure Product SSO Settings
 ![Session Settings Diagram](../../assets/images/guides/sso/sso_marketplace_settings.png)
 
 |||
 |-|-|
-| **Entry URL**  | User is redirected to this url when they click on the Product icon in the End User dashboard. The account_id is injected into the placeholder on the url, and should be passed on to the Authorization URL to trigger the start of SSO. 
-| **Logout URL** | A webhook for back channel logout of service provider session. 
+| **Entry URL**  | The url that acts as the entry point for the product. This could be redirected to from various dashboards or emails. Prior to redirect the account_id is injected into the placeholder on the url, and should be appended as a param on the Authorization URL to trigger the start of the session transfer. 
+| **Logout URL** | A [webhook](https://developers.vendasta.com/vendor/ZG9jOjIxNzM0NjA3-overview#logout-webhook) for back channel logout of service provider session. As a user could have multiple open sessions, it is recommended that you utilize the provided `session_id` rather than the `user_id`.
 
 
+### Client Library or Service Configuration
 
-
-
-
-### Client Configuration
-
-Follow your client’s installation guide, entering the following information when prompted:
+Follow your service's installation guide, entering the following information when prompted:
 
 |                                  |                                                                              |
 |----------------------------------|------------------------------------------------------------------------------|
@@ -75,11 +88,11 @@ Follow your client’s installation guide, entering the following information wh
 ## Step 3: Session Transfer Workflow
 
 ## Authorization URL Configuration
-The library that you chose to use likely had a function for generating the OAuth Authorization URL.
 
 
+The redirect to the OAuth Authorization URL kicks off SSO. The library that you chose to use likely had a function for generating the OAuth Authorization URL based on your configuration.
 
-### Contextualizing your Auth URL
+### Contextualizing your Authorization URL
 
 Vendasta users may belong to any one of our many partners, and each partner may select one of many different login methods. Additionally user access is white-labeled. The branding to be displayed to them can be by `market_id`.
 Thus in order to direct the user to the login screen that is specific to their account, we need to know which account they are attempting to access.
@@ -87,7 +100,9 @@ Most OAuth2 libraries will allow you to add additional context to your Authoriza
 
 ### Prompts
 
-Our Authorization URL supports each of the following values for the `prompt` query parameter
+Note that we track user scope acceptance for your Product, and thus unless you want to override the current default value for this user and product you may **exclude** the `prompt` query parameter from your Authorization URL.
+
+Our Authorization URL supports each of the following values for the `prompt` query parameter. 
 
 |||
 |-------------|--------------------------|
@@ -96,22 +111,20 @@ Our Authorization URL supports each of the following values for the `prompt` que
 | **consent** | Prompt the user to provide consent for accessing the requested scopes. `prompt=consent` is required when requesting the `offline_access` scope. |
 
 
-
-
-
 ### Scopes
 
 In order to call APIs on behalf of a user, you must specify which **scopes** your app needs access to. Consult the APIs you wish to call to determine which scopes you will require, and include these scopes in your OAuth2 client’s configuration step.
 
 ### Special Scopes
 
-Certain scopes have a special meaning, or are distinct from those used for API access.
+Certain scopes have a special meaning for sso, or are distinct from those used for API access.
 
 |                 |                                                                                                 |
 |-----------------|-------------------------------------------------------------------------------------------------|
 | `openid`        | **Required:** this scope MUST be included when performing an OpenID connect flow.               |
 | `offline_access`| This scope requests that a **refresh token** be returned to your application alongside your **access token**. See the **Refresh Token** section for more information.                                           |
 | `profile`       | Grants access to view a user’s name, locale, and Vendasta roles using the **user-info** endpoint. See the **User Info Endpoint** section for more information.                                                        |
+| `email`       | **Not Supported** 
 
 ### Access Tokens
 
@@ -216,14 +229,10 @@ The amount of information returned is determined by the scopes which your applic
     "product_navbar_data_url": "https://www.smblogin.com/api/user/U-b10e6de6-ee43-429c-ac26-b3cb81ef6f5f/products-navigation-bar-data/"
 }
 ```
-<div class="background-accent remember">
-
-**Security note**
-
-From OIDC spec point [5.3.2](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo) - "NOTE: Due to the possibility of token substitution attacks (see [Section 16.11](https://openid.net/specs/openid-connect-core-1_0.html#TokenSubstitution)), the UserInfo Response is not guaranteed to be about the End-User identified by the sub (subject) element of the ID Token. The sub Claim in the UserInfo Response MUST be verified to exactly match the sub Claim in the ID Token; if they do not match, the UserInfo Response values MUST NOT be used."
-
-</div>
-
+<!-- theme: warning -->
+>**Security Note**
+>
+>From OIDC spec point [5.3.2](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo) - "NOTE: Due to the possibility of token substitution attacks (see [Section 16.11](https://openid.net/specs/openid-connect-core-1_0.html#TokenSubstitution)), the UserInfo Response is not guaranteed to be about the End-User identified by the sub (subject) element of the ID Token. The sub Claim in the UserInfo Response MUST be verified to exactly match the sub Claim in the ID Token; if they do not match, the UserInfo Response values MUST NOT be used."
 
 ## Step X - Dashboard Modifications
 
