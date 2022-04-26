@@ -87,6 +87,9 @@ Follow your service's installation guide, entering the following information whe
 
 ## Step 3: Session Transfer Workflow
 
+![Session Transfer](../../assets/images/guides/sso/sso_sequence.png)
+
+
 ## Authorization URL Configuration
 
 
@@ -125,6 +128,9 @@ Certain scopes have a special meaning for sso, or are distinct from those used f
 | `offline_access`| This scope requests that a **refresh token** be returned to your application alongside your **access token**. See the **Refresh Token** section for more information.                                           |
 | `profile`       | Grants access to view a user’s name, locale, and Vendasta roles using the **user-info** endpoint. See the **User Info Endpoint** section for more information.                                                        |
 | `email`       | **Not Supported** 
+
+
+## Token Endpoint
 
 ### Access Tokens
 
