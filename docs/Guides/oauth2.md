@@ -85,23 +85,38 @@ Follow your service's installation guide, entering the following information whe
 | **Client Secret (backend only)** | Obtained when creating your OAuth2 configuration within the Vendasta Platform|
 
 
-## Step 3: Session Transfer Workflow
+## Step 3: Session Transfer Implementation
 
 ![Session Transfer](../../assets/images/guides/sso/sso_sequence.png)
 
 
-## Authorization URL Configuration
-
+### Authorization URL
 
 The redirect to the OAuth Authorization URL kicks off SSO. The library that you chose to use likely had a function for generating the OAuth Authorization URL based on your configuration.
 
-### Contextualizing your Authorization URL
+Your Authorization URL will look something like this:
+```
+GET /oauth2/auth?
+ account_id=AG-XXXXXXXX
+ &response_type=code
+ &scope=openid%20profile
+ &client_id=a69cc85c-6d80-4294-a333-8401715fb36f
+ &state=sdf2k2rf%3AAG-XXXXXXXX%3AMP-XXXXXXXXXXXXXXXXXXXXXX
+ &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb HTTP/1.1
+ Host: sso-api-prod.apigateway.co
+```
 
-Vendasta users may belong to any one of our many partners, and each partner may select one of many different login methods. Additionally user access is white-labeled. The branding to be displayed to them can be by `market_id`.
+<!-- theme: info -->
+> The `state` param is optional, but recommended. In addition to helping avoid CSRF attacks by using a unique and non-guessable value associated with each authentication request, it may be used to pass data through the entire SSO flow as it is included when the OP redirects to the RP callback url.
+
+
+#### Contextualizing your Authorization URL
+
+Vendasta users may belong to any one of our many partners, and each partner may select one of several login methods. Additionally user access is white-labeled. The branding to be displayed to them can be by `market_id`.
 Thus in order to direct the user to the login screen that is specific to their account, we need to know which account they are attempting to access.
-Most OAuth2 libraries will allow you to add additional context to your Authorization URL with query parameters, before initiating an OAuth2 flow, provide options to your OAuth2 library to set the account ID to the `account_id` query parameter.
+Most OAuth2 libraries will allow you to add additional context to your Authorization URL with query parameters. Before initiating an OAuth2 flow, provide options to your OAuth2 library to set the account ID to the `account_id` query parameter.
 
-### Prompts
+#### Prompts
 
 Note that we track user scope acceptance for your Product, and thus unless you want to override the current default value for this user and product you may **exclude** the `prompt` query parameter from your Authorization URL.
 
@@ -114,11 +129,11 @@ Our Authorization URL supports each of the following values for the `prompt` que
 | **consent** | Prompt the user to provide consent for accessing the requested scopes. `prompt=consent` is required when requesting the `offline_access` scope. |
 
 
-### Scopes
+#### Scopes
 
 In order to call APIs on behalf of a user, you must specify which **scopes** your app needs access to. Consult the APIs you wish to call to determine which scopes you will require, and include these scopes in your OAuth2 client’s configuration step.
 
-### Special Scopes
+#### Special Scopes
 
 Certain scopes have a special meaning for sso, or are distinct from those used for API access.
 
@@ -130,9 +145,9 @@ Certain scopes have a special meaning for sso, or are distinct from those used f
 | `email`       | **Not Supported** 
 
 
-## Token Endpoint
+### Token Endpoint
 
-### Access Tokens
+#### Access Tokens
 
 Access tokens expire **30 minutes** from the time of issue. They will need to be refreshed regularly using one of the following techniques:
 
@@ -144,7 +159,7 @@ Access tokens expire **30 minutes** from the time of issue. They will need to be
 
 **All access token claims are subject to change without notice, and should only be inspected for debugging purposes.**
 
-### ID Tokens
+#### ID Tokens
 
 An identity token will be provided in the response from the token endpoint. Identity tokens are compliant with the [OpenID Core ID Token specification](https://openid.net/specs/openid-connect-core-1_0.html#IDToken). 
 
@@ -177,7 +192,7 @@ Here is an example payload of an ID token after decoding, note that fields may b
 }
 ```
 
-### Refresh Tokens
+#### Refresh Tokens
 
 Refresh tokens allow an application to acquire fresh **Access Tokens** as-needed, even when the end-user is no longer actively engaged with their application. This allows applications to perform **background processing** on behalf of the user.
 
@@ -188,7 +203,9 @@ Refresh Tokens are **not granted** by default and must be explicitly requested b
 
 Once a refresh token is obtained you may store it in your database for later use. **Do not store refresh tokens in the browser via local-storage as this is vulnerable to XSS attacks.** Consult your OAuth2 library to learn how to acquire, store, and load refresh tokens as required.
 
-### User Info Endpoint
+### User Management
+
+#### User Info Endpoint
 
 The User Info Endpoint is available to any application which has acquired an Access Token from an OAuth2 flow. However, the information it provides is scaled according to the **scopes** on your access token.
 
@@ -240,7 +257,13 @@ The amount of information returned is determined by the scopes which your applic
 >
 >From OIDC spec point [5.3.2](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo) - "NOTE: Due to the possibility of token substitution attacks (see [Section 16.11](https://openid.net/specs/openid-connect-core-1_0.html#TokenSubstitution)), the UserInfo Response is not guaranteed to be about the End-User identified by the sub (subject) element of the ID Token. The sub Claim in the UserInfo Response MUST be verified to exactly match the sub Claim in the ID Token; if they do not match, the UserInfo Response values MUST NOT be used."
 
-## Step X - Dashboard Modifications
+### Roles
+
+### Session Management
+
+
+
+## Step 4 - Dashboard Modifications
 
 ### Navigation Bar
 
@@ -281,5 +304,9 @@ Script parameter details:
 | `data-account-id`                                 | The unique ID for a Vendasta Account. This is passed to the Service Provider via the Entry URL. 
 | `data-app-id`                                     | The unique ID for a Vendor Product. Found in the Vendor Center URL when in the context of a Product.
 | `target-element-class(optional)`                  | This field can help overcome css conflicts with the NavBar. It allows you to specify an element that has a **unique** class. If the element with this class exists on the page at the time the NavBar is called to render the bar, it will place the bar directly above the target element|
+
+### Product url contextualization
+
+## Adjustments for muliple Products
 
 ## Testing
