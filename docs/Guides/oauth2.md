@@ -10,7 +10,7 @@ This guide is for implementing a **3-legged OAuth** flow. The distinction betwee
 
 |                                             | **Access Level Provided**  | **Setup Required** |
 |---------------------------------------------|----------------------------|--------------------|
-| **2-legged flow (Partner Service Account)** | Access to high-level Vendasta workflow APIs, but no access to **user data** or **business data**. | Allocating a Partner Service Account. Configuring an OAuth2 2-legged client.             
+| **2-legged flow (Partner Service Account)** | Access to high-level Vendasta workflow APIs, but no access to **user data** or **business data**. Not currently used by Vendors.| Allocating a Partner Service Account. Configuring an OAuth2 2-legged client.             
 | **3-legged flow (this guide)**              | Access to **user data** and **business data** associated with the user performing the flow.       | Follow this guide. Requires an end user to initiate the flow to provide access to the app. |
 
 ## Step 1: Technology Review
@@ -57,7 +57,7 @@ Toggle 'Enable SSO' on, then click `Create Configuration`
 |||
 |-|-|
 | **Logout URL - COMING SOON**  |  Front end logout url (*Not yet functional - may be left blank*). Will pop open a hidden iframe and redirect to this url.  **For back channel logouts, please utilize the logout webhook in the main *Access and SSO* section.**
-| **Redirect URI** | Specifies the callback location where the authorization was sent. This value must match the redirect_uri used to generate the original authorization_code.
+| **Redirect URI** | Sometimes referred to as a 'Callback URL' - The URL of the page where the user will be redirected after a successful authentication. This value must match the redirect_uri originally used to generate the Authorization `code`.
 
 
 ### Configure Product SSO Settings
@@ -65,8 +65,8 @@ Toggle 'Enable SSO' on, then click `Create Configuration`
 
 |||
 |-|-|
-| **Entry URL**  | The url that acts as the entry point for the product. This could be redirected to from various dashboards or emails. Prior to redirect the account_id is injected into the placeholder on the url, and should be appended as a param on the Authorization URL to trigger the start of the session transfer. 
-| **Logout URL** | A [webhook](https://developers.vendasta.com/vendor/ZG9jOjIxNzM0NjA3-overview#logout-webhook) for back channel logout of service provider session. As a user could have multiple open sessions, it is recommended that you utilize the provided `session_id` rather than the `user_id`.
+| **Entry URL**  | The url that acts as the entry point for the product. This could be redirected to from various dashboards or emails. Prior to redirect the account_id is injected into the placeholder on the url, and should be appended as an additional url parameter on the Authorization URL to trigger the start of the session transfer. 
+| **Logout URL** | A [webhook](https://developers.vendasta.com/vendor/ZG9jOjIxNzM0NjA3-overview#logout-webhook) for back channel logout of service provider session. As a user could have multiple open sessions across browsers and devices, it is recommended that you utilize the provided `session_id` rather than the `user_id` unless you intend to log them out of all active sessions.
 
 
 ### Client Library or Service Configuration
@@ -84,6 +84,8 @@ Follow your service's installation guide, entering the following information whe
 | **Client ID**                    | Obtained when creating your OAuth2 configuration within the Vendasta Platform|
 | **Client Secret (backend only)** | Obtained when creating your OAuth2 configuration within the Vendasta Platform|
 
+<!-- theme: warning -->
+> If utilizing an Identity Manager such as Okta or AWS Cognito please utilize their option to configure the IDP endpoints manually rather than utilize the https://iam-prod.apigateway.co/.well-known/openid-configuration endpoint at this time.
 
 ## Step 3: Session Transfer Implementation
 
@@ -223,7 +225,7 @@ The amount of information returned is determined by the scopes which your applic
 
 |           |                                                                                                      |
 |-----------|------------------------------------------------------------------------------------------------------|
-| `email`   | **Email is currently excluded from this implementation.** Please use the `sub` field returned by the user-info endpoint to uniquely identify the user.                                                                  |
+| `email`   | **Email is currently a restricted scope** Please use the `sub` field returned by the user-info endpoint to uniquely identify the user.                                                                  |
 | `profile` | Grants access to view a user’s name, locale, and Vendasta roles using the user-info endpoint. See the User Info Endpoint section for more information.                                                                   |
 | `openid`  | Include the User ID (a.k.a. `sub`), and namespace.                                                   |
 
@@ -265,7 +267,7 @@ The amount of information returned is determined by the scopes which your applic
 
 ## Step 4 - Dashboard Modifications
 
-### Navigation Bar
+### Navigation Bar(Required)
 
 The Vendasta NavBar provides a seamless navigation experience for users to switch between your marketplace application, other applications, and their Business Center.  User logout will also be served by this bar, and hidden from your dashboard. **Implementation of the Navigation Bar is required if your integration includes SSO.**
 
@@ -306,6 +308,17 @@ Script parameter details:
 | `target-element-class(optional)`                  | This field can help overcome css conflicts with the NavBar. It allows you to specify an element that has a **unique** class. If the element with this class exists on the page at the time the NavBar is called to render the bar, it will place the bar directly above the target element|
 
 ### Product url contextualization
+In the case that a user has bookmarked your product's dashboard url unless you have something identifying a) That this is a Vendasta account & b) what account it is you are unable to properly authorize the request.
+
+
+### In Product Purchases
+To ensure all purchases are centralized for our Partner, any purchase related to a Vendor product must be accomplished through the Vendasta platform.
+
+If your product has CTAs for in-product purchases, including upgrades, or Add-on purchases these CTAs need to be:
+a) Hidden completely
+b) OR or have any actual purchase capabilities remove, and the copy made to be 'generic' - simply directing the user to purchase the sku without actually referencing them to where they may do so.
+
+
 
 ## Adjustments for muliple Products
 
