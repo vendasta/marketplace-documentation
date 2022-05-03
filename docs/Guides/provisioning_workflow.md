@@ -37,6 +37,7 @@ _*See **Activation Types** below for details on all possible events_
 ## Receiving order & provisioning events
 Notification of a purchase and the purchase data included in the message may be received by the Vendor via Webhook AND/OR Email. These notifications are triggered when your Product, or Add-on is activated on an Account
 
+
 ### Email Notification
 
 Purchase notification emails will always be sent to any recipients configured. You may add as many notification recipients as you like:
@@ -141,6 +142,13 @@ _Edition Change from Partner Center `Account Details` Page_
 
 There is a testing tab on the far right for sending mock purchase data to your purchase urls. If you require order form data to provision your sku, you should test the activations from Partner Center, as the mock data will not suffice. 
 You can create as many test Accounts as you want in Partner Center, and activate and deactivate your own offerings as much as you desire.
+
+<!-- theme: info -->
+>_**Simple steps for your first test Activation**_
+>1. Create a Product - This can be done via the [Vendor Center Homescreen](https://vendors.vendasta.com), or Partner Center [Products Page](https://partners.vendasta.com/marketplace/manage-products)
+>2. [Publish Product](./offerings.md#publishing) - This makes the Product available in Partner Center. That is all publishing does - This will not allow other Resellers to see your product! A green checkbox will appear under the _Distributed_ column once your product has been released to the Marketplace.
+>3. [Create a Test Account](https://partners.vendasta.com/business/search)
+>4. [Activate your new product](https://support.vendasta.com/hc/en-us/articles/4406958134807-Activate-products-for-your-customers) on the test Account.
 
 ---
 

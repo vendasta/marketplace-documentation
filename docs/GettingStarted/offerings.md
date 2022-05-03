@@ -19,13 +19,6 @@ This will represent a _Base Offering_ - Whether that be a Digital Product, a Ser
 
 **Creating your first Product**
 
-<!-- theme: info -->
->_**Simple steps for your first test Activation**_
->1. Create a Product - This can be done via the [Vendor Center Homescreen](https://vendors.vendasta.com), or Partner Center [Products Page](https://partners.vendasta.com/marketplace/manage-products)
->2. [Publish Product](./offerings.md#publishing) - This makes the Product available in Partner Center. That is all publishing does - This will not allow other Resellers to see your product! A green checkbox will appear under the _Distributed_ column once your product has been released to the Marketplace.
->3. [Create a Test Account](https://partners.vendasta.com/business/search)
->4. [Activate your new product](https://support.vendasta.com/hc/en-us/articles/4406958134807-Activate-products-for-your-customers) on the test Account.
-
 ![Product Creation](../../assets/images/getting_started/product_creation.png)
 
 **Trials**

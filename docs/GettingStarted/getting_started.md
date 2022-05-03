@@ -20,9 +20,9 @@ Once comfortable with the platform, next unlock a powerful new sales channel by 
 ![Discover Products](../../assets/images/getting_started/discover_products.png)
 
 
-## High Level Requirements
+## Required Features
 
-If you want your Product distributed in the Vendasta Marketplace, then there are a set of integration features that all distributed products must support:
+If you want your Product distributed in the Vendasta Marketplace, then there are a set of integrations that all distributed products must implement:
 
 **1) Order Acceptance**
 
@@ -46,7 +46,9 @@ All Vendor offerings with applicable data are required to upload analytics and a
 
 **4) Communication**
 
-Communication with end users will flow through the Vendasta [Activity Stream](../Guides/activity_stream_overview.md), a component of the Business App Inbox. The Activity Stream sends emails automatically to all subscribed users. Vendors may use Vendasta provided templates, or may provide their own templates to automatically be wrapped in each Channel Partner's branding. _Vendors may not send any emails to end users directly. To support platform unity, and Channel Partner branding or whitelabelling, all end user communication must come through the Vendasta Platform._
+Event notifications for end users will flow through the Vendasta [Activity Stream](../Guides/activity_stream_overview.md). The Activity Stream sends emails automatically to all subscribed users. Vendors may use Vendasta provided email templates, or may provide their own templates to automatically be wrapped in each Channel Partner's branding. _Vendors may not send any emails to end users directly. To support platform unity, and Channel Partner branding or whitelabelling, all end user communication must come through the Vendasta Platform._
+
+Services must use the Vendasta Task Manager Fulfillment Templates to provide transparent progress updates to Businesses and Partner's on fulfillment work.
 
 
 **5) CRM syncing**
@@ -76,14 +78,14 @@ Once you have a Platform Account, you will be able to enter your offerings into 
 >
 >_Review Requirements_ 
 >
->You've seen the integration requirements highlighted above, but please take a moment to review the detailed checklist that you can refer back to while working through your integration: [Marketplace Integration Requirements](./integration_requirements.md)
+>Please take a moment to review the detailed requirement list which you can refer back to while working through your integration: [Marketplace Integration Requirements](./integration_requirements.md)
 
 
 
 ---
 
 ## Platform Overview
-There are several Vendasta dashboards, which we call 'Centers', that you will interact with to set up and manage your Offerings
+There are several Vendasta dashboards, which we call 'Centers', that you will interact with to set up and manage your Marketplace Offerings
 
 ### Partner Center
 
@@ -92,11 +94,11 @@ There are several Vendasta dashboards, which we call 'Centers', that you will in
 _To learn more about Partner Center visit our [Support Center](https://support.vendasta.com/hc/en-us/categories/4406956996375-Partner-Center)_
 
 <!-- theme: info -->
->* Manage Admin platform access for your team
->* Create test Accounts
+>* [Manage Admin platform access for your team](https://partners.vendasta.com/my-team)
+>* [Create test Accounts](https://partners.vendasta.com/manage-accounts)
 >* Test activation of your Product
 >* Manage End User access to Accounts (and thus to your product by default)
->* Access the End User Business App via sso, which we call 'Impersonation'
+>* Access the End User Business App
 
 ### Vendor Center
 ![Vendor Center](../../assets/images/getting_started/vendor_center.png)
@@ -105,8 +107,9 @@ _To learn more about Partner Center visit our [Support Center](https://support.v
 >* Create Products
 >* Configure and manage Products
 >* Review the interactions Resellers have with your product, and view analytics on how your product is performing
->* Contact Resellers that have opted in when you see an opportunity to accelerate their sales
 >* View, and Accept or Reject orders of your Product
+>* Contact Resellers that have opted in when you see an opportunity to accelerate their sales
+
 
 ### Whitelabelled Business App
 ![Whitelabelled Business App](../../assets/images/getting_started/business_app.png)
@@ -115,7 +118,7 @@ _To learn more about Business App visit our [Support Center](https://support.ven
 
 <!-- theme: info -->
 >* Test Single Sign On into your Product
->* Activate Trials
+>* Test activate Trials
 >* Test the Executive Report
 >* Test the Activity Stream
 >* Test the Customer List
