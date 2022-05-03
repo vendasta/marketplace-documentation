@@ -1,7 +1,5 @@
 # SSO: OAuth2 3-Legged Flow
-
 ## Overview
-
 This guide aims to help you configure your application to use Vendasta’s Identity Gateway as an Identity Provider for your application. This will allow you to identify users entering your application from the Vendasta platform and will *in future API iterations* allow you to call Vendasta APIs on their behalf.
 
 Vendasta implements the [OpenID Connect Core specification](https://openid.net/specs/openid-connect-core-1_0.html), which includes a complete [OAuth 2.0 Authorization Framework](https://tools.ietf.org/html/rfc6749) integration.
@@ -14,7 +12,6 @@ This guide is for implementing a **3-legged OAuth** flow. The distinction betwee
 | **3-legged flow (this guide)**              | Access to **user data** and **business data** associated with the user performing the flow.       | Follow this guide. Requires an end user to initiate the flow to provide access to the app. |
 
 ## Step 1: Technology Review
-
 Your first decision you will need to make is where you will implement your authorization flow:
 
 1. **(Recommended)** Backend workflow: implement the workflow within your secure webserver
@@ -46,15 +43,16 @@ Frontend clients should use the [PKCE(Proof Key for Code Exchange) flow](https:/
 
 
 ## Step 2: Configuring Client & Library or Service
-
-Your SSO integration is configured in *[Vendor Center](https://vendors.vendasta.com)-->Product-->Integration Page-->Access and SSO*
+ *[Vendor Center](https://vendors.vendasta.com)-->Product-->Integration Page-->Access and SSO*
 
 ### Generate your OAuth Client
-
 Toggle 'Enable SSO' on, then click `Create Configuration`
 ![](../../assets/images/guides/sso/OAuth_client_generation.png)
 
-|||
+<!-- theme: warning -->
+>Once saved a modal will pop up with your new client id and secret. Ensure you save your client secret before closing the modal, otherwise you will need to delete and re-generate your client. 
+
+|*Client Fields*||
 |-|-|
 | **Logout URL - COMING SOON**  |  Front end logout url (*Not yet functional - may be left blank*). Will pop open a hidden iframe and redirect to this url.  **For back channel logouts, please utilize the logout webhook in the main *Access and SSO* section.**
 | **Redirect URI** | Sometimes referred to as a 'Callback URL' - The URL of the page where the user will be redirected after a successful authentication. This value must match the redirect_uri originally used to generate the Authorization `code`.
@@ -71,7 +69,7 @@ Toggle 'Enable SSO' on, then click `Create Configuration`
 
 ### Client Library or Service Configuration
 
-Follow your service's installation guide, entering the following information when prompted:
+Follow your service's installation guide, entering the following information where prompted:
 
 |                                  |                                                                              |
 |----------------------------------|------------------------------------------------------------------------------|
@@ -85,7 +83,7 @@ Follow your service's installation guide, entering the following information whe
 | **Client Secret (backend only)** | Obtained when creating your OAuth2 configuration within the Vendasta Platform|
 
 <!-- theme: warning -->
-> If utilizing an Identity Manager such as Okta or AWS Cognito please utilize their option to configure the IDP endpoints manually rather than utilize the https://iam-prod.apigateway.co/.well-known/openid-configuration endpoint at this time.
+> If utilizing an Identity Manager such as Okta or AWS Cognito please utilize their option to configure the IDP endpoints manually rather than utilizing the https://iam-prod.apigateway.co/.well-known/openid-configuration endpoint at this time.
 
 ## Step 3: Session Transfer Implementation
 
@@ -94,7 +92,7 @@ Follow your service's installation guide, entering the following information whe
 
 ### Authorization URL
 
-The redirect to the OAuth Authorization URL kicks off SSO. The library that you chose to use likely had a function for generating the OAuth Authorization URL based on your configuration.
+The redirect to the OAuth Authorization URL kicks off SSO. The library that you chose to use likely has a function for generating the OAuth Authorization URL based on your configuration.
 
 Your Authorization URL will look something like this:
 ```
@@ -109,20 +107,20 @@ GET /oauth2/auth?
 ```
 
 <!-- theme: info -->
-> The `state` param is optional, but recommended. In addition to helping avoid CSRF attacks by using a unique and non-guessable value associated with each authentication request, it may be used to pass data through the entire SSO flow as it is included when the OP redirects to the RP callback url.
+> The `state` param is optional, but recommended. In addition to helping avoid CSRF attacks by using a unique and non-guessable value associated with each authentication request it may be used to pass data through the entire SSO flow as it is included when the OP redirects to the RP callback url.
 
 
 #### Contextualizing your Authorization URL
 
-Vendasta users may belong to any one of our many partners, and each partner may select one of several login methods. Additionally user access is white-labeled. The branding to be displayed to them can be by `market_id`.
+Vendasta users may belong to any one of our many partners, and each partner may select one of several login methods. Additionally end user access is white-labeled. The branding to be displayed to the user could depend on the `market_id` of the Account.
 Thus in order to direct the user to the login screen that is specific to their account, we need to know which account they are attempting to access.
 Most OAuth2 libraries will allow you to add additional context to your Authorization URL with query parameters. Before initiating an OAuth2 flow, provide options to your OAuth2 library to set the account ID to the `account_id` query parameter.
 
 #### Prompts
 
-Note that we track user scope acceptance for your Product, and thus unless you want to override the current default value for this user and product you may **exclude** the `prompt` query parameter from your Authorization URL.
+Note that Vendasta tracks user's scope acceptance for your Product. Unless you want to override the current default value for this user's entry to your product you may **exclude** the `prompt` query parameter from your Authorization URL.
 
-Our Authorization URL supports each of the following values for the `prompt` query parameter. 
+The following values are supported for the `prompt` query parameter. 
 
 |||
 |-------------|--------------------------|
@@ -133,9 +131,9 @@ Our Authorization URL supports each of the following values for the `prompt` que
 
 #### Scopes
 
-In order to call APIs on behalf of a user, you must specify which **scopes** your app needs access to. Consult the APIs you wish to call to determine which scopes you will require, and include these scopes in your OAuth2 client’s configuration step.
+In order to call APIs on behalf of a user, you must specify which **scopes** your app needs access to. Currently there are no APIs other than the User Info endpoint that support the `Access Token` granted from the token endpoint. The Marketplace V1 API currently uses a separate method for generation of its supported [Bearer Token](https://developers.vendasta.com/vendor/ZG9jOjIxNzM0NjA4-api-authentication).
 
-#### Special Scopes
+#### SSO Scopes
 
 Certain scopes have a special meaning for sso, or are distinct from those used for API access.
 
