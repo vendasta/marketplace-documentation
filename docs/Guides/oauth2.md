@@ -92,7 +92,7 @@ Follow your service's installation guide, entering the following information whe
 
 ### Authorization URL
 
-The redirect to the OAuth Authorization URL kicks off SSO. The library that you chose to use likely has a function for generating the OAuth Authorization URL based on your configuration.
+The redirect to the OAuth Authorization URL initiates SSO. The library that you chose to use likely has a function for generating the OAuth Authorization URL based on your configuration.
 
 Your Authorization URL will look something like this:
 ```
@@ -192,16 +192,7 @@ Here is an example payload of an ID token after decoding, note that fields may b
 }
 ```
 
-#### Refresh Tokens
 
-Refresh tokens allow an application to acquire fresh **Access Tokens** as-needed, even when the end-user is no longer actively engaged with their application. This allows applications to perform **background processing** on behalf of the user.
-
-Refresh Tokens are **not granted** by default and must be explicitly requested by the application by meeting the following requirements:
-
-- Request the `offline_access` scope in your OAuth2 Auth requests
-- Set the `prompt=consent` query parameter on your Auth requests (most clients provide this option, or will do so automatically if they are sufficiently OpenID connect aware)
-
-Once a refresh token is obtained you may store it in your database for later use. **Do not store refresh tokens in the browser via local-storage as this is vulnerable to XSS attacks.** Consult your OAuth2 library to learn how to acquire, store, and load refresh tokens as required.
 
 ### User Management
 
