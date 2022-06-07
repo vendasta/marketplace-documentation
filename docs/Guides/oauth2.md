@@ -28,7 +28,7 @@ Both OpenID Connect and OAuth2 are standardized workflows, which means most prog
 
 **Backend Clients**
 
-Clients running on a backend web-server will use their **client secret** for verification. Client secret generation is covered in the next section.
+Clients running on a backend web-server will use their **client secret** for verification. Client secret generation is covered in _Step 2_.
 
 **Frontend Clients**
 
@@ -110,39 +110,39 @@ GET /oauth2/auth?
 > The `state` param is optional, but recommended. In addition to helping avoid CSRF attacks by using a unique and non-guessable value associated with each authentication request it may be used to pass data through the entire SSO flow as it is included when the OP redirects to the RP callback url.
 
 
-#### Contextualizing your Authorization URL
+#### Contextualizing your Authorization URL(Required)
 
 Vendasta users may belong to any one of our many partners, and each partner may select one of several login methods. Additionally end user access is white-labeled. The branding to be displayed to the user could depend on the `market_id` of the Account.
 Thus in order to direct the user to the login screen that is specific to their account, we need to know which account they are attempting to access.
-Most OAuth2 libraries will allow you to add additional context to your Authorization URL with query parameters. Before initiating an OAuth2 flow, provide options to your OAuth2 library to set the account ID to the `account_id` query parameter.
 
-#### Prompts
+Most OAuth2 libraries will allow you to add additional context to your Authorization URL with query parameters, _though in some cases you may need to do this manually, or extend your library_. Before initiating an OAuth2 flow, provide options to your OAuth2 library to set the account ID to the `account_id` query parameter.
+
+#### Prompts(Optional)
 
 Note that Vendasta tracks user's scope acceptance for your Product. Unless you want to override the current default value for this user's entry to your product you may **exclude** the `prompt` query parameter from your Authorization URL.
 
 The following values are supported for the `prompt` query parameter. 
 
 |||
-|-------------|--------------------------|
-| **none**    | Do not prompt the user for consent or to log in. Will result in an error if the user does not have an active session or has not previously provided consent. This is useful for acquiring fresh tokens for a user who has logged in recently and likely has an active session. |
-| **login**   | Prompt the user to log in, ignoring an existing session if one exists.  |
-| **consent** | Prompt the user to provide consent for accessing the requested scopes. `prompt=consent` is required when requesting the `offline_access` scope. |
+|-------------|-
+| **none**    | Do not prompt the user for consent or to log in. Will result in an error if the user does not have an active session or has not previously provided consent. This is useful for acquiring fresh tokens for a user who has logged in recently and likely has an active session.
+| **login**   | Prompt the user to log in, ignoring an existing session if one exists.
+| **consent** | Prompt the user to provide consent for accessing the requested scopes. `prompt=consent` is required when requesting the `offline_access` scope.
 
 
-#### Scopes
+#### Scopes(Required)
 
-In order to call APIs on behalf of a user, you must specify which **scopes** your app needs access to. Currently there are no APIs other than the User Info endpoint that support the `Access Token` granted from the token endpoint. The Marketplace V1 API currently uses a separate method for generation of its supported [Bearer Token](https://developers.vendasta.com/vendor/ZG9jOjIxNzM0NjA4-api-authentication).
+In order to call APIs on behalf of a user, you must specify which **scopes** your app needs access to. Currently there are no APIs other than the User Info endpoint that utlize the `Access Token` granted from the token endpoint for authentication. The Marketplace V1 API currently uses a separate method for generation of its [Bearer Token](https://developers.vendasta.com/vendor/ZG9jOjIxNzM0NjA4-api-authentication).
 
-#### SSO Scopes
+**SSO Scopes**
 
-Certain scopes have a special meaning for sso, or are distinct from those used for API access.
+Certain scopes have a special meaning for sso, or are distinct from those used for API access. Each scope is optional, but **at least one scope must be specified**.
 
-|                 |                                                                                                 |
-|-----------------|-------------------------------------------------------------------------------------------------|
-| `openid`        | **Required:** this scope MUST be included when performing an OpenID connect flow.               |
-| `offline_access`| This scope requests that a **refresh token** be returned to your application alongside your **access token**. See the **Refresh Token** section for more information.                                           |
-| `profile`       | Grants access to view a user’s name, locale, and Vendasta roles using the **user-info** endpoint. See the **User Info Endpoint** section for more information.                                                        |
-| `email`       | **Not Supported** 
+|||
+|--------------------------|-
+| `openid`  _**Optional**_ |  This scope MUST be included when performing an OpenID connect flow.
+| `profile` _**Optional**_ | Grants access to view a user’s name, locale, and Vendasta roles via the **user-info** endpoint. 
+| `email`   _**Optional**_ | **Not Supported** 
 
 
 ### Token Endpoint
@@ -153,9 +153,9 @@ Access tokens expire **30 minutes** from the time of issue. They will need to be
 
 - **Redirect the user back through the authorization process (backend)**. If the user’s token has expired, or is close to expiry, you can fetch a new one by re-initiating the OAuth2 authorization flow. You may pass the `prompt=none` query parameter for users who have already given consent to avoid displaying the consent dialog again, which should allow a seamless redirection back into your application.
 
-- **Silent Refresh (Frontend):** This technique redirects the user through the authorization process just as the previous technique, however it is initiated from Javascript by opening a hidden browser window for the authorization flow, using prompt=none to complete the flow without user interaction. Thiss refreshes the user’s token without any interruption.
+- **Silent Refresh (Frontend) - COMING SOON:** This technique redirects the user through the authorization process just as the previous technique, however it is initiated from Javascript by opening a hidden browser window for the authorization flow, using prompt=none to complete the flow without user interaction. This refreshes the user’s token without any interruption.
 
-- **Use a refresh token (Backend):** Refresh tokens allow applications to refresh access tokens at any time, even after the user has left their application. This is useful, but requires explicit consent from the end-user and is not recommended unless your application needs to perform background work on behalf of the end-user. Refresh tokens are sensitive and must be kept secure.
+- **Use a refresh token (Backend) - COMING SOON:** Refresh tokens allow applications to refresh access tokens at any time, even after the user has left their application. This is useful, but requires explicit consent from the end-user and is not recommended unless your application needs to perform background work on behalf of the end-user. Refresh tokens are sensitive and must be kept secure.
 
 **All access token claims are subject to change without notice, and should only be inspected for debugging purposes.**
 
@@ -163,9 +163,10 @@ Access tokens expire **30 minutes** from the time of issue. They will need to be
 
 An identity token will be provided in the response from the token endpoint. Identity tokens are compliant with the [OpenID Core ID Token specification](https://openid.net/specs/openid-connect-core-1_0.html#IDToken). 
 
-In addition to the core ID token claims, they will also include requested identity data claims such as the [OpenID Standard Identity Claims](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims). The ID Token will also be given any requested identity scopes (such as `email`, which provide `email` and `email_verified` identity claims), so it can be used via the `Authorization` header when calling the user-info endpoint.
-
 ID tokens are valid for 30 days.
+
+In addition to the core ID token claims, they will also include requested identity data claims such as the [OpenID Standard Identity Claims](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims). 
+
 
 Per the OpenID specification, ID tokens are [**JWT**](https://jwt.io/introduction/) encoded. When troubleshooting your integration you can use [https://jwt.io/](https://jwt.io/) tool to inspect the contents.
 
@@ -196,9 +197,28 @@ Here is an example payload of an ID token after decoding, note that fields may b
 
 ### User Management
 
-#### User Info Endpoint
+``` mermaid
+erDiagram
+    USER ||--|{ PERSONA : has
+    USER {
+      string user_id}
+    PERSONA {string legacy_user_id}
+```
 
-The User Info Endpoint is available to any application which has acquired an Access Token from an OAuth2 flow. However, the information it provides is scaled according to the **scopes** on your access token.
+There are two persona's that a Vendor may interact with. The persona's that a user has may be seen in the `role` list in the User-Info endpoint response. 
+
+|Roles||
+|-------------|-
+| `partner`| Reseller admin user. A user with this role is able to log into Partner Center, the Reseller administrative dashboard.
+| `smb`    | An end busines user. Typically the Business Owner, and their employees. Due to the legacy practice of Impersonation, many Reseller users will have this role in addition to their partner role.
+
+
+
+The Marketplace v1 API, Webhooks, and the Order Form `End User` field only interact with the SMB persona. Thus JIT(Just In Time) user creation using data from the User Info endpoint is recommended. This is the only way to allow for syncing of Partner Admin users. If you don't want to allow Reseller users to access your product, then you could utilize the Marketplace v1 User API & Webhooks to sync End Business Users only. 
+
+**User Info Endpoint**
+
+The User Info Endpoint is available to any application which has acquired an Access Token from the OAuth2 flow. However, the information it provides is scaled according to the **scopes** on your access token.
 
 Here is the User Info URL:
 
@@ -248,10 +268,10 @@ The amount of information returned is determined by the scopes which your applic
 >
 >From OIDC spec point [5.3.2](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo) - "NOTE: Due to the possibility of token substitution attacks (see [Section 16.11](https://openid.net/specs/openid-connect-core-1_0.html#TokenSubstitution)), the UserInfo Response is not guaranteed to be about the End-User identified by the sub (subject) element of the ID Token. The sub Claim in the UserInfo Response MUST be verified to exactly match the sub Claim in the ID Token; if they do not match, the UserInfo Response values MUST NOT be used."
 
-### Roles
 
-### Session Management
+**Session Management**
 
+The Vendasta Business App session length is 30 days. If your session is shorter than this then upon session expiry you should route the user back through the 
 
 
 ## Step 4 - Dashboard Modifications
