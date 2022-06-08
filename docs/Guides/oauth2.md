@@ -205,16 +205,26 @@ erDiagram
     PERSONA {string legacy_user_id}
 ```
 
-There are two persona's that a Vendor may interact with. The persona's that a user has may be seen in the `role` list in the User-Info endpoint response. 
+There are two persona's that a Vendor may interact with. The persona's that a user has may be seen in the `role` list in the User-Info endpoint response. Where a user logs in will determine what persona their current session is utilizing. The persona used to access a product can affect session transfer behaviour as well as what products a user has access to.
 
 |Roles||
 |-------------|-
-| `partner`| Reseller admin user. A user with this role is able to log into Partner Center, the Reseller administrative dashboard.
-| `smb`    | An end busines user. Typically the Business Owner, and their employees. Due to the legacy practice of Impersonation, many Reseller users will have this role in addition to their partner role.
+| `partner`| Reseller admin user. A user with this role is able to access every dashboard in the Vendasta Platform, but mainly interact with Partner Center, the Reseller administrative dashboard.
+| `smb`    | An end busines user. Typically the Business Owner, and their employees. A user with this role is able to log into Business App. Due to the legacy practice of [Impersonation](https://support.vendasta.com/hc/en-us/articles/4406958143383), many Reseller users will have this role in addition to their partner role. These personas are associated with Accounts. _Note that OAuth SSO doesn't support impersonation, and even with an impersonated session the `partner` persona `legacy_user_id` will be surfaced in the Get-Info Endpoint response rather than that of the `smb` persona being impersonated._
+
+There are several options for syncing users. Note that the v1 Marketplace API, Webhooks, and the Order Form `End User` field only interact with the SMB persona. 
+
+a) **JIT(Just In Time):** User creation on the fly using data from the User Info endpoint **is recommended**. This is the only way to allow for syncing of Partner Admin users. This is also the only way to get the `user_id` rather than the `legacy_user_id` at this time(via the user info `sub`).
+
+b) **Sync users via the Marketplace v1 API & Webhooks:** Create users at time of provisioning, and then manage them moving forward based on webhook triggers and subsequent API interaction. 
+
+c) **Headless Session Transfer:** Do a many:1 session transfer from any Vendasta user into a single dummy user on the Vendor side.
+
+d) **Order Form:** There is a special order form field type `End User` which will provide the user filling in the form with a dropdown to select any of the SMB persona's associated with the account. If this field type is configured on your order form, the `legacy_user_id` will be provided in the provisioning webhook `order_form` object for this custom field.
 
 
-
-The Marketplace v1 API, Webhooks, and the Order Form `End User` field only interact with the SMB persona. Thus JIT(Just In Time) user creation using data from the User Info endpoint is recommended. This is the only way to allow for syncing of Partner Admin users. If you don't want to allow Reseller users to access your product, then you could utilize the Marketplace v1 User API & Webhooks to sync End Business Users only. 
+<!-- theme: info -->
+> The `roles` array will inform you if a user has the `partner` role, and is thus a Reseller user. You aren't able to learn from the User-Info response however what persona this user has accessed your product with currently. The only way to check at this time what role the current `legacy_user_id` belongs to is to call the v1 Marketplace API [Get User](https://developers.vendasta.com/vendor/02b526c75600d-get-user) endpoint. A `legacy_user_id` belonging to a `partner` persona will provide a 404 response. This does mean that you are currently unable to retreive the email for a user that only has the `partner` persona.
 
 **User Info Endpoint**
 
@@ -236,7 +246,7 @@ The amount of information returned is determined by the scopes which your applic
 |-----------|------------------------------------------------------------------------------------------------------|
 | `email`   | **Email is currently a restricted scope** Please use the `sub` field returned by the user-info endpoint to uniquely identify the user.                                                                  |
 | `profile` | Grants access to view a user’s name, locale, and Vendasta roles using the user-info endpoint. See the User Info Endpoint section for more information.                                                                   |
-| `openid`  | Include the User ID (a.k.a. `sub`), and namespace.                                                   |
+| `openid`  | Include the `user_id` (the `sub` claim), and namespace.                                                   |
 
 **All user info claims aside from those specified in the [OpenID Core specification](https://openid.net/specs/openid-connect-core-1_0.html#UserInfoResponse) are subject to change without notice and should only be used for debugging purposes.**
 
@@ -268,13 +278,16 @@ The amount of information returned is determined by the scopes which your applic
 >
 >From OIDC spec point [5.3.2](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo) - "NOTE: Due to the possibility of token substitution attacks (see [Section 16.11](https://openid.net/specs/openid-connect-core-1_0.html#TokenSubstitution)), the UserInfo Response is not guaranteed to be about the End-User identified by the sub (subject) element of the ID Token. The sub Claim in the UserInfo Response MUST be verified to exactly match the sub Claim in the ID Token; if they do not match, the UserInfo Response values MUST NOT be used."
 
+**User Access Check(Required)**
+
+OAuth based sso spec does not include clear guidance on access checks. Vendasta requires that after session transfer completes that the [Check User Access to an Account](https://developers.vendasta.com/vendor/df4894447fee6-check-user-access-to-an-account) endpoint be called prior to redirecting the user to the product. If the response to this `HEAD` call is 403, then a 403 error page must be displayed. Unlike the Get User endpoint, this check does support `legacy_user_id`s for `partner` personas, and will ensure that the namespace of the Account and Partner user match.
 
 **Session Management**
 
 The Vendasta Business App session length is 30 days. If your session is shorter than this then upon session expiry you should route the user back through the 
 
 
-## Step 4 - Dashboard Modifications
+## Step 4: Dashboard Modifications
 
 ### Navigation Bar(Required)
 
