@@ -108,6 +108,8 @@ GET /oauth2/auth?
 
 <!-- theme: info -->
 > The `state` param is optional, but recommended. In addition to helping avoid CSRF attacks by using a unique and non-guessable value associated with each authentication request it may be used to pass data through the entire SSO flow as it is included when the OP redirects to the RP callback url.
+>
+>Additionally the `Entry URL` supports a `nextUrl` param, which can be passed through SSO using the `state` to enable **deep linking**.
 
 
 #### Contextualizing your Authorization URL(Required)
@@ -142,7 +144,7 @@ Certain scopes have a special meaning for sso, or are distinct from those used f
 |--------------------------|-
 | `openid`  _**Optional**_ |  This scope MUST be included when performing an OpenID connect flow.
 | `profile` _**Optional**_ | Grants access to view a user’s name, locale, and Vendasta roles via the **user-info** endpoint. 
-| `email`   _**Optional**_ | **Not Supported** 
+| `email`   _**Optional**_ | **Restricted Scope** 
 
 
 ### Token Endpoint
@@ -157,7 +159,8 @@ Access tokens expire **30 minutes** from the time of issue. They will need to be
 
 - **Use a refresh token (Backend) - COMING SOON:** Refresh tokens allow applications to refresh access tokens at any time, even after the user has left their application. This is useful, but requires explicit consent from the end-user and is not recommended unless your application needs to perform background work on behalf of the end-user. Refresh tokens are sensitive and must be kept secure.
 
-**All access token claims are subject to change without notice, and should only be inspected for debugging purposes.**
+<!-- theme: warning -->
+>All access token claims are subject to change without notice, and should only be inspected for debugging purposes.
 
 #### ID Tokens
 
@@ -165,10 +168,7 @@ An identity token will be provided in the response from the token endpoint. Iden
 
 ID tokens are valid for 30 days.
 
-In addition to the core ID token claims, they will also include requested identity data claims such as the [OpenID Standard Identity Claims](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims). 
-
-
-Per the OpenID specification, ID tokens are [**JWT**](https://jwt.io/introduction/) encoded. When troubleshooting your integration you can use [https://jwt.io/](https://jwt.io/) tool to inspect the contents.
+In addition to the core ID token claims, the token will also include requested identity data claims such as the [OpenID Standard Identity Claims](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims). 
 
 Here is an example payload of an ID token after decoding, note that fields may be absent if unavailable:
 
@@ -192,7 +192,8 @@ Here is an example payload of an ID token after decoding, note that fields may b
   "updated_at": 1311220970
 }
 ```
-
+<!-- theme: info -->
+>Per the OpenID specification, ID tokens are [**JWT**](https://jwt.io/introduction/) encoded. When troubleshooting your integration you can use [https://jwt.io/](https://jwt.io/) tool to inspect the contents.
 
 
 ### User Management
@@ -205,26 +206,33 @@ erDiagram
     PERSONA {string legacy_user_id}
 ```
 
-There are two persona's that a Vendor may interact with. The persona's that a user has may be seen in the `role` list in the User-Info endpoint response. Where a user logs in will determine what persona their current session is utilizing. The persona used to access a product can affect session transfer behaviour as well as what products a user has access to.
+There are two *Personas* that a Vendor may interact with. The personas that a user has may be found in the `role` list in the User-Info endpoint response. Where a *User* logs in will determine what persona their current session is utilizing. The persona used to access a product can affect session transfer behaviour as well as what products a user has access to.
 
 |Roles||
 |-------------|-
 | `partner`| Reseller admin user. A user with this role is able to access every dashboard in the Vendasta Platform, but mainly interact with Partner Center, the Reseller administrative dashboard.
 | `smb`    | An end busines user. Typically the Business Owner, and their employees. A user with this role is able to log into Business App. Due to the legacy practice of [Impersonation](https://support.vendasta.com/hc/en-us/articles/4406958143383), many Reseller users will have this role in addition to their partner role. These personas are associated with Accounts. _Note that OAuth SSO doesn't support impersonation, and even with an impersonated session the `partner` persona `legacy_user_id` will be surfaced in the Get-Info Endpoint response rather than that of the `smb` persona being impersonated._
+| `sales_person` | A user with this role is able to interact with the Partner level Sales CRM dashboard *Sales & Success Center*. Salespeople are currently unable to access third party Vendor products from Sales & Succes CenterS|
+| `digital_agent` | A user with this role is able to interact with the Partner level task management dashboard *Task Manager*.
 
-There are several options for syncing users. Note that the v1 Marketplace API, Webhooks, and the Order Form `End User` field only interact with the SMB persona. 
 
-a) **JIT(Just In Time):** User creation on the fly using data from the User Info endpoint **is recommended**. This is the only way to allow for syncing of Partner Admin users. This is also the only way to get the `user_id` rather than the `legacy_user_id` at this time(via the user info `sub`).
+<!-- theme: info -->
+>Note that the v1 Marketplace API, Webhooks, and the Order Form `End User` field only interact with the SMB persona, and thus utilize the `legacy_user_id`. 
+
+**There are several options for syncing users:**
+
+a) **JIT(Just In Time):** User creation on the fly using data from the User Info endpoint **is recommended**. This is the only way to allow for syncing of Partner Admin users. This is also the only way to get the `user_id`(`sub` in the User-Info response) rather than the `legacy_user_id` at this time.
 
 b) **Sync users via the Marketplace v1 API & Webhooks:** Create users at time of provisioning, and then manage them moving forward based on webhook triggers and subsequent API interaction. 
 
-c) **Headless Session Transfer:** Do a many:1 session transfer from any Vendasta user into a single dummy user on the Vendor side.
+c) **Many:1 Session Transfer:** Do a many:1 session transfer from any Vendasta user into a single dummy user on the Vendor side. Typically used when a Vendor doesn't have User entities.
 
 d) **Order Form:** There is a special order form field type `End User` which will provide the user filling in the form with a dropdown to select any of the SMB persona's associated with the account. If this field type is configured on your order form, the `legacy_user_id` will be provided in the provisioning webhook `order_form` object for this custom field.
 
 
 <!-- theme: info -->
-> The `roles` array will inform you if a user has the `partner` role, and is thus a Reseller user. You aren't able to learn from the User-Info response however what persona this user has accessed your product with currently. The only way to check at this time what role the current `legacy_user_id` belongs to is to call the v1 Marketplace API [Get User](https://developers.vendasta.com/vendor/02b526c75600d-get-user) endpoint. A `legacy_user_id` belonging to a `partner` persona will provide a 404 response. This does mean that you are currently unable to retreive the email for a user that only has the `partner` persona.
+>**Entry Context:** 
+>The `roles` array will inform you if a user has the `partner` role, and is thus a Reseller user. You aren't able to learn from the User-Info response however what persona this user has accessed your product with the current request. The v1 Marketplace API [Get User](https://developers.vendasta.com/vendor/02b526c75600d-get-user) endpoint can determine if the `legacy_user_id` belongs to an SMB persona. A `legacy_user_id` belonging to a `partner` persona will provide a 404 response. 
 
 **User Info Endpoint**
 
@@ -234,7 +242,7 @@ Here is the User Info URL:
 
     https://sso-api-prod.apigateway.co/oauth2/user-info
 
-You may make a `GET` or `POST` request to this endpoint. Include your Identity Token in the **AUTHORIZATION** header like so, replace the token with your own:
+You may make a `GET` or `POST` request to this endpoint. Include your Identity Token in the **AUTHORIZATION** header like so, replacing the token with your own:
 
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lhbS1wcm9kLmFwaWdhdGV3YXkuY28iLCJleHAiOjE2MTExNjEyMDQsImlhdCI6MTYxMTE1OTQwNCwiaXNzIjoiaHR0cHM6Ly9pYW0tcHJvZC5hcGlnYXRld2F5LmNvIiwic3ViIjoiVS1lNzg1MWM1My04YTQ5LTRjODktOTBmZC03YTgxNDA4ODhjMDIiLCJmZWRlcmF0ZWRfaWRlbnRpdHlfcHJvdmlkZXIiOiJvYXV0aCIsInVzZXJfaWQiOiJVLWU3ODUxYzUzLThhNDktNGM4OS05MGZkLTdhODE0MDg4OGMwMiIsImtpbmQiOiJhY2Nlc3MiLCJzY29wZSI6InByb2ZpbGUgZW1haWwgb3BlbmlkIiwia2lkIjoiOWZjMGEyYWNlMTNjZjdjOTBiM2ZmZjcxODkzZGJjODAiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.s12fKo19qKBR4CjMlXqkV0KxksieY7jlgT7Ryg9PH68
@@ -247,8 +255,6 @@ The amount of information returned is determined by the scopes which your applic
 | `email`   | **Email is currently a restricted scope** Please use the `sub` field returned by the user-info endpoint to uniquely identify the user.                                                                  |
 | `profile` | Grants access to view a user’s name, locale, and Vendasta roles using the user-info endpoint. See the User Info Endpoint section for more information.                                                                   |
 | `openid`  | Include the `user_id` (the `sub` claim), and namespace.                                                   |
-
-**All user info claims aside from those specified in the [OpenID Core specification](https://openid.net/specs/openid-connect-core-1_0.html#UserInfoResponse) are subject to change without notice and should only be used for debugging purposes.**
 
 ```
 {
