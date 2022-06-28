@@ -1,6 +1,7 @@
 {
   "name": "Marketplace Documentation",
   "description": "",
+  "spectralExtends": [],
   "formats": [
     "oas2",
     "oas3",

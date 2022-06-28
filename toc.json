@@ -45,7 +45,7 @@
       },
       {
       "type": "group",
-      "title": "Requirement 4: End User Communication",
+      "title": "Requirement 4: End User Notifications",
       "items": [
         {
           "type": "item",
@@ -58,6 +58,11 @@
           "uri": "docs/Guides/activity_stream_implementation.md"
         }
       ]
+      },
+      {
+         "type":"item",
+         "title":"Requirement 5: Customer List CRM",
+         "uri":"docs/Guides/customer_list.md"
       },
       {
          "type":"divider",
