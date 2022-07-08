@@ -2,7 +2,7 @@
 ## Overview
 This guide aims to help you configure your application to use Vendasta’s Identity Gateway as an Identity Provider for your application. This will allow you to identify users entering your application from the Vendasta platform and will *in future API iterations* allow you to call Vendasta APIs on their behalf.
 
-Vendasta implements the [OpenID Connect Core specification](https://openid.net/specs/openid-connect-core-1_0.html), which includes a complete [OAuth 2.0 Authorization Framework](https://tools.ietf.org/html/rfc6749) integration.
+Vendasta implements the [OpenID Connect Core specification](https://openid.net/specs/openid-connect-core-1_0.html)(OIDC), which includes a complete [OAuth 2.0 Authorization Framework](https://tools.ietf.org/html/rfc6749) integration.
 
 This guide is for implementing a **3-legged OAuth** flow. The distinction between 2-legged and 3-legged flows is as follows:
 
@@ -17,7 +17,7 @@ Your first decision you will need to make is where you will implement your autho
 1. **(Recommended)** Backend workflow: implement the workflow within your secure webserver
 2. Frontend workflow: implement the workflow using Javascript within a Single Page Application
 
-**We recommend implementing your authorization flow on the backend in most cases as it is easier to setup, secure, and use. However, Single Page Applications would likely prefer a Frontend Workflow so that tokens can be more easily refreshed.**
+**We recommend implementing your authorization flow on the backend in most cases as it is easier to setup, secure, and use. However, Single Page Applications would likely prefer a Frontend Workflow so that tokens can be more easily refreshed. (NOTE - Refresh Tokens are not yet supported)**
 
 Both OpenID Connect and OAuth2 are standardized workflows, which means most programming languages have at least one library available to aid your implementation whether you choose to implement the workflow on the frontend or on your backend webserver.
 
@@ -64,7 +64,7 @@ Toggle 'Enable SSO' on, then click `Create Configuration`
 |||
 |-|-|
 | **Entry URL**  | The url that acts as the entry point for the product. This could be redirected to from various dashboards or emails. Prior to redirect the account_id is injected into the placeholder on the url, and should be appended as an additional url parameter on the Authorization URL to trigger the start of the session transfer. 
-| **Logout URL** | A [webhook](https://developers.vendasta.com/vendor/ZG9jOjIxNzM0NjA3-overview#logout-webhook) for back channel logout of service provider session. As a user could have multiple open sessions across browsers and devices, it is recommended that you utilize the provided `session_id` rather than the `user_id` unless you intend to log them out of all active sessions.
+| **Logout URL** | A [webhook](https://developers.vendasta.com/vendor/ZG9jOjIxNzM0NjA3-overview#logout-webhook) for back channel logout of service provider session. As a user could have multiple open sessions across browsers and devices it is recommended that you utilize the provided `session_id` rather than the `user_id` unless you intend to log them out of all active sessions.
 
 
 ### Client Library or Service Configuration
@@ -87,7 +87,7 @@ Follow your service's installation guide, entering the following information whe
 
 ## Step 3: Session Transfer Implementation
 
-![Session Transfer](../../assets/images/guides/sso/sso_sequence.png)
+![Session Transfer](../../assets/images/guides/sso/sp_oidc_sequencediagram.png)
 
 
 ### Authorization URL
@@ -117,7 +117,7 @@ GET /oauth2/auth?
 Vendasta users may belong to any one of our many partners, and each partner may select one of several login methods. Additionally end user access is white-labeled. The branding to be displayed to the user could depend on the `market_id` of the Account.
 Thus in order to direct the user to the login screen that is specific to their account, we need to know which account they are attempting to access.
 
-Most OAuth2 libraries will allow you to add additional context to your Authorization URL with query parameters, _though in some cases you may need to do this manually, or extend your library_. Before initiating an OAuth2 flow, provide options to your OAuth2 library to set the account ID to the `account_id` query parameter.
+Most OAuth2 libraries will allow you to add additional context to your Authorization URL with query parameters(_though in some cases you may need to do this manually, or extend your library_). Before initiating an OAuth2 flow, provide options to your OAuth2 library to set the account ID to the `account_id` query parameter.
 
 #### Prompts(Optional)
 
@@ -206,18 +206,18 @@ erDiagram
     PERSONA {string legacy_user_id}
 ```
 
-There are two *Personas* that a Vendor may interact with. The personas that a user has may be found in the `role` list in the User-Info endpoint response. Where a *User* logs in will determine what persona their current session is utilizing. The persona used to access a product can affect session transfer behaviour as well as what products a user has access to.
+The _Personas_ that a user has may be found in the `role` list in the User-Info endpoint response. Where a *User* logs in will determine what _Persona_ their current session is utilizing. A Vendor may choose to map these roles to equivilent permission sets on their side.
 
 |Roles||
 |-------------|-
-| `partner`| Reseller admin user. A user with this role is able to access every dashboard in the Vendasta Platform, but mainly interact with Partner Center, the Reseller administrative dashboard.
-| `smb`    | An end busines user. Typically the Business Owner, and their employees. A user with this role is able to log into Business App. Due to the legacy practice of [Impersonation](https://support.vendasta.com/hc/en-us/articles/4406958143383), many Reseller users will have this role in addition to their partner role. These personas are associated with Accounts. _Note that OAuth SSO doesn't support impersonation, and even with an impersonated session the `partner` persona `legacy_user_id` will be surfaced in the Get-Info Endpoint response rather than that of the `smb` persona being impersonated._
-| `sales_person` | A user with this role is able to interact with the Partner level Sales CRM dashboard *Sales & Success Center*. Salespeople are currently unable to access third party Vendor products from Sales & Succes CenterS|
+| `partner`| Reseller admin user. A user with this role is able to access every dashboard in the Vendasta Platform, but mainly interact with Partner Center, the Reseller administrative dashboard. This persona is never associated with an Account.
+| `smb`    | An end busines user. Typically the Business Owner, and their employees. A user with this role and no other is only able to log into Business App. This persona is directly associated with Accounts.</br>Due to the legacy practice of [Impersonation](https://support.vendasta.com/hc/en-us/articles/4406958143383), many Reseller users will have this role in addition to their higher level roles.</br>  _Note that OAuth SSO doesn't support impersonation, and even with an impersonated session the `partner` persona `legacy_user_id` will be surfaced in the Get-Info Endpoint response rather than that of the `smb` persona being impersonated._
+| `sales_person` | A user with this role is able to interact with the Partner level Sales CRM dashboard *Sales & Success Center*. |
 | `digital_agent` | A user with this role is able to interact with the Partner level task management dashboard *Task Manager*.
 
 
 <!-- theme: info -->
->Note that the v1 Marketplace API, Webhooks, and the Order Form `End User` field only interact with the SMB persona, and thus utilize the `legacy_user_id`. 
+>Note that the `user_id` referred to by the v1 Marketplace API, Webhooks, and the Order Form `End User` field directly maps to the `legacy_user_id` returned in the OAuth User-Info Endpoint. 
 
 **There are several options for syncing users:**
 
@@ -225,7 +225,7 @@ a) **JIT(Just In Time):** User creation on the fly using data from the User Info
 
 b) **Sync users via the Marketplace v1 API & Webhooks:** Create users at time of provisioning, and then manage them moving forward based on webhook triggers and subsequent API interaction. 
 
-c) **Many:1 Session Transfer:** Do a many:1 session transfer from any Vendasta user into a single dummy user on the Vendor side. Typically used when a Vendor doesn't have User entities.
+c) **Many:1 Session Transfer:** Do a many:one session transfer from any Vendasta user into a single dummy user on the Vendor side. Typically used when a Vendor doesn't have User entities.
 
 d) **Order Form:** There is a special order form field type `End User` which will provide the user filling in the form with a dropdown to select any of the SMB persona's associated with the account. If this field type is configured on your order form, the `legacy_user_id` will be provided in the provisioning webhook `order_form` object for this custom field.
 
@@ -286,11 +286,11 @@ The amount of information returned is determined by the scopes which your applic
 
 **User Access Check(Required)**
 
-OAuth based sso spec does not include clear guidance on access checks. Vendasta requires that after session transfer completes that the [Check User Access to an Account](https://developers.vendasta.com/vendor/df4894447fee6-check-user-access-to-an-account) endpoint be called prior to redirecting the user to the product. If the response to this `HEAD` call is 403, then a 403 error page must be displayed. Unlike the Get User endpoint, this check does support `legacy_user_id`s for `partner` personas, and will ensure that the namespace of the Account and Partner user match.
+OAuth based sso specs do not include clear guidance on access checks. Vendasta requires that after session transfer completes that the [Check User Access to an Account](https://developers.vendasta.com/vendor/df4894447fee6-check-user-access-to-an-account) endpoint be called prior to redirecting the user to the product. If the response to this `HEAD` call is 403, then a 403 error page must be displayed. Unlike the Get User endpoint, this check does support `legacy_user_id`s for `partner` personas, and will ensure that the namespace of the Account and Partner user match.
 
 **Session Management**
 
-The Vendasta Business App session length is 30 days. If your session is shorter than this then upon session expiry you should route the user back through the 
+The Vendasta Business App session length is 30 days. If your session is shorter than this then upon session expiry you should route the user back through the _Authorization URL_
 
 
 ## Step 4: Dashboard Modifications
@@ -336,7 +336,9 @@ Script parameter details:
 | `target-element-class(optional)`                  | This field can help overcome css conflicts with the NavBar. It allows you to specify an element that has a **unique** class. If the element with this class exists on the page at the time the NavBar is called to render the bar, it will place the bar directly above the target element|
 
 ### Product url contextualization
-In the case that a user has bookmarked your product's dashboard url unless you have something identifying a) That this is a Vendasta account & b) what account it is you are unable to properly authorize the request.
+In the case that a user has bookmarked your product's dashboard url unless you have something identifying [This is a Vendasta account **&** What account it is] you are unable to properly authenticate the request, as the Authorization URL requires the account_id be included. 
+
+Thus contextual urls for your Vendasta Product are suggested, with a long lived cookie, or browser caching being less robust alternatives for keeping track of the last account entered, and the fact that the account belongs to a Vendasta reseller.
 
 
 ### In Product Purchases
@@ -346,8 +348,7 @@ If your product has CTAs for in-product purchases, including upgrades, or Add-on
 a) Hidden completely
 b) OR or have any actual purchase capabilities remove, and the copy made to be 'generic' - simply directing the user to purchase the sku without actually referencing them to where they may do so.
 
-
-
-## Adjustments for muliple Products
-
 ## Testing
+Functionally testing SSO can be accomplished by redirecting to the Authorization URL in the browser. This will result in a prompt for user login, and scope acceptance.
+
+For an end to end test, Activate the product on an Account, log into Business App, and click on the icon of the product.
