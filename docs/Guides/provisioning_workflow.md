@@ -21,7 +21,7 @@ _*See **Activation Types** below for details on all possible events_
 
 **#2 Resolve Pending Activation Event:** Depending on the sku configuration, either Vendasta, or the Vendor confirms that the product is now active by calling the 'Resolve Pending Activation' endpoint in the Accounts API. This can be accomplished automatically via the API, or via the Vendor Center Accounts page -> Pending Activations sub tab(_this is hidden when there are no pending activations_).
 
-**#3 Cancellation Event:** A sku has been [canceled](https://support.vendasta.com/hc/en-us/articles/206621228) for a given Account, and the activation goes into a _Pending De-Provisioning State_. This can be undone if the user changes their mind. Vendors may optionally subscribe to this event.
+**#3 Cancellation Event:** A sku has been canceled for a given Account, and the activation goes into a _Pending De-Provisioning State_. This can be undone if the user changes their mind. Vendors may optionally subscribe to this event.
 
 **#4 Deactivation Event:** A de-provison alert is sent to the Vendor. 
 * If the Product is in a pending de-provision state, then the product is fully deactivated at the end of it's billing cycle.
@@ -70,19 +70,25 @@ Vendors are responsible for maintaining a mapping between the Vendasta Account, 
 |`activation_id` | This is a unique activation tracking id, it will be required to resolve a Pending Activation.|
 |`order_form_submission_id` |This is a unique id for tracking order form data from an Activation.
 
-## Possible Workflows
+## Provisioning Workflows
 
-It is recommended that if webhooks are being used to utilize the _Pending Activation Workflow_
+It is recommended that if webhooks are being used to utilize the _Pending Activation Workflow_. If your operations team has to take manual steps to provision the offering, then this flow is **required**.
 
-This workflow is configured via the `Use "Pending Activation" workflow` checkbox in the _Product activation_ section of the _Product Info_ page.
+The `Use "Pending Activation" workflow` checkbox in the _Product activation_ section of the _Product Info_ page shifts the responsibility for activation resolution from Vendasta to the Vendor.
 
+**Manual UI Route**
+1) An email with the order details will be sent to all of the email addresses registered in the Notifications --> Recipient Email list.
+2) Execute whatever steps are needed to provision product. If you utilize the API or SSO this will involve mapping the `account_id` to the equivilent id for your product.
+3) Resolve the pending activation via Vendor Center. _Vendor Center -> Product -> Accounts -> Pending accounts_. *Note that the Pending accounts subtab only appears when the `Pending Activation` workflow checkbox is selected on the product or one of it's Add-ons.
+
+**API Route**
 1) When the webhook is received always respond with a 200 indicating a successful response
 2) Execute whatever steps are needed to provision product
 3) Resolve the pending activation via the _Resolve a Pending Activation` API endpoint in the Accounts API.
 
 </br>
 
-**Full Purchase Workflow**
+**Full Provisioning Workflow**
 ![Activation Workflow](../../assets/images/provisioning/activation_workflow.png)
 
 ## Activation Types
@@ -96,48 +102,46 @@ The action field on the Purchase Webhook indicates which payload type you are re
 
 
 ### Trial Activation
-Trials are currently activated from within in the Business App.
+Trials are currently activated from within in the Business App. A trial may be upgraded to a paid product or edition via either Business App, or Partner Center.
 
-![Trial Activation](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/trial_800.png)
+![Trial Activation](../../assets/images/provisioning/Trial_BusinessApp.png)
 
 There are two steps to making a trial available to be activated.
 
-1. As a Vendor, configure the Trial in Vendor Center. This is configured in the _Pricing & Trials_ section in the _App Info_ tab
+1. As a Vendor, configure the Trial in Vendor Center. This is configured in the _Pricing & Trials_ section in the _App Info_ tab. **If your product has editions, let your Vendasta contact know which edition you want to be trialed.**
 
 2. As a Channel Partner, set the Trial to be available in Business App via _Marketplace -> Manage Product -> App -> Product Settings_:
-![Make Trial Available](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/trial_config_800.png)
+![Make Trial Available](../../assets/images/provisioning/PartnerCenter_EnableTrial.png)
 
 The Vendor is responsible for the trial lifecycle, including:
 
 1. If Editions are used, informing Vendasta as to which Edition of the product should be trialed.
-2. Any communications via the [Activity Stream](/vendors/integration/activity-stream) with calls to action, informing users of the trials state, when it ends, and encouraging upgrades.
+2. Any communications via the [Activity Stream](https://developers.vendasta.com/vendor/ZG9jOjIxNzMyNTMx-activity-stream) with calls to action, informing users of the trials state, when it ends, and encouraging upgrades.
 3. Behavior after the trial ends.
 
 
 
 ### Product or Add-on Activation
 
-There are many ways a sku can be activated. For testing purposes, the easiest method is via Partner Center
+There are many ways a sku can be activated. For testing purposes, the easiest method is via Partner Center `Account Details` page:
 
-Activate products from the "Account Details" screen. To access this page, go to [Partner Center > Businesses > Accounts](https://partners.vendasta.com/manage-accounts) and click on the account name.
-![Activate Products](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/activation_route_800.png)
+1. Navigate to [Partner Center > Businesses > Accounts](https://partners.vendasta.com/manage-accounts) and click on the account name.
 
-Activation Options:
+2. Within the Account Details page - select `Activate Products`
+![Activate Products](../../assets/images/provisioning/PartnerCenter_ActivateSku.png)
 
-![Activation Example](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/product_activation_labels.png)
+
 
 <!-- theme: info -->
->* Product, and Add-on purchases will be sent to their respective purchase webhooks with the `provisioned` action.
->* If you have configured _Editions_ then the `edition_id` will be populated in the purchase payload, and present in the purchase email.
+>* Once an order is completed, and the activation lifecyle begins, if the product has webhooks configured, request(s) will be sent to their respective purchase webhooks with the `provisioned` action.
 
 ### Edition Change
+![Edition Change](../../assets/images/provisioning/PC_EditionChange_Modal.png)
 
-![Edition Change](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/edition_change.gif)
-
-_Edition Change from Partner Center Account Details Page_
+_Edition Change from Partner Center `Account Details` Page_
 
 <!-- theme: info -->
->The `edition_id` will be included in the data for whatever purchase notification is configured.
+>The new `edition_id` will be included in the data for whatever purchase notification is configured.
 
 ## Testing
 

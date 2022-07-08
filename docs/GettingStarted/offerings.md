@@ -19,13 +19,6 @@ This will represent a _Base Offering_ - Whether that be a Digital Product, a Ser
 
 **Creating your first Product**
 
-<!-- theme: info -->
->_**Simple steps for your first test Activation**_
->1. Create a Product - This can be done via the [Vendor Center Homescreen](https://vendors.vendasta.com), or Partner Center [Products Page](https://partners.vendasta.com/marketplace/manage-products)
->2. [Publish Product](./offerings.md#publishing) - This makes the Product available in Partner Center. That is all publishing does - This will not allow other Resellers to see your product! A green checkbox will appear under the _Distributed_ column once your product has been released to the Marketplace.
->3. [Create a Test Account](https://partners.vendasta.com/business/search)
->4. [Activate your new product](https://support.vendasta.com/hc/en-us/articles/4406958134807-Activate-products-for-your-customers) on the test Account.
-
 ![Product Creation](../../assets/images/getting_started/product_creation.png)
 
 **Trials**
@@ -33,7 +26,8 @@ This will represent a _Base Offering_ - Whether that be a Digital Product, a Ser
 You are able to set a timed trial for your Product. The Vendor is responsible for in-product behavior after the trial expires.
 
 _Configure in: Product Info-->Pricing & trials_
-![trial configuration](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/app_trials.png)
+
+![trial configuration](../../assets/images/getting_started/VendorCenter_TrialConfig.png)
 
 &nbsp;
 
@@ -42,7 +36,8 @@ _Configure in: Product Info-->Pricing & trials_
 Products are able to be purchased multiple times on the same Account, but not multiple times at once, unlike Add-ons. _If you turn multi-purchasing on for your product, it disables it for your Add-ons_
 
 _Product Info-->Advanced Settings dropdown_
-![Multiple Purchase Setting](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/multi-purchase_app.png)
+
+![Multiple Purchase Setting](../../assets/images/getting_started/VendorCenter_MultiPurchase.png)
 
 &nbsp;
 
@@ -77,9 +72,9 @@ _Using Add-ons to help fill out your billing model:_
 
 Unlike Products, multiple Add-ons can be purchased at once
 
-![Multi-Purchase Add-on](https://storage.googleapis.com/wordpress-www-vendasta/developers/2020/multi-buy_addon.png)
+For Multi-purchasable Add-ons that include an Order Form, the Order Form can be set to appear once, or you may require a form be filled for every instance of an Add-on purchase.
 
-For Multi-purchasable Add-ons, the Order Form can be set to appear once, or you may require a form be filled for every instance of an Add-on purchase.
+![Multi-Purchase Add-on Order Form Settings](../../assets/images/getting_started/VendorCenter_Addon_Multipurchase.png)
 
 <!-- theme: warning -->
 >_Please Note:_
@@ -100,7 +95,7 @@ There are two types of order form fields
 
 These fields are optional by default, but you may check them off as required.
 
-* Business Information - ***It is suggested that if you absolutely need country that you add a required _Custom Field for this as it's not guaranteed to be within the Address field or on the Account object data**
+* Business Information - ***It is suggested that if you absolutely need country that you add a required _Custom Field_ for this as it's not guaranteed to be within the Address field or on the Account object data**
 * Primary Contact – The first *User* from the Account. ***It is suggested if you need particular contact information that you add required _Custom Fields_ for this**, so you can add a description indicating who's information you need, and what you will use it for.
 * Salesperson – Principle Salesperson the Channel Partner has assigned to the Account
 
