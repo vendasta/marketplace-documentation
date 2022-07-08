@@ -560,7 +560,7 @@
         "field": "url"
       },
       "description": "Contact object should have \"url\"",
-      "message": "Contact object should have \"url\""
+      "message": "Contact object should have \"url\"."
     },
     "contact-email": {
       "given": [
@@ -1070,7 +1070,7 @@
         "field": "schemes"
       },
       "description": "OpenAPI host \"schemes\" must be present and non-empty array.",
-      "message": "OpenAPI host \"schemes\" must be present and non-empty array.",
+      "message": "OpenAPI host \"schemes\" must be present and non-empty array",
       "formats": [
         "oas2"
       ]
@@ -1242,20 +1242,20 @@
     }
   },
   "functions": [
-    "oasOpSuccessResponse",
-    "oasPathParam",
-    "oasOpParams",
-    "refSiblings",
-    "typedEnum",
     "oasDocumentSchema",
     "oasDiscriminator",
-    "oasOpFormDataConsumeCheck",
-    "oasUnusedComponent",
-    "oasOpIdUnique",
-    "oasTagDefined",
-    "oasOpSecurityDefined",
     "oasExample",
-    "oasSchema"
+    "oasOpFormDataConsumeCheck",
+    "oasOpIdUnique",
+    "oasOpParams",
+    "oasOpSecurityDefined",
+    "oasOpSuccessResponse",
+    "oasPathParam",
+    "oasSchema",
+    "oasTagDefined",
+    "oasUnusedComponent",
+    "refSiblings",
+    "typedEnum"
   ],
   "functionsDir": ".stoplight/custom-functions"
 }
