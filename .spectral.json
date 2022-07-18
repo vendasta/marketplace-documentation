@@ -560,11 +560,7 @@
         "field": "url"
       },
       "description": "Contact object should have \"url\"",
-<<<<<<< HEAD
       "message": "Contact object should have \"url\"."
-=======
-      "message": "Contact object should have \"url\""
->>>>>>> master
     },
     "contact-email": {
       "given": [
@@ -1074,11 +1070,7 @@
         "field": "schemes"
       },
       "description": "OpenAPI host \"schemes\" must be present and non-empty array.",
-<<<<<<< HEAD
       "message": "OpenAPI host \"schemes\" must be present and non-empty array",
-=======
-      "message": "OpenAPI host \"schemes\" must be present and non-empty array.",
->>>>>>> master
       "formats": [
         "oas2"
       ]
