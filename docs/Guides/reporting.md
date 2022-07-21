@@ -1,9 +1,5 @@
 # Executive Report
 
-<!-- theme: warning -->
-> There is a new closed API for the Executive Report.
-> Please discuss your reporting with vendor support before starting an integration.
-
 ## Usage
 
 Depending on Vendor data availability the Executive Report may be populated for the weekly, and/or monthly periods. It is suggested to provide data for both the weekly & monthly periods to provide regular metrics as well as a higher level view of the data.
@@ -14,9 +10,7 @@ Example json for each card type is provided below. To submit multiple cards for 
 
 ## Model
 
-There are two separate endpoints, one for each time period. Both endpoints accept data in the exact same format. View the Model, including available ENUM Values in the [API Definition](https://developers.vendasta.com/swaggerui#operations-tag-executive_report)
-
-![apis](https://storage.googleapis.com/wordpress-www-vendasta/developers/2018/10/Vendasta-Marketplace-V1-APIs-e1539209446394.jpg)
+There are two separate endpoints, one for each time period. Both endpoints accept data in the exact same format. View the Model, including available ENUM Values in the [API Definition](https://developers.vendasta.com/vendor/c2NoOjE2NTY5NDAw-executive-report-data)
 
 ## Timing
 
