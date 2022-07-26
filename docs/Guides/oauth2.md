@@ -232,7 +232,7 @@ d) **Order Form:** There is a special order form field type `End User` which wil
 
 <!-- theme: info -->
 >**Entry Context:** 
->The `roles` array will inform you if a user has the `partner` role, and is thus a Reseller user. You aren't able to learn from the User-Info response however what persona this user has accessed your product with the current request. The v1 Marketplace API [Get User](https://developers.vendasta.com/vendor/02b526c75600d-get-user) endpoint can determine if the `legacy_user_id` belongs to an SMB persona. A `legacy_user_id` belonging to a `partner` persona will provide a 404 response. 
+>The `roles` array will inform you if a user has the `partner` role, and is thus a Reseller user. You aren't able to learn from the User-Info response however what persona this user has accessed your product with the current request. The v1 Marketplace API [Get User](https://developers.vendasta.com/vendor/02b526c75600d-get-user) endpoint can determine if the `legacy_user_id` belongs to an SMB persona. A `legacy_user_id` belonging to a `partner` persona will provide a 403 response. 
 
 **User Info Endpoint**
 
