@@ -13,9 +13,6 @@ B) Anything that appears in the Stream can be pushed out through instant, or dig
 >
 >When you switch your end user communications to flow through the Activity Stream you will want to turn off the corresponding emails on your end so users don’t receive double communications.
 
-
-Basic HTML is supported by the `content` field and will render appropriately on the Activity Cards in the UI, but if you have more media heavy reports, you may want to send a message with a link to the report. Even if you don’t have any regular communications we recommend setting up both a welcome message, and a generic Activity Type for any one off communication needs.
-
 ## Implementation of the Activity Stream
 
 [View the Activity Stream Schema](https://developers.vendasta.com/vendor/c2NoOjE2NTY5NDA3-activity)
@@ -23,6 +20,10 @@ Basic HTML is supported by the `content` field and will render appropriately on 
 The `Activity Type` is essentially a Notification Category, that allows for filtering of all the `Activities` that are occurring in a Business's active Products.
 
 ![new](../../assets/images/guides/activitystream/activitystream_activitytype.png)
+
+### Content
+
+Basic HTML is supported by the `content` field and will render appropriately on the Activity Cards in the UI, or in the default email templates. If you have more media heavy reports, you may want to send a message with a link to the report. Even if you don’t have any regular communications we recommend setting up both a welcome message, and a generic Activity Type for any one off communication needs.
 
 ### Filters
 
