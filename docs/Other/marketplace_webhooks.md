@@ -558,7 +558,7 @@ SAMPLE DECODED PAYLOAD:
 }
 ```
 
-*note that user_id can be different lengths
+**note*** - The `user_id` can be different lengths
 
 ### Account Update Webhook
 
@@ -591,7 +591,7 @@ The user permission webhook is called every time permission is granted/revoked f
 
 <!-- theme: info -->
 
-> #### User Versioning
+> **User Versioning**
 >
 > The `user_id` in the Marketplace v1 API & Webhooks is the `legacy_user_id` returned from the [OpenIdConnect SSO](https://developers.vendasta.com/vendor/ZG9jOjE2NTY5Mzky-requirement-2-sso-o-auth2-3-legged-flow#user-info-endpoint) `user-info` endpoint.
 
@@ -650,15 +650,20 @@ title: Permission Revoked Event
 <!-- type: tab-end -->
 
 <!-- theme: warning -->
-> #### Assumption Alert!
+> **Security Note***
 >
-> This webhook is for syncing of users only. Observation of this webhook does not replace the need to call the [Check User Access to an Account](https://developers.vendasta.com/vendor/b3A6MTY1Njk0MzI-check-user-access-to-an-account) endpoint to validate a user's authorization after session transfer completes before redirecting the user to your dashboard.
+> This webhook is for syncing of Business users(`smb` Persona) only. Resource checks always need to be made as part of the SSO flow regardless of the synced state of a user. Use the [Check User Access to an Account](https://developers.vendasta.com/vendor/b3A6MTY1Njk0MzI-check-user-access-to-an-account) endpoint to validate a user's authorization after session transfer completes before redirecting the user to your dashboard.
 
 ### Customer Webhook
 
 The customer webhook is called every time a customer is created, or deleted in an Account's _Customer List_.
 
-SAMPLE DECODED PAYLOAD - Create:
+<!--
+type: tab
+title: Customer Create Event
+-->
+
+`create` action - SAMPLE DECODED PAYLOAD
 
 ```json
 {
@@ -672,18 +677,63 @@ SAMPLE DECODED PAYLOAD - Create:
        "first_name": "John",
        "last_name": "Smith",
        "created": "2018-02-01T17:09:23.358779241Z",
-       "country": "Canada",
+       "country": "CA",
        "contact_id": "CON-12345678901234567890123456789012",
        "phone": "1234567890",
        "state": "SK",
        "account_group_id": "AG-XXXXXXXX",
-       "address":    "7 - 3th Street, Saskatoon",
+       "address": "7 - 3th Street, Saskatoon",
        "email": [ "john@smith.com" ]
   }
 }
 ```
 
-SAMPLE DECODED PAYLOAD - Delete:
+<!--
+type: tab
+title: Customer Update Event
+-->
+`update` action - SAMPLE DECODED PAYLOAD
+
+```json
+{
+    "iss": "Vendasta Marketplace",
+    "iat": 1656448269,
+    "exp": 1656448329,
+    "vendasta.com/marketplace/webhook": {
+        "action": "update",
+        "city": "Saskatoon",
+        "first_name": "Some",
+        "last_name": "Person",
+        "new_synced_app_ids": [],
+        "created": "2022-06-28T20:28:52.523399855Z",
+        "country": "CA",
+        "author": "",
+        "updated": "2022-06-28T20:30:59.096145171Z",
+        "contact_id": "CUSTOMER-1fa4808c-3d93-4d77-971f-5374c16dc845",
+        "vendor_contact_id": "associated_id",
+        "phone": null,
+        "state": "",
+        "permission_to_contact": true,
+        "address": "",
+        "old_synced_app_ids": [],
+        "account_group_id": "AG-RN53F9WD",
+        "email": [
+            "someemail@example.com"
+        ]
+    }
+}
+```
+<!-- theme: info -->
+
+> * Existence of the `vendor_contact_id` will depend on whether the Product has [associated](https://developers.vendasta.com/vendor/4e54c2707bf93-associate-customer-i-ds) its own copy of a customer record with the central Customer List record.
+> * If a Product hits the Customer Update API, it will *not* receive a corresponding update webhook for this Customer record.
+
+<!--
+type: tab
+title: Customer Delete Event
+-->
+
+`delete` action - SAMPLE DECODED PAYLOAD
 
 ```json
 {
@@ -699,6 +749,8 @@ SAMPLE DECODED PAYLOAD - Delete:
   }
 }
 ```
+
+<!-- type: tab-end -->
 
 ### Spend Change Request Webhook
 

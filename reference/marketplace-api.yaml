@@ -432,17 +432,18 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - customer_id
-                - account_id
               properties:
                 customer_id:
                   type: string
-                  description: A unique ID (Vendor's customerID) indicating which customer to fetch.
+                  description: 'The `vendor_customer_id` provided at time of customer creation, or at time of association if the customer has a different origin.'
                 account_id:
                   type: string
                   description: A unique account ID that can be used to identify and reference an account.
+              required:
+                - customer_id
+                - account_id
         required: true
+      description: 'Returns a single customer record based on a `vendor_customer_id`. If the id is not unique, the newest record with that id will be returned.'
   /customer/associate-id:
     post:
       tags:
@@ -1791,28 +1792,28 @@ components:
             delivery:
               type: string
               enum:
-                - Y
-                - N
+                - 'Y'
+                - 'N'
             no_contact_delivery:
               type: string
               enum:
-                - Y
-                - N
+                - 'Y'
+                - 'N'
             in_store_pickup:
               type: string
               enum:
-                - Y
-                - N
+                - 'Y'
+                - 'N'
             curbside_pickup:
               type: string
               enum:
-                - Y
-                - N
+                - 'Y'
+                - 'N'
             appointments_only:
               type: string
               enum:
-                - Y
-                - N
+                - 'Y'
+                - 'N'
             closed_status:
               type: string
               enum:
