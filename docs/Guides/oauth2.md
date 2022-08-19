@@ -1,6 +1,6 @@
 # SSO: OAuth2 3-Legged Flow
 ## Overview
-This guide aims to help you configure your application to use Vendasta’s Identity Gateway as an Identity Provider for your application. This will allow you to identify users entering your application from the Vendasta platform and will *in future API iterations* allow you to call Vendasta APIs on their behalf.
+This guide aims to help you configure your application to use Vendasta’s Identity Gateway as its Identity Provider. This will allow you to identify users entering your application from the Vendasta platform and will *in future API iterations* allow you to call Vendasta APIs on their behalf.
 
 Vendasta implements the [OpenID Connect Core specification](https://openid.net/specs/openid-connect-core-1_0.html)(OIDC), which includes a complete [OAuth 2.0 Authorization Framework](https://tools.ietf.org/html/rfc6749) integration.
 
@@ -11,6 +11,17 @@ This guide is for implementing a **3-legged OAuth** flow. The distinction betwee
 | **2-legged flow (Partner Service Account)** | Access to high-level Vendasta workflow APIs, but no access to **user data** or **business data**. Not currently used by Vendors.| Allocating a Partner Service Account. Configuring an OAuth2 2-legged client.             
 | **3-legged flow (this guide)**              | Access to **user data** and **business data** associated with the user performing the flow.       | Follow this guide. Requires an end user to initiate the flow to provide access to the app. |
 
+### SSO Checklist
+- [ ] Choose frontend or backend authorization flow 
+- [ ] Choose a library, or service to use
+- [ ] Generate OAuth Client in Vendor Center
+- [ ] Build Entry URL & Logout endpoints, and register them in Vendor Center
+- [ ] Determine how you will sync Users
+- [ ] Build Session Transfer workflow
+- [ ] Test as you go from Business App
+- [ ] Make dashboard adjustments
+- [ ] Request a review of your work
+
 ## Step 1: Technology Review
 Your first decision you will need to make is where you will implement your authorization flow:
 
@@ -19,7 +30,7 @@ Your first decision you will need to make is where you will implement your autho
 
 **We recommend implementing your authorization flow on the backend in most cases as it is easier to setup, secure, and use. However, Single Page Applications would likely prefer a Frontend Workflow so that tokens can be more easily refreshed. (NOTE - Refresh Tokens are not yet supported)**
 
-Both OpenID Connect and OAuth2 are standardized workflows, which means most programming languages have at least one library available to aid your implementation whether you choose to implement the workflow on the frontend or on your backend webserver.
+Both OpenID Connect and OAuth2 are standardized workflows, which means most programming languages have at least one library available to aid your implementation whether you choose to implement the workflow on the frontend or on your backend.
 
 <!-- theme: info -->
 >You can find a list of compliant OAuth2 libraries [here](https://oauth.net/code/). Please select a **Client Library** in your language of choice.
@@ -42,7 +53,7 @@ Frontend clients should use the [PKCE(Proof Key for Code Exchange) flow](https:/
 >The **implicit grant flow** is considered insecure and should be avoided. 
 
 
-## Step 2: Configuring Client & Library or Service
+## Step 2: Initial Configuration
  *[Vendor Center](https://vendors.vendasta.com)-->Product-->Integration Page-->Access and SSO*
 
 ### Generate your OAuth Client
@@ -50,24 +61,24 @@ Toggle 'Enable SSO' on, then click `Create Configuration`
 ![](../../assets/images/guides/sso/OAuth_client_generation.png)
 
 <!-- theme: warning -->
->Once saved a modal will pop up with your new client id and secret. Ensure you save your client secret before closing the modal, otherwise you will need to delete and re-generate your client. 
+>After saving your configuration, a modal will pop up with your new client id and secret. Ensure you save your client secret before closing the modal, otherwise you will need to delete and re-generate your client. 
 
 |*Client Fields*||
 |-|-|
-| **Logout URL - COMING SOON**  |  Front end logout url (*Not yet functional - may be left blank*). Will pop open a hidden iframe and redirect to this url.  **For back channel logouts, please utilize the logout webhook in the main *Access and SSO* section.**
-| **Redirect URI** | Sometimes referred to as a 'Callback URL' - The URL of the page where the user will be redirected after a successful authentication. This value must match the redirect_uri originally used to generate the Authorization `code`.
+| **Logout URL - _(Proposed)_**  |  Front end logout url (*Not yet functional - may be left blank*). Will pop open a hidden iframe and redirect to this url.  **For back channel logouts, please utilize the logout webhook in the main *Access and SSO* section.**
+| **Redirect URI** | Sometimes referred to as a 'Callback URL' - The URL of the page where the user will be redirected after a successful authentication. This value **must** match the redirect_uri originally used to generate the Authorization `code`.
 
 
-### Configure Product SSO Settings
+### Configure SSO Settings
 ![Session Settings Diagram](../../assets/images/guides/sso/sso_marketplace_settings.png)
 
 |||
 |-|-|
-| **Entry URL**  | The url that acts as the entry point for the product. This could be redirected to from various dashboards or emails. Prior to redirect the account_id is injected into the placeholder on the url, and should be appended as an additional url parameter on the Authorization URL to trigger the start of the session transfer. 
+| **Entry URL**  | The url that acts as the entry point for the product. This could be redirected to from various dashboards or emails. Prior to redirect the account_id is injected into the placeholder on the url, and should be appended as an additional url parameter on the Authorization URL to trigger the start of the session transfer.</br> Optionally may support a `nextUrl` url param for deep linking. This may be encoded into the `state` variable on the Authorization URL to be passed through the Session Transfer flow.
 | **Logout URL** | A [webhook](https://developers.vendasta.com/vendor/ZG9jOjIxNzM0NjA3-overview#logout-webhook) for back channel logout of service provider session. As a user could have multiple open sessions across browsers and devices it is recommended that you utilize the provided `session_id` rather than the `user_id` unless you intend to log them out of all active sessions.
 
 
-### Client Library or Service Configuration
+### Library or Service Configuration
 
 Follow your service's installation guide, entering the following information where prompted:
 
@@ -153,7 +164,7 @@ Certain scopes have a special meaning for sso, or are distinct from those used f
 
 Access tokens expire **30 minutes** from the time of issue. They will need to be refreshed regularly using one of the following techniques:
 
-- **Redirect the user back through the authorization process (backend)**. If the user’s token has expired, or is close to expiry, you can fetch a new one by re-initiating the OAuth2 authorization flow. You may pass the `prompt=none` query parameter for users who have already given consent to avoid displaying the consent dialog again, which should allow a seamless redirection back into your application.
+- **Redirect the user back through the authorization process (backend)**. If the user’s token has expired, or is close to expiry, you can fetch a new one by re-initiating the OAuth2 authorization flow. You may pass the `prompt=none` query parameter for users who have already given consent to avoid displaying the consent dialog again, which should allow a seamless redirection back into your Product.
 
 - **Silent Refresh (Frontend) - COMING SOON:** This technique redirects the user through the authorization process just as the previous technique, however it is initiated from Javascript by opening a hidden browser window for the authorization flow, using prompt=none to complete the flow without user interaction. This refreshes the user’s token without any interruption.
 
@@ -219,11 +230,16 @@ The _Personas_ that a user has may be found in the `role` list in the User-Info 
 <!-- theme: info -->
 >Note that the `user_id` referred to by the v1 Marketplace API, Webhooks, and the Order Form `End User` field directly maps to the `legacy_user_id` returned in the OAuth User-Info Endpoint. 
 
-**There are several options for syncing users:**
+#### User Syncing
+_Email & User Identification:_
+
+Emails should not be used to identify an individual. Also, though `email` is a valid OIDC scope, users should have more awareness and control around providing their email for use by third parties. This is why at this time `email` is a restricted scope for the Vendasta SSO service, and we recommend that if your application's User entities require `email` as primary key, that you generate a dummy email. To uniquely identify a user from Vendasta you may use the `user_id` provided as the `sub` claimn in the OIDC User-Info endpoint, as well as by the `legacy_user_id` that is used by the Marketplace V1 API.
+
+_User Syncing Options:_
 
 a) **JIT(Just In Time):** User creation on the fly using data from the User Info endpoint **is recommended**. This is the only way to allow for syncing of Partner Admin users. This is also the only way to get the `user_id`(`sub` in the User-Info response) rather than the `legacy_user_id` at this time.
 
-b) **Sync users via the Marketplace v1 API & Webhooks:** Create users at time of provisioning, and then manage them moving forward based on webhook triggers and subsequent API interaction. 
+b) **Sync users via the Marketplace v1 API & Webhooks:** May be used if only Business Users(a user with only the `smb` role) are allowed to interact with your Product. Create users at time of provisioning, and then manage them moving forward based on webhook triggers and subsequent API interaction. 
 
 c) **Many:1 Session Transfer:** Do a many:one session transfer from any Vendasta user into a single dummy user on the Vendor side. Typically used when a Vendor doesn't have User entities.
 
@@ -234,9 +250,9 @@ d) **Order Form:** There is a special order form field type `End User` which wil
 >**Entry Context:** 
 >The `roles` array will inform you if a user has the `partner` role, and is thus a Reseller user. You aren't able to learn from the User-Info response however what persona this user has accessed your product with the current request. The v1 Marketplace API [Get User](https://developers.vendasta.com/vendor/02b526c75600d-get-user) endpoint can determine if the `legacy_user_id` belongs to an SMB persona. A `legacy_user_id` belonging to a `partner` persona will provide a 403 or 404 response. 
 
-**User Info Endpoint**
+#### User Info Endpoint
 
-The User Info Endpoint is available to any application which has acquired an Access Token from the OAuth2 flow. However, the information it provides is scaled according to the **scopes** on your access token.
+The User Info Endpoint is available to any Product which has acquired an Access Token from the OAuth2 flow. However, the information it provides is scaled according to the **scopes** on your access token.
 
 Here is the User Info URL:
 
@@ -248,7 +264,7 @@ You may make a `GET` or `POST` request to this endpoint. Include your Identity T
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lhbS1wcm9kLmFwaWdhdGV3YXkuY28iLCJleHAiOjE2MTExNjEyMDQsImlhdCI6MTYxMTE1OTQwNCwiaXNzIjoiaHR0cHM6Ly9pYW0tcHJvZC5hcGlnYXRld2F5LmNvIiwic3ViIjoiVS1lNzg1MWM1My04YTQ5LTRjODktOTBmZC03YTgxNDA4ODhjMDIiLCJmZWRlcmF0ZWRfaWRlbnRpdHlfcHJvdmlkZXIiOiJvYXV0aCIsInVzZXJfaWQiOiJVLWU3ODUxYzUzLThhNDktNGM4OS05MGZkLTdhODE0MDg4OGMwMiIsImtpbmQiOiJhY2Nlc3MiLCJzY29wZSI6InByb2ZpbGUgZW1haWwgb3BlbmlkIiwia2lkIjoiOWZjMGEyYWNlMTNjZjdjOTBiM2ZmZjcxODkzZGJjODAiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.s12fKo19qKBR4CjMlXqkV0KxksieY7jlgT7Ryg9PH68
 ```
 
-The amount of information returned is determined by the scopes which your application requested during its authorization flow as follows:
+The amount of information returned is determined by the scopes which your Product requested during its authorization flow as follows:
 
 |           |                                                                                                      |
 |-----------|------------------------------------------------------------------------------------------------------|
@@ -293,15 +309,15 @@ OAuth based sso specs do not include clear guidance on access checks. Vendasta r
 The Vendasta Business App session length is 30 days. If your session is shorter than this then upon session expiry you should route the user back through the _Authorization URL_
 
 
-## Step 4: Dashboard Modifications
+## Step 4: Modify Dashboard
 
 ### Navigation Bar(Required)
 
-The Vendasta NavBar provides a seamless navigation experience for users to switch between your marketplace application, other applications, and their Business Center.  User logout will also be served by this bar, and hidden from your dashboard. **Implementation of the Navigation Bar is required if your integration includes SSO.**
+The Vendasta NavBar provides a seamless navigation experience for users to switch between your marketplace Product, other Products, and their Business Center.  User logout will also be served by this bar, and hidden from your dashboard. **Implementation of the Navigation Bar is required if your integration includes SSO.**
 
 ![](../../assets/images/guides/sso/navbar.png)
 
-Include the script tag below before the closing body tag of your HTML to allow for rendering of the Navigation bar. **All** the data- attributes in the script tag are required to be passed as when loading the application. The Navbar should load on every page of the application.
+Include the script tag below before the closing body tag of your HTML to allow for rendering of the Navigation bar. **All** the data- attributes in the script tag are required to be passed as when loading the Product dashboard. The Navbar should load on every page of the Product.
 
 It is recommended that you build the entire script tag before injecting it into the page rather than injecting the custom params individually. This will avoid a race condition where the script runs before the parameters are present, resulting in an empty navbar frame.
 
