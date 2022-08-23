@@ -3,7 +3,7 @@
 ## Overview
 The Activity Stream is a notification distribution system. A simple API call creates an `Activity` notification Event, and users can individually control their subscription to these Events for all their products from within a single place in their Business Operating System - the Vendasta Business App.
 
-A) Notifications of _Events_ that occur in any Product a Business has purchased are streamed to their Business App UI 'Activity Stream'. Users can then click through to see further details or take prompted action.
+A) Notifications of _Events_ that occur in any Product a Business has purchased are streamed to their Business App UI 'Activity Stream'. Users can then click through to see further details or take a prompted action.
 ![highlights](../../assets/images/guides/activitystream/activitystream_activity.png)
 
 B) Anything that appears in the Stream can be pushed out through instant, or digest based emails which are **automatically branded for the Channel Partner**. By default it will be pushed to all users on the Account; Notification Recipients can then set their preferences individually.
@@ -48,6 +48,11 @@ The `link` is a required field. When a User selects ‘View’, it calls the Pro
 
 ![Deep Linking](../../assets/images/guides/activitystream/activity_deeplink.png)
 
+<!-- theme: info -->
+> **Hiding the View link** 
+>
+>If your Activity requires no action, or your product doesn't have a dashboard, etc., and you want to hide the 'View' link, submit the `link` param with the value `https://nodisplay.com`
+
 ### Email Template Options
 
 You can use your existing email html templates if you have them, or create a new dynamic template, for both the Instant Emails, and the Daily Digest.
@@ -66,4 +71,3 @@ Default Structure: This email has a section for each Product that has had activi
 *There will be up to 3 of each type of Notification displayed, and then a ‘View all’ button below if there are more.*
 
 If you feel that your emails require something different for the inner tiles displayed for each activity, you can supply a custom html template for the individual activity tiles.
-
