@@ -21,6 +21,8 @@ Modification or addition to your application's session middleware will be requir
         2. Vendor checks that the User has access to the resource being requested. See the _'Check User Access to an Account'_ endpoint in the [User API](https://developers.vendasta.com/swaggerui).
         3. If a valid session exists for Vendor Application, and access checks pass: Vendor redirects to landing page, or nextUrl if present
         4. If the user authorization check fails, vendor displays an Error Page indicating user doesn't have access to requested resource
+<!-- theme: warning -->
+> Even for legacy sso flows, we no longer suggest using a session cookie. We suggest that you overwrite any existing sessions upon each entry, and thus skip step two. Note that if access is accomplished via `impersonation` that the first call to the Entry URL will now be skipped, and the first call the Vendor receives in the flow will be to the Session URL. Thus do not rely on caching anything from the first call to the Entry URL. Any caching of data for future use should be done in the second call to the Entry URL w/code.
 3. If no Vendasta User session currently exists:
     * The app *Entry URL* uses the Marketplace API to fetch the _Session Transfer         URL_ for the Account via the _'Get Session Transfer URL'_ endpoint in the [Account API](https://developers.vendasta.com/swaggerui)
     * To make calls to the Marketplace API, the Vendor must first retrieve an authorization token via the OAuth endpoint in the [Marketplace API](https://developers.vendasta.com/swaggerui)  
