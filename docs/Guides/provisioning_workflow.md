@@ -102,22 +102,26 @@ The action field on the Purchase Webhook indicates which payload type you are re
 
 
 ### Trial Activation
-Trials are currently activated from within in the Business App. A trial may be upgraded to a paid product or edition via either Business App, or Partner Center.
+Trials are currently ONLY activated from within in the Business App. 
 
 ![Trial Activation](../../assets/images/provisioning/Trial_BusinessApp.png)
-
-There are two steps to making a trial available to be activated.
-
-1. As a Vendor, configure the Trial in Vendor Center. This is configured in the _Pricing & Trials_ section in the _App Info_ tab. **If your product has editions, let your Vendasta contact know which edition you want to be trialed.**
-
-2. As a Channel Partner, set the Trial to be available in Business App via _Marketplace -> Manage Product -> App -> Product Settings_:
-![Make Trial Available](../../assets/images/provisioning/PartnerCenter_EnableTrial.png)
+_A trial may be upgraded to a paid product or edition via either Business App, or Partner Center._
 
 The Vendor is responsible for the trial lifecycle, including:
 
-1. If Editions are used, informing Vendasta as to which Edition of the product should be trialed.
+1. **Behavior after the trial ends.** The product remains accessible after trial expiry to provide flexibility to the Vendor as to how they want to prompt upgrades.
 2. Any communications via the [Activity Stream](https://developers.vendasta.com/vendor/ZG9jOjIxNzMyNTMx-activity-stream) with calls to action, informing users of the trials state, when it ends, and encouraging upgrades.
-3. Behavior after the trial ends.
+
+
+There are two steps to making a trial available to be activated.
+
+1. **_As a Vendor_**, configure the Trial in Vendor Center. This is configured in the _Pricing & Trials_ section in the _App Info_ tab. 
+<!-- theme: info -->
+>If your product has editions, let your Vendasta contact know which edition you want to be trialed.
+
+2. **_As a Channel Partner_**, set the Trial to be available in Business App via _Marketplace -> Manage Product -> App -> Product Settings_:
+![Make Trial Available](../../assets/images/provisioning/PartnerCenter_EnableTrial.png)
+
 
 
 

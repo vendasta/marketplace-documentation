@@ -327,6 +327,11 @@ title: Trial Provision Event
 }
 ```
 
+<!-- theme: info -->
+>Trials are only triggered from the Business App currently. See [Provisioning>Trial Activation](https://developers.vendasta.com/vendor/e5a7f08cce1cc-provisioning-workflow#trial-activation) for details
+
+
+
 <!-- type: tab-end -->
 
 ### Add-Ons Purchase Hook
