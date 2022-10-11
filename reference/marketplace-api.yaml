@@ -709,17 +709,13 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - activation_id
-                - business_id
-                - approved
               properties:
                 activation_id:
                   type: string
                   description: A unique ID that can be used to identify a specific activation record.
                 business_id:
                   type: string
-                  description: A unique ID that can be used to identify a business.
+                  description: 'A unique ID that can be used to identify a business location. This is equivalent to the `account_id`. In legacy apis, it may be referred to as `accountId`, or `accountGroupId`.'
                 addon_id:
                   type: string
                   description: A unique ID used to identify a marketplace addon.
@@ -729,6 +725,10 @@ paths:
                 rejection_reason:
                   type: string
                   description: 'If approved is false, you must give a reason for rejecting the activation.'
+              required:
+                - activation_id
+                - business_id
+                - approved
         required: true
   /activation/list-pending/:
     get:
@@ -1258,6 +1258,7 @@ components:
           type: string
         business_id:
           type: string
+          description: 'A unique ID that can be used to identify a business location. This is equivalent to the `account_id`. In legacy apis, it may be referred to as `accountId`, or `accountGroupId`.'
         activation_id:
           type: string
         created_date:
