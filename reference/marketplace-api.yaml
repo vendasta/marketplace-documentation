@@ -252,9 +252,8 @@ paths:
                   type: boolean
                   description: Whether the link is public or requires Vendasta authentication. If `false` the `link` will be redirected to as an absolute url rather than added as a NextUrl to the SSO EntryUrl.
                 template_data:
-                  type: array
-                  description: json array(may be left empty) *REQURIED IF Activity Type email configuration is `Instant`
-                  items: {}
+                  type: object
+                  description: 'json object *REQURIED IN PAYLOD IF Activity Type email configuration is `Instant`(may be left empty {} ifthere is no template_data to be sent)'
               required:
                 - account_id
                 - activity_type
