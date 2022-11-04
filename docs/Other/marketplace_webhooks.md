@@ -112,6 +112,10 @@ Details:
 type: tab
 title: Provision Event
 -->
+<!-- theme: info -->
+>_Please Note:_
+>
+>Only core account data is included in the `provisioned` webhook payload. If you need extended account data it can be retrieved via the [Get Account Rich Data](https://developers.vendasta.com/vendor/b3A6MzYxMzM5OTI-get-account-rich-data) endpoint.
 
 `provisioned` action - SAMPLE DECODED PAYLOAD
 
@@ -227,25 +231,7 @@ title: Provision Event
    }
 }
 ```
-**Handling Add-ons**
-<!-- theme: info -->
-> Add-ons have a separate provisioning endpoint from the base product. This endpoint is registered in the Integration page of the base product.
 
-If your offering has an Add-on that could foreseeably be activated at the same time as the base product, the webhook for the provision event of the base product will always come first, but the Add-on event could be sent hundredths of a second later. To avoid any race conditions there are two options:
-
-**1)** Utilize the pending purchase workflow for all skus. This way you can leave things in a pending state and resolve/approve the activations in the order desired.   
-
-You configure this from the Product activation section of both Product & Add-ons, and would need to be configured for each sku
-
-![Pending Workflow Config](../../assets/images/webhooks/pendingactivation_workflow.png)
-
-**2)** Respond with a 429 to the Add-on webhooks until you have the base product active. They'll continue to backoff and retry until you respond with a 200 once the base product is active.
-
-
-<!-- theme: info -->
->_Please Note:_
->
->Only core account data is included in the `provisioned` webhook payload. If you need extended account data it can be retrieved via the [Get Account Rich Data](https://developers.vendasta.com/vendor/b3A6MzYxMzM5OTI-get-account-rich-data) endpoint.
 
 <!--
 type: tab
@@ -347,15 +333,28 @@ title: Trial Provision Event
 <!-- theme: info -->
 >Trials are only triggered from the Business App currently. See [Provisioning>Trial Activation](https://developers.vendasta.com/vendor/e5a7f08cce1cc-provisioning-workflow#trial-activation) for details
 
-
-
 <!-- type: tab-end -->
 
 ### Add-Ons Purchase Hook
 
 The Add-ons purchase webhook is called every time billing information about an account changes in regards to the Add-ons for your product. The relevant changes are the **provisioned**, and **de-provisioned** events, which are specified in the 'action' field. Note that the order_form section will be null if no order form is specified for your product.
 
-Details:
+**Timing**
+<!-- theme: info -->
+> Add-ons have a separate provisioning endpoint from the base product. This endpoint is registered in the Integration page of the base product.
+
+If your offering has an Add-on that could foreseeably be activated at the same time as the base product, the webhook for the provision event of the base product will always come first, but the Add-on event could be sent hundredths of a second later. To avoid any race conditions there are two options:
+
+**1)** Utilize the pending purchase workflow for all skus. This way you can leave things in a pending state and resolve/approve the activations in the order desired.   
+
+You configure this from the Product activation section of both Product & Add-ons, and would need to be configured for each sku
+
+![Pending Workflow Config](../../assets/images/webhooks/pendingactivation_workflow.png)
+
+**2)** Respond with a 429 to the Add-on webhooks until you have the base product active. They'll continue to backoff and retry until you respond with a 200 once the base product is active.
+
+
+**Details:**
 
 - **account** _A nested structure representing the business the product has been purchased for including identification, location, and contact information._
 - **order_form** _A collection of information added to an order form filled out while purchasing the Add-on. Will be null if the product has no order form specified._
