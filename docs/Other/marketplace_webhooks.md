@@ -14,7 +14,7 @@ Webhooks are registered by placing a url in the Integration page of an App in [V
 content type: text/plain
 body: JWT signed base64 string sent as plaintext raw in the POST body
 ```
-Auth0 has libraries for most popular languages to help speed up integrations that interact with JWTs: [https://jwt.io/#libraries-io](https://jwt.io/#libraries-io)
+Auth0 has libraries for most popular languages to help speed up integrations that interact with JWTs: [https://jwt.io/libraries](https://jwt.io/libraries)
 
 
 **Testing**
@@ -227,6 +227,21 @@ title: Provision Event
    }
 }
 ```
+**Handling Add-ons**
+<!-- theme: info -->
+> Add-ons have a separate provisioning endpoint from the base product. This endpoint is registered in the Integration page of the base product.
+
+If your offering has an Add-on that could foreseeably be activated at the same time as the base product, the webhook for the provision event of the base product will always come first, but the Add-on event could be sent hundredths of a second later. To avoid any race conditions there are two options:
+
+**1)** Utilize the pending purchase workflow for all skus. This way you can leave things in a pending state and resolve/approve the activations in the order desired.   
+
+You configure this from the Product activation section of both Product & Add-ons, and would need to be configured for each sku
+
+![Pending Workflow Config](../../assets/images/webhooks/pendingactivation_workflow.png)
+
+**2)** Respond with a 429 to the Add-on webhooks until you have the base product active. They'll continue to backoff and retry until you respond with a 200 once the base product is active.
+
+
 <!-- theme: info -->
 >_Please Note:_
 >
