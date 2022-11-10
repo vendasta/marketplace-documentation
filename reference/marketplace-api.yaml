@@ -728,6 +728,9 @@ paths:
                 rejection_reason:
                   type: string
                   description: 'If approved is false, you must give a reason for rejecting the activation.'
+                activation_descriptor:
+                  type: string
+                  description: 'An optional description for multi-activatable products & services to help users tell the activations apart.  '
               required:
                 - activation_id
                 - business_id
