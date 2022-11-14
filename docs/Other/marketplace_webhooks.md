@@ -14,14 +14,14 @@ Webhooks are registered by placing a url in the Integration page of an App in [V
 content type: text/plain
 body: JWT signed base64 string sent as plaintext raw in the POST body
 ```
-Auth0 has libraries for most popular languages to help speed up integrations that interact with JWTs: [https://jwt.io/libraries](https://jwt.io/libraries)
+Auth0 has libraries for most popular languages to help speed up integrations that interact with JWTs: [https://jwt.io/#libraries-io](https://jwt.io/#libraries-io)
 
 
 **Testing**
 
 The best way to initially test receiving a webhook payload from Vendasta is to use the Testing Page in Vendor Center. 
 
-The Testing Page will load the **Purchase Webhook** URLs you have entered in the Integration Page by default, but you can set them to whatever url you would like. This tool only send purchase webhook dummy payloads.
+The Testing Page will load the **Purchase Webhook** URLs you have entered in the Integration Page by default, but you can set them to whatever url you would like. This tool only sends purchase webhook dummy payloads.
 
 To review a test payload try a webhook testing service like [Webhook.Site](https://webhook.site) or [RequestBin by Pipedream](https://requestbin.com/). Copy the unique url they give, and enter it into the on the testing page, and select "SEND TEST APP WEBHOOK" -
 Review the results on the Webhook Tester page. It will have received a dummy payload. To see the contents, place the JWT token into the Encoded text area of the [jwt.io debugger](https://jwt.io). 
@@ -55,17 +55,23 @@ You can quickly test whether a token's signature is valid using the [jwt.io debu
 
 |Webhook|Timeout |Retry
 |:---|:---|:---
-|*Purchase Webhooks* | 30s | Backoff time doubles from 30s to a  maximum spacing of one hour(aprox*)
-| *All other Webhooks*| 10s | Backoff time doubles from 60s to a  maximum spacing of one hour(aprox*)
+|*Purchase Webhooks* | 30s | Backoff time doubles from 30s to a  maximum spacing of one hour(approximate*)
+| *All other Webhooks*| 10s | Backoff time doubles from 60s to a  maximum spacing of one hour(approximate*)
 
 If your system is down, the retry mechanism will allow for you to receive the message once it is back up. Otherwise, it will serve to alert you that a problem exists without inundating your endpoint with traffic.
 
+
 ### Provisioning Errors
 
-<!-- theme: warning -->
-> #### Best Practice
->If your App has need to reject an Activation for expected reasons please manage this through the Pending Activation Workflow rather than via the purchase webhook response. Always respond with a 200 to the webhook, and utilize the [Resolve a Pending Activation](https://developers.vendasta.com/vendor/b3A6MTY1Njk0Mjg-resolve-a-pending-activation) ednpoint to resolve the activation with a approval or rejection.
+> **Expected Rejections** - Best Practices
 >
+>If your App has need to reject an Activation for expected reasons we suggest managing this through the Pending Activation Workflow rather than via the purchase webhook response. Always respond with a 200 to the webhook, and utilize the [Resolve a Pending Activation](https://developers.vendasta.com/vendor/b3A6MTY1Njk0Mjg-resolve-a-pending-activation) endpoint to resolve the activation with a approval or rejection.
+
+**Purchase Webhooks: 500 response status**
+
+Your Notification Recipients don't receive the order email until the activation resolves. In the case of a 500 it doesn't resolve and remains in a pending state, thus the recipients will not receive an email. 
+<!-- theme: warning -->
+>**You must add appropriate logging, and means of alerting yourself to unexpected failures. Vendasta support will make efforts to ensure your team is informed of activaitons stuck in a pending state, but ultimately this is the Vendor's responsibilty.**
 
 **Purchase Webhooks: 3xx-4xx response status**
 
@@ -112,10 +118,6 @@ Details:
 type: tab
 title: Provision Event
 -->
-<!-- theme: info -->
->_Please Note:_
->
->Only core account data is included in the `provisioned` webhook payload. If you need extended account data it can be retrieved via the [Get Account Rich Data](https://developers.vendasta.com/vendor/b3A6MzYxMzM5OTI-get-account-rich-data) endpoint.
 
 `provisioned` action - SAMPLE DECODED PAYLOAD
 
@@ -231,7 +233,10 @@ title: Provision Event
    }
 }
 ```
-
+<!-- theme: info -->
+>_Please Note:_
+>
+>Only core account data is included in the `provisioned` webhook payload. If you need extended account data it can be retrieved via the [Get Account Rich Data](https://developers.vendasta.com/vendor/b3A6MzYxMzM5OTI-get-account-rich-data) endpoint.
 
 <!--
 type: tab
@@ -333,28 +338,15 @@ title: Trial Provision Event
 <!-- theme: info -->
 >Trials are only triggered from the Business App currently. See [Provisioning>Trial Activation](https://developers.vendasta.com/vendor/e5a7f08cce1cc-provisioning-workflow#trial-activation) for details
 
+
+
 <!-- type: tab-end -->
 
 ### Add-Ons Purchase Hook
 
 The Add-ons purchase webhook is called every time billing information about an account changes in regards to the Add-ons for your product. The relevant changes are the **provisioned**, and **de-provisioned** events, which are specified in the 'action' field. Note that the order_form section will be null if no order form is specified for your product.
 
-**Timing**
-<!-- theme: info -->
-> Add-ons have a separate provisioning endpoint from the base product. This endpoint is registered in the Integration page of the base product.
-
-If your offering has an Add-on that could foreseeably be activated at the same time as the base product, the webhook for the provision event of the base product will always come first, but the Add-on event could be sent hundredths of a second later. To avoid any race conditions there are two options:
-
-**1)** Utilize the pending purchase workflow for all skus. This way you can leave things in a pending state and resolve/approve the activations in the order desired.   
-
-You configure this from the Product activation section of both Product & Add-ons, and would need to be configured for each sku
-
-![Pending Workflow Config](../../assets/images/webhooks/pendingactivation_workflow.png)
-
-**2)** Respond with a 429 to the Add-on webhooks until you have the base product active. They'll continue to backoff and retry until you respond with a 200 once the base product is active.
-
-
-**Details:**
+Details:
 
 - **account** _A nested structure representing the business the product has been purchased for including identification, location, and contact information._
 - **order_form** _A collection of information added to an order form filled out while purchasing the Add-on. Will be null if the product has no order form specified._
@@ -479,11 +471,11 @@ title: De-Provision Event
 
 ### Cancelation Webhook
 
-The Cancelation webhook is called when a product gets cancelled. The relevant changes are the **cancel**, and **undo-cancel** events, which are specified in the 'action' field. Note that the original activation time, time of the action, and time of deactivation or renewal will be included.
+The Cancelation webhook is called when a product gets canceled. The relevant changes are the **cancel**, and **undo-cancel** events, which are specified in the 'action' field. Note that the original activation time, time of the action, and time of deactivation or renewal will be included.
 
 Details:
 
-- **account_group_id:** _Unique id, specific to the account that is cancelling a product._
+- **account_group_id:** _Unique id, specific to the account that is canceling  a product._
 - **activation_id:** _Unique id specific to each instance of an activated product._
 - **activation_time:** _The time that the product was activated._
 - **deactivation_time:** _The time that the product should be deactivated in the future. This must be observed and acted on come the given time._
