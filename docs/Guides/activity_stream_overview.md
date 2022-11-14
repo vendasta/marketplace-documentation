@@ -51,7 +51,7 @@ The `link` is a required field. When a User selects ‘View’, it calls the Pro
 <!-- theme: info -->
 > **Hiding the View link** 
 >
->If your Activity requires no action, or your product doesn't have a dashboard, etc., and you want to hide the 'View' link, submit the `link` param with the value `https://nodisplay.com`
+>If your Activity requires no action, or your product doesn't have a dashboard, etc., and you want to hide the 'View' link in the Activity tile and instant email, submit `requires_platform_auth` as `false`, and the `link` param with the value `https://nodisplay.com`
 
 ### Email Template Options
 
