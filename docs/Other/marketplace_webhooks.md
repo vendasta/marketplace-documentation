@@ -776,6 +776,10 @@ The spend change request webhook is called every time a spend change is requeste
 
 Details:
 
+We always convert non-USD values to USD. While partners can pay in USD, AUD, or CAD for digital ads and potentially
+other products, Vendasta only pays vendors in USD. The currency related fields below are used to provide transparency
+(to vendors) in cross currency variable priced purchases.
+
 - **currency** _The currency in which the spend/budget is being requested._
 - **requested_value** _The requested new spend value/budget, in cents (or smallest denomination in other currencies)._
 - **conversion_currency** _The currency that the original spend/budget was converted to._
