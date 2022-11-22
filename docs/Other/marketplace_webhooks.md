@@ -780,7 +780,8 @@ Details:
 - **requested_value** _The requested new spend value/budget, in cents (or smallest denomination in other currencies)._
 - **conversion_currency** _The currency that the original spend/budget was converted to._
 - **conversion_value** _The original requested new spend value/budget in cents, before currency conversion._
-- **conversion_rate** _The conversion rate used to convert ConversionValue to obtain the RequestedValue._
+- **conversion_rate** _The conversion rate used to convert `conversion_value` to obtain the `requested_value`._
+
 
 SAMPLE DECODED PAYLOAD:
 
