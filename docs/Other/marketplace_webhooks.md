@@ -774,6 +774,14 @@ title: Customer Delete Event
 
 The spend change request webhook is called every time a spend change is requested for one of the vendor's products.
 
+Details:
+
+- **currency** _The currency in which the spend/budget is being requested._
+- **requested_value** _The requested new spend value/budget, in cents (or smallest denomination in other currencies)._
+- **conversion_currency** _The currency that the original spend/budget was converted to._
+- **conversion_value** _The original requested new spend value/budget in cents, before currency conversion._
+- **conversion_rate** _The conversion rate used to convert ConversionValue to obtain the RequestedValue._
+
 SAMPLE DECODED PAYLOAD:
 
 ```json
@@ -789,13 +797,16 @@ SAMPLE DECODED PAYLOAD:
     "app_id": "MP-VR6THPZ3HK3SM7J5BM7DVR427GKKK",
     "billing_frequency": "Monthly",
     "change_request_id": "SCR-12990f0e-c74e-40f0-8380-f15f7b1d6a37",
-    "currency": "USD",
+    "currency": "CAD",
+    "requested_value": 14000,
+    "conversion_currency": "USD",
+    "conversion_value": 19600,
+    "conversion_rate": 1.4,
     "edition_id": "",
     "effective_date": "2022-01-10T17:37:59.892036587Z",
     "event_time": "2021-12-17T16:40:09.187494398Z",
     "market_id": "default",
     "partner_id": "PID1",
-    "requested_value": 10000,
     "requester_email": "requester@email.com",
     "requester_note": "",
     "webhook_id": "service-change-request",
