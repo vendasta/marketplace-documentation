@@ -109,8 +109,13 @@ Details:
 - **activation_id:** _Unique id specific to each instance of an activated product._
 - **order_form_submission_id** _A unique identifier specific to the order form that was filled out. Will be empty if there is no order form.
 - **vendor_order_id** _A unique identifier for the order the product was purchased in._
-- **variable_price** _A nested structure representing what is being spent on the product at activation. The structure contains values for currency, frequency of billing and the spending amount in cents. 
-As well as the original spending amount converted to your currency, plus the conversion rate used._
+- **variable_price** _A nested structure representing what is being spent on the product at activation.
+    - **value** _The original spend value/budget in cents, before currency conversion._
+    - **currency** _The original currency in which the spend/budget._
+    - **frequency** _The frequency of the spend value_
+    - **conversion_value** _The spend value/budget in cents, after currency conversion._
+    - **conversion_currency** _The currency that the original spend/budget is converted to_,
+    - **conversion_rate** _The conversion rate used to convert `value` to obtain the `conversion_value`._
 - **edition_id** _A unique identifier for the edition of the product being purchased. Will be empty if product does not have separate editions._
 - **app_id** _A unique identifier for the product._
 
