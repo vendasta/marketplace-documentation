@@ -774,6 +774,22 @@ title: Customer Delete Event
 
 The spend change request webhook is called every time a spend change is requested for one of the vendor's products.
 
+Details:
+
+We always convert non-USD values to USD. While partners can pay in USD, AUD, or CAD for digital ads and potentially
+other products, Vendasta only pays vendors in USD. The currency related fields below are used to provide transparency
+(to vendors) in cross currency variable priced purchases.
+
+Received from reseller
+- **currency** _The currency of the requested spend._
+- **requested_value** _The amount of the requested spend in cents (or smallest denomination in other currencies), before currency conversion._
+
+Sent to vendor
+- **conversion_currency** _The currency that the requested spend will be converted to._
+- **conversion_value** _The amount of the requested spend in cents (or smallest denomination in other currencies) after conversion to the `requested_value`._
+- **conversion_rate** _The conversion rate used to convert `requested_value` to obtain the `conversion_value`._
+
+
 SAMPLE DECODED PAYLOAD:
 
 ```json
@@ -789,13 +805,16 @@ SAMPLE DECODED PAYLOAD:
     "app_id": "MP-VR6THPZ3HK3SM7J5BM7DVR427GKKK",
     "billing_frequency": "Monthly",
     "change_request_id": "SCR-12990f0e-c74e-40f0-8380-f15f7b1d6a37",
-    "currency": "USD",
+    "currency": "CAD",
+    "requested_value": 19600,
+    "conversion_currency": "USD",
+    "conversion_value": 14000,
+    "conversion_rate": 1.4,
     "edition_id": "",
     "effective_date": "2022-01-10T17:37:59.892036587Z",
     "event_time": "2021-12-17T16:40:09.187494398Z",
     "market_id": "default",
     "partner_id": "PID1",
-    "requested_value": 10000,
     "requester_email": "requester@email.com",
     "requester_note": "",
     "webhook_id": "service-change-request",
