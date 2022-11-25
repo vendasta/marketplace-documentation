@@ -780,10 +780,13 @@ We always convert non-USD values to USD. While partners can pay in USD, AUD, or 
 other products, Vendasta only pays vendors in USD. The currency related fields below are used to provide transparency
 (to vendors) in cross currency variable priced purchases.
 
-- **requested_value** _The requested new spend value/budget in cents, before currency conversion._
-- **currency** _The original currency in which the spend/budget is being requested._
-- **conversion_value** _The requested new spend value/budget in cents, after currency conversion._
-- **conversion_currency** _The currency that the original spend/budget is converted to._
+Received from reseller
+- **currency** _The currency of the requested spend._
+- **requested_value** _The amount of the requested spend in cents (or smallest denomination in other currencies), before currency conversion._
+
+Sent to vendor
+- **conversion_currency** _The currency that the requested spend will be converted to._
+- **conversion_value** _The amount of the requested spend in cents (or smallest denomination in other currencies) after conversion to the `requested_value`._
 - **conversion_rate** _The conversion rate used to convert `requested_value` to obtain the `conversion_value`._
 
 
@@ -802,10 +805,10 @@ SAMPLE DECODED PAYLOAD:
     "app_id": "MP-VR6THPZ3HK3SM7J5BM7DVR427GKKK",
     "billing_frequency": "Monthly",
     "change_request_id": "SCR-12990f0e-c74e-40f0-8380-f15f7b1d6a37",
-    "requested_value": 19600,
     "currency": "CAD",
-    "conversion_value": 14000,
+    "requested_value": 19600,
     "conversion_currency": "USD",
+    "conversion_value": 14000,
     "conversion_rate": 1.4,
     "edition_id": "",
     "effective_date": "2022-01-10T17:37:59.892036587Z",
