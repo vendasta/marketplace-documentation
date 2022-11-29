@@ -109,19 +109,23 @@ Details:
 - **activation_id:** _Unique id specific to each instance of an activated product._
 - **order_form_submission_id** _A unique identifier specific to the order form that was filled out. Will be empty if there is no order form.
 - **vendor_order_id** _A unique identifier for the order the product was purchased in._
-- **variable_price** _A nested structure representing what is being spent on the product at activation._
-  Received from reseller
-    - **value** _The amount of the original spend in cents (or smallest denomination in other currencies), before currency conversion._
-    - **currency** _The currency of the original spend._
-    - **frequency** _The frequency of the spend value._
-
-  Sent to vendor
-
-    - **conversion_value** _The amount of the original spend in cents (or smallest denomination in other currencies) after conversion from the requested_value._
-    - **conversion_currency** _The currency that the original spend is converted to._
-    - **conversion_rate** _The conversion rate used to convert `value` to obtain the `conversion_value`._
 - **edition_id** _A unique identifier for the edition of the product being purchased. Will be empty if product does not have separate editions._
 - **app_id** _A unique identifier for the product._
+- **variable_price** _A nested structure representing what is being spent on the product at activation._
+
+    We always convert non-USD values to USD. While partners can pay in USD, AUD, or CAD for digital ads and potentially
+    other products, Vendasta only pays vendors in USD. The currency related fields below are used to provide transparency
+    (to vendors) in cross currency variable priced purchases.
+
+    Received from reseller
+  - **value** _The amount of the original spend in cents (or smallest denomination in other currencies), before currency conversion._
+  - **currency** _The currency of the original spend._
+  - **frequency** _The frequency of the spend value._
+
+    Sent to vendor
+  - **converted_value** _The amount of the original spend in cents (or smallest denomination in other currencies) after conversion from the `value`._
+  - **conversion_currency** _The currency that the original spend is converted to._
+  - **conversion_rate** _The conversion rate used to convert `value` to obtain the `converted_value`._
 
 
 <!--
@@ -237,7 +241,7 @@ title: Provision Event
          "currency":"CAD",
          "value":14000,
          "frequency":"MONTHLY",
-         "conversion_value": 10000,
+         "converted_value": 10000,
          "conversion_currency": "USD",
          "conversion_rate": 1.4
       },
@@ -794,13 +798,13 @@ other products, Vendasta only pays vendors in USD. The currency related fields b
 (to vendors) in cross currency variable priced purchases.
 
 Received from reseller
-- **currency** _The currency of the requested spend._
 - **requested_value** _The amount of the requested spend in cents (or smallest denomination in other currencies), before currency conversion._
+- **currency** _The currency of the requested spend._
 
 Sent to vendor
-- **conversion_currency** _The currency that the requested spend will be converted to._
-- **conversion_value** _The amount of the requested spend in cents (or smallest denomination in other currencies) after conversion to the `requested_value`._
-- **conversion_rate** _The conversion rate used to convert `requested_value` to obtain the `conversion_value`._
+- **converted_value** _The amount of the requested spend in cents (or smallest denomination in other currencies) after conversion from the `requested_value`._
+- **conversion_currency** _The currency that the requested spend is converted to._
+- **conversion_rate** _The conversion rate used to convert `requested_value` to obtain the `converted_value`._
 
 
 SAMPLE DECODED PAYLOAD:
@@ -821,7 +825,7 @@ SAMPLE DECODED PAYLOAD:
     "currency": "CAD",
     "requested_value": 19600,
     "conversion_currency": "USD",
-    "conversion_value": 14000,
+    "converted_value": 14000,
     "conversion_rate": 1.4,
     "edition_id": "",
     "effective_date": "2022-01-10T17:37:59.892036587Z",
