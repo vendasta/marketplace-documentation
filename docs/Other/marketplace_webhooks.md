@@ -113,16 +113,17 @@ Details:
 - **app_id** _A unique identifier for the product._
 - **variable_price** _A nested structure representing what is being spent on the product at activation._
 
-    We always convert non-USD values to USD. While partners can pay in USD, AUD, or CAD for digital ads and potentially
-    other products, Vendasta only pays vendors in USD. The currency related fields below are used to provide transparency
-    (to vendors) in cross currency variable priced purchases.
 
-    Received from reseller
+  We always convert non-USD values to USD. While partners can pay in USD, AUD, or CAD for digital ads and potentially
+  other products, Vendasta only pays vendors in USD. The currency related fields below are used to provide transparency
+  (to vendors) in cross currency variable priced purchases.
+
+  Received from reseller
   - **value** _The amount of the original spend in cents (or smallest denomination in other currencies), before currency conversion._
   - **currency** _The currency of the original spend._
   - **frequency** _The frequency of the spend value._
 
-    Sent to vendor
+  Sent to vendor
   - **converted_value** _The amount of the original spend in cents (or smallest denomination in other currencies) after conversion from the `value`._
   - **conversion_currency** _The currency that the original spend is converted to._
   - **conversion_rate** _The conversion rate used to convert `value` to obtain the `converted_value`._
