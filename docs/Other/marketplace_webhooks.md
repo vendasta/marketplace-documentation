@@ -114,9 +114,7 @@ Details:
 - **variable_price** _A nested structure representing what is being spent on the product at activation._
 
 
-  We always convert non-USD values to USD. While partners can pay in USD, AUD, or CAD for digital ads and potentially
-  other products, Vendasta only pays vendors in USD. The currency related fields below are used to provide transparency
-  (to vendors) in cross currency variable priced purchases.
+We always convert non-USD values to USD. While partners can pay in USD, AUD, or CAD for digital ads and potentially other products, Vendasta only pays vendors in USD. The currency related fields below are used to provide transparency (to vendors) in cross currency variable priced purchases.
 
 Received from reseller
   - **value** _The amount of the original spend in cents (or smallest denomination in other currencies), before currency conversion._
