@@ -91,14 +91,19 @@ The `Use "Pending Activation" workflow` checkbox in the _Product activation_ sec
 **Full Provisioning Workflow**
 ![Activation Workflow](../../assets/images/provisioning/activation_workflow.png)
 
-## Activation Types
+## Testing Provisioning
 
-The action field on the Purchase Webhook indicates which payload type you are receiving. 
+The `action` field on the Purchase Webhook indicates which payload type you are receiving. 
 
-`action`  _provision/de-provision/provisioned-trial/change-edition_
+**actions:** _`provision`, `de-provision`, `provisioned-trial`, `change-edition`_
 
 <!-- theme: info -->
 >Note that Add-ons only have the _provisioned & de-provisioned_ actions, as they are not compatible with Editons or Trials.
+
+### Initial Testing
+
+Once a value has been entered in the _Integration-->Integration Settings-->Purchase URLs_ a testing tab will appear on the far right for sending mock purchase data to your purchase urls. If you require order form data to provision your sku, you should test the activations from Partner Center, as the mock data will not suffice. 
+You can [create](https://support.vendasta.com/hc/en-us/articles/4406959813911) as many test Accounts as you want in Partner Center, and [activate and deactivate](https://support.vendasta.com/hc/en-us/articles/4406958134807) your own offerings as much as you desire.
 
 
 ### Trial Activation
@@ -115,11 +120,11 @@ The Vendor is responsible for the trial lifecycle, including:
 
 There are two steps to making a trial available to be activated.
 
-1. **_As a Vendor_**, configure the Trial in Vendor Center. This is configured in the _Pricing & Trials_ section in the _App Info_ tab. 
+1. **_As a Vendor_**, configure the Trial in Vendor Center. This is configured in the _Pricing & Trials_ section in the _Product Info_ tab. 
 <!-- theme: info -->
 >If your product has editions, let your Vendasta contact know which edition you want to be trialed.
 
-2. **_As a Channel Partner_**, set the Trial to be available in Business App via _Marketplace -> Manage Product -> App -> Product Settings_:
+2. **_As a Channel Partner_**, set the Trial to be available in Business App via _Marketplace -> Products -> App -> Product info_:
 ![Make Trial Available](../../assets/images/provisioning/PartnerCenter_EnableTrial.png)
 
 
@@ -127,7 +132,7 @@ There are two steps to making a trial available to be activated.
 
 ### Product or Add-on Activation
 
-There are many ways a sku can be activated. For testing purposes, the easiest method is via Partner Center `Account Details` page:
+There are many ways a sku can be activated. For testing purposes, the easiest method is via the Partner Center `Account Details` page:
 
 1. Navigate to [Partner Center > Businesses > Accounts](https://partners.vendasta.com/manage-accounts) and click on the account name.
 
@@ -137,20 +142,17 @@ There are many ways a sku can be activated. For testing purposes, the easiest me
 
 
 <!-- theme: info -->
->* Once an order is completed, and the activation lifecyle begins, if the product has webhooks configured, request(s) will be sent to their respective purchase webhooks with the `provisioned` action.
+>Once Sales Order is completed, and the activation lifecyle begins, if the product has webhooks configured, request(s) will be sent to their respective purchase webhooks with the `provisioned` action.
 
 ### Edition Change
-![Edition Change](../../assets/images/provisioning/PC_EditionChange_Modal.png)
 
+The new `edition_id` will be included in the data for whatever purchase notification is configured.
+
+![Edition Change](../../assets/images/provisioning/PC_EditionChange_Modal.png)
 _Edition Change from Partner Center `Account Details` Page_
 
-<!-- theme: info -->
->The new `edition_id` will be included in the data for whatever purchase notification is configured.
-
-## Testing
-
-There is a testing tab on the far right for sending mock purchase data to your purchase urls. If you require order form data to provision your sku, you should test the activations from Partner Center, as the mock data will not suffice. 
-You can create as many test Accounts as you want in Partner Center, and activate and deactivate your own offerings as much as you desire.
+<!-- theme: warning -->
+> Unlike an Activation, an Edition Change can not be rejected at this time. If a 400 error occurs during the Edition Change event, Vendasta and the Vendor will end up out of sync. If this edge case does occur, the Partner and/or Vendor should contact support@vendasta.com
 
 ---
 
