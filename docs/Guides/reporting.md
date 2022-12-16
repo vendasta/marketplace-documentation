@@ -44,6 +44,7 @@ Example:
     "format": "FRACTION"
 }
 ```
+![number with change card](../../assets/images/guides/reporting/number_with_change.png) 
 
 ### Info List Card
 
@@ -80,6 +81,7 @@ Example:
   ]
 }
 ```
+![Info List card](../../assets/images/guides/reporting/info_list_full.png)
 
 ### Bar Chart Card
 
@@ -122,6 +124,7 @@ Example:
   ]
 }
 ```
+![bar chart card](../../assets/images/guides/reporting/bar_chart_half.png)
 
 ### Word Cloud Card
 
@@ -196,6 +199,7 @@ Example:
   ]
 }
 ```
+![wordcloud card](../../assets/images/guides/reporting/word_cloud_full.png)
 
 ### Line Graph Card
 
@@ -209,76 +213,70 @@ Example:
   "unique_id": "linegraph_social_twitter",
   "title": "Social Audience",
   "next_url": "https://yourdashboardurl.com/deeplinkpath",
-  "width": "HALF",
+  "width": "FULL",
   "line_graph": [
-  {
-      "label": "Omega Dental",
-      "point": [
-          {
-              "x": 1498867200000.0,
-              "y": 100.0
-          },
-          {
-              "x": 1501545600000.0,
-              "y": 120.0
-          },
-          {
-              "x": 1504224000000.0,
-              "y": 157.0
-          },
-          {
-              "x": 1506816000000.0,
-              "y": 155.0
-          },
-          {
-              "x": 1509494400000.0,
-              "y": 193.0
-          },
-          {
-              "x": 1512086400000.0,
-              "y": 245.0
-          },
-          {
-              "x": 1514764800000.0,
-              "y": 323.0
-          }
-      ]
-  },
-  {
-      "label": "City Park Dental",
-      "point": [
-          {
-              "x": 1498867200000.0,
-              "y": 88.0
-          },
-          {
-              "x": 1501545600000.0,
-              "y": 101.0
-          },
-          {
-              "x": 1504224000000.0,
-              "y": 130.0
-          },
-          {
-              "x": 1506816000000.0,
-              "y": 136.0
-          },
-          {
-              "x": 1509494400000.0,
-              "y": 148.0
-          },
-          {
-              "x": 1512086400000.0,
-              "y": 150.0
-          },
-          {
-              "x": 1514764800000.0,
-              "y": 152.0
-          }
-      ]
-  }]
+      {
+          "label": "Omega Dental",
+          "point": [
+              {
+                  "x": 1670540481000,
+                  "y": 100.0
+              },
+              {
+                  "x": 1670626881000,
+                  "y": 120.0
+              },
+              {
+                  "x": 1670713281000,
+                  "y": 157.0
+              },
+              {
+                  "x": 1670799681000,
+                  "y": 155.0
+              },
+              {
+                  "x": 1670886081000,
+                  "y": 193.0
+              },
+              {
+                  "x": 1670972481000,
+                  "y": 245.0
+              }
+          ]
+      },
+      {
+          "label": "City Park Dental",
+          "point": [
+              {
+                  "x": 1670540481000,
+                  "y": 78.0
+              },
+              {
+                  "x": 1670626881000,
+                  "y": 72.0
+              },
+              {
+                  "x": 1670713281000,
+                  "y": 97.0
+              },
+              {
+                  "x": 1670799681000,
+                  "y": 103.0
+              },
+              {
+                  "x": 1670886081000,
+                  "y": 129.0
+              },
+              {
+                  "x": 1670972481000,
+                  "y": 176.0
+              }
+          ]
+      }
+  ]
 }
 ```
+![line chart card](../../assets/images/guides/reporting/line_chart_full.png)
 
 ### Call to Action Card
 
@@ -288,23 +286,21 @@ Example:
 ```json
 {  
   "template_type":"CALL_TO_ACTION",
-  "description":"Activate Google My Business Insights to discover how people interact with Tyra's Total Automotive, Inc online. Understand how people are finding you, where they're coming from, and how many of them are clicking on your phone number! Once your GMB account is connected, you will be able to view online business insights on your next report.",
-  "title":"Unlock Google My Business Insights",
+  "description":"Activate Google Business Profile Insights to discover how people interact with Tyra's Total Automotive, Inc online. Understand how people are finding you, where they're coming from, and how many of them are clicking on your phone number! Once your GMB account is connected, you will be able to view online business insights on your next report.",
+  "title":"Unlock Google Business Profile Insights",
   "width":"FULL",
   "next_url_label":"Connect Account",
   "next_url":"/edit/account/AG-PR8S4ZHN/google-insights/",
-  "unique_id":"cta_gmb_connect"
+  "unique_id":"cta_gbp_connect"
 }
 ```
-
+![call to action card](../../assets/images/guides/reporting/cta_full.png)
 
 ## Testing 
 
 The Executive Report is accessed via Business Center.
 
 Submit tests for the previous period, whether monthly or weekly. If you are submitting tests for the current period they won't show up as that period has not yet been released. Tests should show up in Business Center very shortly after submission.
-
-![Exec Report is accessed via Business Center](https://storage.googleapis.com/wordpress-www-vendasta/developers/2019/BusinessCenter_ExecReport.jpg)
 
 ### Example of a full payload
 
@@ -452,79 +448,71 @@ Submit tests for the previous period, whether monthly or weekly. If you are subm
          ]
       },
       {
-         "template_type":"LINE_GRAPH",
-         "unique_id":"linegraph_social_twitter",
-         "title":"Social Audience",
-         "next_url":"https://yourdashboardurl.com/deeplinkpath",
-         "width":"HALF",
-         "line_graph":[
+        "template_type": "LINE_GRAPH",
+        "unique_id": "linegraph_social_twitter",
+        "title": "Social Audience",
+        "next_url": "https://yourdashboardurl.com/deeplinkpath",
+        "width": "FULL",
+        "line_graph": [
             {
-               "label":"Omega Dental",
-               "point":[
-                  {
-                     "x":1498867200000.0,
-                     "y":100.0
-                  },
-                  {
-                     "x":1501545600000.0,
-                     "y":120.0
-                  },
-                  {
-                     "x":1504224000000.0,
-                     "y":157.0
-                  },
-                  {
-                     "x":1506816000000.0,
-                     "y":155.0
-                  },
-                  {
-                     "x":1509494400000.0,
-                     "y":193.0
-                  },
-                  {
-                     "x":1512086400000.0,
-                     "y":245.0
-                  },
-                  {
-                     "x":1514764800000.0,
-                     "y":323.0
-                  }
-               ]
+                "label": "Omega Dental",
+                "point": [
+                    {
+                        "x": 1670540481000,
+                        "y": 100.0
+                    },
+                    {
+                        "x": 1670626881000,
+                        "y": 120.0
+                    },
+                    {
+                        "x": 1670713281000,
+                        "y": 157.0
+                    },
+                    {
+                        "x": 1670799681000,
+                        "y": 155.0
+                    },
+                    {
+                        "x": 1670886081000,
+                        "y": 193.0
+                    },
+                    {
+                        "x": 1670972481000,
+                        "y": 245.0
+                    }
+                ]
             },
             {
-               "label":"City Park Dental",
-               "point":[
-                  {
-                     "x":1498867200000.0,
-                     "y":88.0
-                  },
-                  {
-                     "x":1501545600000.0,
-                     "y":101.0
-                  },
-                  {
-                     "x":1504224000000.0,
-                     "y":130.0
-                  },
-                  {
-                     "x":1506816000000.0,
-                     "y":136.0
-                  },
-                  {
-                     "x":1509494400000.0,
-                     "y":148.0
-                  },
-                  {
-                     "x":1512086400000.0,
-                     "y":150.0
-                  },
-                  {
-                     "x":1514764800000.0,
-                     "y":152.0
-                  }
-               ]
+                "label": "City Park Dental",
+                "point": [
+                    {
+                        "x": 1670540481000,
+                        "y": 78.0
+                    },
+                    {
+                        "x": 1670626881000,
+                        "y": 72.0
+                    },
+                    {
+                        "x": 1670713281000,
+                        "y": 97.0
+                    },
+                    {
+                        "x": 1670799681000,
+                        "y": 103.0
+                    },
+                    {
+                        "x": 1670886081000,
+                        "y": 129.0
+                    },
+                    {
+                        "x": 1670972481000,
+                        "y": 176.0
+                    }
+                ]
             }
-         ]
+        ]
       },
       {
          "template_type":"CALL_TO_ACTION",
