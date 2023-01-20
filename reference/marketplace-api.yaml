@@ -1198,6 +1198,9 @@ paths:
                 account_id:
                   type: string
                   description: A unique ID that can be used to identify an account.
+                item_id:
+                  type: string
+                  description: Field for specifying the add-on ID if the change request is for an add-on.
                 approved:
                   type: boolean
                   description: A boolean value representing whether the change spend has been approved or rejected.
