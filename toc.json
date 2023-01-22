@@ -54,6 +54,11 @@
          "uri":"docs/Guides/customer_list.md"
       },
       {
+         "type":"item",
+         "title":"Creating New Vendor Application",
+         "uri":"docs/Guides/creating_new_vendor_app.md"
+      },
+      {
          "type":"divider",
          "title":"WEBHOOKS"
       },
