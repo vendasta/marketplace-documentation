@@ -124,7 +124,7 @@ You should be able to login to the app. As soon as you hit the entry url you sho
 
 That's it. You are done!! You are now successfully authenticated with the Vendasta 3-legged OAuth process. You can get the complete code sample for the Marketplace application with 3-legged([SSO](https://developers.vendasta.com/vendor/d191b96068b71-sso-o-auth2-3-legged-flow)) and 2-legged ([Partner Platform Api](https://developers.vendasta.com/platform/ZG9jOjEwMTkzMDg4-overview)) OAuth2 processes from this [link](https://github.com/vendasta/api-gateway-docs/tree/marketplace-app/examples/spring-boot/marketplace-app).
 
-#### Related Links
+### Related Links
 
 Here are some useful links for the deep dive:
 
