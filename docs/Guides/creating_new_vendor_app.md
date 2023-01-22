@@ -1,11 +1,10 @@
-
 # Creating New Vendor Application
 
 This guide aims to help you learn how to build marketplace applications. By the end of this article, you will understand how to build and integrate SSO into your marketplace application.
 
 [Spring](https://spring.io/projects/spring-boot) comes with some handy packages which makes your backend application [OAuth2](https://oauth.net/2/) compliant with few steps. Let's dive into creating a simple Spring Boot app.
 
-#### Step 1 - Create a spring boot app with OAuth2 (3 Legged OAuth)
+### Step 1 - Create a spring boot app with OAuth2 (3 Legged OAuth)
 
 You can use the spring initializer to create simple spring boot app with oauth2 client enabled and have thymeleaf added - https://start.spring.io/
 
@@ -14,20 +13,20 @@ Below are the required dependencies. We’ve used Maven as the build tool. You c
 ![image.png](../../assets/images/guides/vendor_application/dependency.png)
 
 
-#### Step 2 - Create a Vendor app with Vendasta
+### Step 2 - Create a Vendor app with Vendasta
 
  Follow this [guide](https://developers.vendasta.com/vendor/d191b96068b71-sso-o-auth2-3-legged-flow) to create a simple vendor app which has oauth2 enabled and keep your client id and client secret safe.
 
 Once the app is created and ready to use, test from local machine use [ngrok](https://ngrok.com/) to obtain a public uri. It's a reverse proxy which can expose your local development server.
 
-#### Step 3 - Updating the spring boot configuration file
+### Step 3 - Updating the spring boot configuration file
 
  Update your application.yml file with the settings that you got from step 2 as below
 
 ![image.png](../../assets/images/guides/vendor_application/application_yml.png)
 
 
-#### Step 4 - Adding basic oauth configurations
+### Step 4 - Adding basic oauth configurations
 
 Lets add a simple oauth2 configuration in a configuration file as below
 
@@ -42,7 +41,7 @@ Most OAuth2 libraries will allow you to add additional context to your Authoriza
 
 The next steps are for doing that.
 
-#### Step 5 - Tagging the account group id or the partner id to the auth url
+### Step 5 - Tagging the account group id or the partner id to the auth url
 
 Lets add a custom AuthorizationRequestResolver to our authorization endpoint like so
 
@@ -90,7 +89,7 @@ This is the logic for `getAccountIdFromRequest` method
 ![image.png](../../assets/images/guides/vendor_application/accountid_from_request.png)
 
 
-#### Step 6 - Adding a custom Success Handler to capture the redirect Url 
+### Step 6 - Adding a custom Success Handler to capture the redirect Url 
 
 The final addition to the chain will look something like this
 
@@ -106,7 +105,7 @@ The logic of the custom handler is simple and cute.
 
 We check if the request is from the `/callback` endpoint we configured in Vendasta and then we check the session param that was added before to get the baseUrl. We also add the accountId that we got from the state param. That's it. We create a landing page for `/accountID` and we are done.
 
-#### Step 7 - Landing page controller
+### Step 7 - Landing page controller
 
 Let's write a simple html page using thymeleaf
 
@@ -125,7 +124,7 @@ You should be able to login to the app. As soon as you hit the entry url you sho
 
 That's it. You are done!! You are now successfully authenticated with the Vendasta 3-legged OAuth process. You can get the complete code sample for the Marketplace application with 3-legged([SSO](https://developers.vendasta.com/vendor/d191b96068b71-sso-o-auth2-3-legged-flow)) and 2-legged ([Partner Platform Api](https://developers.vendasta.com/platform/ZG9jOjEwMTkzMDg4-overview)) OAuth2 processes from this [link](https://github.com/vendasta/api-gateway-docs/tree/marketplace-app/examples/spring-boot/marketplace-app).
 
-##### Related Links
+#### Related Links
 
 Here are some useful links for the deep dive:
 
