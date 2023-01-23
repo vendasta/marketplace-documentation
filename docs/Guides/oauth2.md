@@ -374,4 +374,4 @@ For an end to end test, Activate the product on an Account, log into Business Ap
 Here are some useful links for the deep dive:
 
 - Checklist for vendor application using Spring-boot - [Doc](creating_new_vendor_app.md)
-- Spring-boot code example - [Git](https://github.com/vendasta/api-gateway-docs/examples/spring-boot/marketplace-app)
+- Spring-boot code example - [Git](https://github.com/vendasta/api-gateway-docs/tree/master/examples/spring-boot/marketplace-app)

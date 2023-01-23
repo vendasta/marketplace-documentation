@@ -6,7 +6,7 @@ This guide aims to help you learn how to build marketplace applications. By the 
 
 ### Step 1 - Create a spring boot app with OAuth2 (3 Legged OAuth)
 
-You can use the spring initializer to create simple spring boot app with oauth2 client enabled and have thymeleaf added - https://start.spring.io/
+You can use the spring initializer to create simple spring boot app with oauth2 client enabled and have thymeleaf added - https://start.spring.io
 
 Below are the required dependencies. We’ve used Maven as the build tool. You can choose Groovy or any other tool you’d prefer. It's up to you!
 
@@ -122,7 +122,7 @@ You should be able to login to the app. As soon as you hit the entry url you sho
 ![image.png](../../assets/images/guides/vendor_application/home_page.png)
 
 
-That's it. You are done!! You are now successfully authenticated with the Vendasta 3-legged OAuth process. You can get the complete code sample for the Marketplace application with 3-legged([SSO](https://developers.vendasta.com/vendor/d191b96068b71-sso-o-auth2-3-legged-flow)) and 2-legged ([Partner Platform Api](https://developers.vendasta.com/platform/ZG9jOjEwMTkzMDg4-overview)) OAuth2 processes from this [link](https://github.com/vendasta/api-gateway-docs/tree/marketplace-app/examples/spring-boot/marketplace-app).
+That's it. You are done!! You are now successfully authenticated with the Vendasta 3-legged OAuth process. You can get the complete code sample for the Marketplace application with 3-legged([SSO](https://developers.vendasta.com/vendor/d191b96068b71-sso-o-auth2-3-legged-flow)) and 2-legged ([Partner Platform Api](https://developers.vendasta.com/platform/ZG9jOjEwMTkzMDg4-overview)) OAuth2 processes from this [link](https://github.com/vendasta/api-gateway-docs/tree/master/examples/spring-boot/marketplace-app).
 
 ### Related Links
 
@@ -130,7 +130,7 @@ Here are some useful links for the deep dive:
 
 - Implementation of 3-legged OAuth with Spring-boot - [Video](https://drive.google.com/file/d/15taDril9zlGkI1aGMxrW7C2g0JLYJQXA/view)
 
-- Spring-boot code example - [Git](https://github.com/vendasta/api-gateway-docs/examples/spring-boot/marketplace-app)
+- Spring-boot code example - [Git](https://github.com/vendasta/api-gateway-docs/tree/master/examples/spring-boot/marketplace-app)
 
 - Running Maven Application - [Docs](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.running-your-application)
 
