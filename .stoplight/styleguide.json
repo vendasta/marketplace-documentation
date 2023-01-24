@@ -2,6 +2,9 @@
   "name": "Marketplace Documentation",
   "description": "",
   "spectralExtends": [],
+  "extends": [
+    "cHJqOjEyMzU4Ng@32"
+  ],
   "formats": [
     "oas2",
     "oas3",
@@ -10,9 +13,6 @@
   ],
   "aliases": {},
   "rules": {},
-  "extends": [
-    "cHJqOjEyMzU4Ng@32"
-  ],
   "extendedStyleguides": [
     {
       "id": "cHJqOjEyMzU4Ng",
