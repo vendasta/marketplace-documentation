@@ -369,9 +369,10 @@ Functionally testing SSO can be accomplished by redirecting to the Authorization
 
 For an end to end test, Activate the product on an Account, log into Business App, and click on the icon of the product.
 
-## Related Links
+## Example implementation
 
-Here are some useful links for the deep dive:
+To see a demonstration of requirement 2 in action check out these examples:
 
-- Checklist for vendor application using Spring-boot - [Doc](creating_new_vendor_app.md)
-- Spring-boot code example - [Git](https://github.com/vendasta/api-gateway-docs/tree/master/examples/spring-boot/marketplace-app)
+- Java Springboot app 
+  - [Guide](creating_new_vendor_app.md)
+  - [Source Code](https://github.com/vendasta/api-gateway-docs/tree/master/examples/spring-boot/marketplace-app)
