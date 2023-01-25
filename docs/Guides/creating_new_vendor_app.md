@@ -126,7 +126,7 @@ That's it. You are done!! You are now successfully authenticated with the Vendas
 
 ### Related Links
 
-Here are some useful links for the deep dive:
+Here are some useful links to learn more:
 
 - Implementation of 3-legged OAuth with Spring-boot - [Video](https://drive.google.com/file/d/15taDril9zlGkI1aGMxrW7C2g0JLYJQXA/view)
 
