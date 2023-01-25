@@ -4,7 +4,7 @@ stoplight-id: jd66qo3rwdql2
 
 # miniOrange Service Provider Wordpress Plugin
 
-This Guide is for OIDC/OAuth2 SSO from a Vendasta Product into a Wordpress hosted webapp, where Vendasta is the OpenID Provider(OP)/Identity Provider(IDP), and the product the Relying Party(RP)/Service Provider(SP). If you are looking for the reverse instructions on executing OAuth SSO from Wordpress App into Vendasta, please review MiniOrange's [Server guide for Vendasta](https://plugins.miniorange.com/vendasta-sso-using-wordpress-as-oauth-server) & Vendasta's [IDP SSO Guide](https://developers.vendasta.com/platform/ZG9jOjQ4NDkwNDQ2-identity-provider-idp-sso)
+This Guide covers OIDC/OAuth2 SSO from a Vendasta Product into a Wordpress hosted webapp, where Vendasta is the OpenID Provider(OP)/Identity Provider(IDP), and the product the Relying Party(RP)/Service Provider(SP). If you are looking for a guide on executing OAuth SSO from a Wordpress App into Vendasta, please review MiniOrange's [Server guide for Vendasta](https://plugins.miniorange.com/vendasta-sso-using-wordpress-as-oauth-server) & Vendasta's [IDP SSO Guide](https://developers.vendasta.com/platform/ZG9jOjQ4NDkwNDQ2-identity-provider-idp-sso)
 
 ## Requirements
 
@@ -18,19 +18,19 @@ This Guide is for OIDC/OAuth2 SSO from a Vendasta Product into a Wordpress hoste
 
 **Purchase**
 
-You will need to create a miniOrange Account. Once done, you will be prompted to enter in a key. **You need either the `Enterprise`, or the `All-Inclusive` plan. To proceed**
+You will need to create a miniOrange Account. Once done, you will be prompted to enter in a key. **You need either the `Enterprise`, or the `All-Inclusive` plan or trial to unlock the needed features for using the miniOrange plugin to integrate with Vendasta.**
 
-## 1. Setup your product OAuth Client
+## Setup your product OAuth Client
 
-If you haven't created your product yet, create a product in [Vendor Center](https://vendors.vendasta.com). You will need to navigate back to your product during the plugin setup.
+If you haven't created your product yet, create a product in [Vendor Center](https://vendors.vendasta.com). You will need to navigate back to your product to configure your redirect uri during the plugin setup.
 
-**In Wordpress:**
+**1) In Wordpress:**
 
-1) Navigate to the miniOrange OAuth plugin, and select `Add New Application` to get started
-2) Search for Vendasta in the list of providers. If not found, select `Custom OAuth 2.0 App`
+1) Navigate to the miniOrange OAuth plugin, and select `Add New Application` to get started. You will need to be logged in and have some sort of plan or trial active.
+2) Search for Vendasta in the list of providers. If not found, select `Custom OAuth 2.0 App`(the OIDC option will not work)
 3) Copy your callback url(redirect uri)
 
-**In Vendor Center:**
+**2) In Vendor Center:**
 1) Navigate to the Integration Page
 2) Under Access and SSO-->SSO settings, toggle on Enable SSO
 3) Under OAuth2 Configuration select 'Create Configuration'
@@ -38,7 +38,7 @@ If you haven't created your product yet, create a product in [Vendor Center](htt
     ![image.png](../../assets/images/guides/iaas/miniOrange/vendasta_createconfig.png)
 5) After saving a modal will appear with your client_id and client_secret. **SAVE YOUR CLIENT SECRET someplace secure. If you do not record it now, you will need to delete your client and generate a new one.**
 
-**In Wordpress**
+**3) In Wordpress**
 
 Go to the Vendasta Developer Center [Service Configuration](https://developers.vendasta.com/vendor/d191b96068b71-sso-o-auth2-3-legged-flow#library-or-service-configuration) section of the SSO page to find the details required for the remainder of the miniOrange setup wizard.
 
@@ -49,7 +49,7 @@ Go to the Vendasta Developer Center [Service Configuration](https://developers.v
 4) Save your settings - a few more fields will become avilable on the Update Application screen.
 5) Add the JWKS URL
 6) Alter the checkboxes if needed:
-    1) Set 'Send client credentials in' to `Body`, though this can be changed later.
+    1) Set 'Send client credentials in' to `Body`
     2) Uncheck 'Show on login page'
 
 Don't forget to save your settings.
@@ -59,6 +59,7 @@ Don't forget to save your settings.
 You will likely want to update your miniOrange application to include User Attribute Mapping, and optionally Role Mapping.
 
 **User Attribute Mapping**
+
 Users will be created Just in Time(JIT)
 ![image.png](../../assets/images/guides/iaas/miniOrange/miniorange_userattributes.png)
 _*note that you turn on Role mapping within Attribute Mapping_
@@ -74,11 +75,11 @@ Above is an example configuration. Vendasta's OAuth implementation doesn't suppo
 
 ### Register Endpoint
 
-There are many tutorials available on how to register endpoints in Wordpress. The simplest methods would be to use a plugin, or to edit your child theme's functions.php file. For ease of demonstration, this POC uses the latter.
+There are many tutorials available on how to register endpoints in Wordpress. The simplest methods would be to use a plugin, or to edit your child theme's functions.php file. For ease of demonstration, this POC uses the latter option.
 
 **Step 1) Register the route**
 
-Use the add_action function to register a route:
+Use the Wordpress add_action function to register a route:
 
 ```php
 add_action( 'rest_api_init', function () {
@@ -93,7 +94,7 @@ Whatever route you define is what you will register in Vendor Center:
 
 **Step 2) Define some constants**
 
-Define some constants at the top of your file
+Define some constants at the top of your file for your host, and miniOrange appName. Your appName is found in the miniOrange plugin application list - see [How to get the application name](https://developers.miniorange.com/docs/oauth/wordpress/client/miscellaneous-info#getting-application-name)
 
 ```php
 define(SITE_URL,get_site_url());
@@ -111,7 +112,6 @@ define(MINIORANGE_REDIRECT_URI, "https://wintzell-s-oyster-house.websitepro.host
  */
 function entry( object $args ) {
 	$account_id = $args['account_id'];
-	wp_cache_set('current_accountid', $account_id);
 	$idp_entry = SITE_URL . "?option=oauthredirect&app_name=" . 
 		MINIORANGE_APPNAME . "&redirect_url=" . MINIORANGE_REDIRECT_URI
 		. "&account_id=" . $account_id;
@@ -122,7 +122,18 @@ function entry( object $args ) {
 	exit;
 }
 ```
-test
+*The above function will pull the account_id from the Entry Route, build the miniOrange IDP login link, and use it to generate the OAuth Authorization url. Then finally redirect to the Authorization url.
+
+
+MiniOrange does have [a filter](https://developers.miniorange.com/docs/oauth/wordpress/client/wordpress-hooks) for altering the Authorization URL in flight. However, they suggest for Vendasta's use case that their Identity Provider Initiated SSO should be utilized.
+
+Here are the instructions for the [Link Login option](https://developers.miniorange.com/docs/oauth/wordpress/client/login-options#link-login):
+
+This link is in the format:
+```<your-wordpress-site>?option=oauthredirect&app_name=<application-name>&redirect_url=<redirect-url-of-your-wordpress-site>&additionalparams=xxx```
+
+Where `<your-wordpress-site>` is your WP domain, `<application-name>` is the application that would be created in the OAuth Client plugin on WordPress, and `<redirect-url-of-your-wordpress-site>` will be the WP site link where the user will be redirected after the SSO.
+
 ```php
 /**
  * We are using the miniOrange Link Login Option to trigger IDP initiated sso
@@ -146,21 +157,6 @@ function parse_response($response) {
   return $parsed_response;
 }
 ```
-
-### Handling custom authentication url params
-
-MiniOrange does have [a filter](https://developers.miniorange.com/docs/oauth/wordpress/client/wordpress-hooks) for altering the Authorization URL in flight. However, they suggest for Vendasta's use case that their Identity Provider Initiated SSO should be utilized.
-
-Here are the instructions for the [Link Login option](https://developers.miniorange.com/docs/oauth/wordpress/client/login-options#link-login):
-
-This link is in the format:
-```<your-wordpress-site>?option=oauthredirect&app_name=<application-name>&redirect_url=<redirect-url-of-your-wordpress-site>```
-
-Where `<your-wordpress-site>` is your WP domain, `<application-name>` is the application that would be created in the OAuth Client plugin on WordPress, and `<redirect-url-of-your-wordpress-site>` will be the WP site link where the user will be redirected after the SSO.
-
-To find the application name, please refer the [Misc. Section for How to get the application name?](https://developers.miniorange.com/docs/oauth/wordpress/client/miscellaneous-info#getting-application-name)
-For Example: If your domain is miniorange.com, your application name is OAuthApplication and redirect url is https://miniorange.com/single-sign-on-sso this link would look like:
-`https://miniorange.com?option=oauthredirect&app_name=OAuthApplication&redirect_url=https://miniorange.com/single-sign-on-sso`
 
 
 ## Testing
