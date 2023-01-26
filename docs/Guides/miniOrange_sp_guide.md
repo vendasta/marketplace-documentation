@@ -27,7 +27,7 @@ If you haven't created your product yet, create a product in [Vendor Center](htt
 **1) In Wordpress:**
 
 1) Navigate to the miniOrange OAuth plugin, and select `Add New Application` to get started. You will need to be logged in and have some sort of plan or trial active.
-2) Search for Vendasta in the list of providers. If not found, select `Custom OAuth 2.0 App`(the OIDC option will not work)
+2) Find Vendasta in the list of providers. The default OAuth 2.0 & OIDC options won't work due to the need for custom url parameters to be passed to the Authorization URL.
 3) Copy your callback url(redirect uri)
 
 **2) In Vendor Center:**
