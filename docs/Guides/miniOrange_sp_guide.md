@@ -46,7 +46,7 @@ Go to the Vendasta Developer Center [Service Configuration](https://developers.v
 2) Copy in your client_id & client_secret that you got when generating your Product's OAuth client in Vendor Center. 
 3) Copy in the Authorization, Token, and Get User Info endpoints from the service configuration url table in the Vendasta OAuth guide. **Exclude the '?account_id=<account_id>' placeholder for the authorization url. Authorization URL param appension is supported by miniOrange, but needs to be initiated by your App's Entry URL, which will be covered later in the guide.**
     ![image.png](../../assets/images/guides/iaas/miniOrange/miniorange_newapp.png)
-4) Save your settings - a few more fields will become avilable on the Update Application screen.
+4) Save your settings - a few more fields will become available on the Update Application screen.
 5) Add the JWKS URL
 6) Alter the checkboxes if needed:
     1) Set 'Send client credentials in' to `Body`
@@ -73,7 +73,9 @@ Above is an example configuration. Vendasta's OAuth implementation doesn't suppo
 
 ## Product Entry URL
 
-### Register Endpoint
+This url acts as the entry point for the product. It could be redirected to from various dashboards or emails. Prior to redirect the account_id is injected into the placeholder on the url, and should be appended as an additional url parameter on the Authorization URL to trigger the start of the session transfer. See [Contextualizing your Authorization URL](https://developers.vendasta.com/vendor/d191b96068b71-sso-o-auth2-3-legged-flow#contextualizing-your-authorization-urlrequired).
+
+### Configure the Entry URL in Wordpress
 
 There are many tutorials available on how to register endpoints in Wordpress. The simplest methods would be to use a plugin, or to edit your child theme's functions.php file. For ease of demonstration, this POC uses the latter option.
 
@@ -90,7 +92,9 @@ add_action( 'rest_api_init', function () {
 } );
 ```
 Whatever route you define is what you will register in Vendor Center:
-
+![image.png](../../assets/images/guides/sso/sso_marketplace_settings.png)
+<!-- theme: warning -->
+>The Entry URL supports the `<accountId>` placeholder being anywhere, but for this integration, it needs to be implemented as a url parameter, with the key specified as `account_id`
 
 **Step 2) Define some constants**
 
@@ -103,6 +107,9 @@ define(MINIORANGE_REDIRECT_URI, "https://wintzell-s-oyster-house.websitepro.host
 ```
 
 **Step 3) Add the entry function**
+
+The entry function will pull the account_id from the Entry Route, build the miniOrange IDP login link, appending the `account_id`, and use it to retrieve the OAuth Authorization url. The parse_response function will extract the Authorization url from the Link Login url response, then finally we redirect to the Authorization url.
+
 ```php
 /**
  * Routes through sso before redirecting user to requested resource
@@ -122,7 +129,6 @@ function entry( object $args ) {
 	exit;
 }
 ```
-*The above function will pull the account_id from the Entry Route, build the miniOrange IDP login link, and use it to generate the OAuth Authorization url. Then finally redirect to the Authorization url.
 
 
 MiniOrange does have [a filter](https://developers.miniorange.com/docs/oauth/wordpress/client/wordpress-hooks) for altering the Authorization URL in flight. However, they suggest for Vendasta's use case that their Identity Provider Initiated SSO should be utilized.
@@ -158,9 +164,24 @@ function parse_response($response) {
 }
 ```
 
-
 ## Testing
 
+**Turn on Logging**
 
+Configure miniOrange, and then turn on the logging. There is a Debug Logs tile on the right hand side when editing your miniOrange application:
+![image.png](../../assets/images/guides/iaas/miniOrange/miniorange_logging.png)
 
-Tip - test in a different browser session than where you are editing plugin settings and files from, as you'll gain the permission level of the last user you accessed wordpress as, including via this sso. This keeps you from having to continually re-login as an administrator to be able to edit things.
+This will allow you to see exactly how the OAuth flow, and user creation and mappings proceed. Come back to this tile after you've executed a session transfer, and there will be an option to download the logs.
+
+**Testing SSO**
+
+Start testing by using the miniOrange 'Test Configuration' button. This will pop open a window and generate the Authorization url for you. Here's what you would expect: ```string(1028) "https://sso-api-prod.apigateway.co/oauth2/auth?client_id=e82cf897-b912-4559-bea7-f8b384aaa201&scope=openid profile&redirect_uri=https%3A%2F%2Fyourdomain.websitepro.hosting&response_type=code&state=randomjot&account_id="```
+
+Copy the Auth url, and paste the url into your browser, before submitting, add an account_id that your product is currently active on to the `account_id` value, which is left blank.
+
+**Testing the Entry URL**
+
+You can do this manually, but you should ensure you have your Entry URL registered in Vendor Center, and test that the link works properly from Business App. Ensure the product is active on your test account, then [Access Business App](https://support.vendasta.com/hc/en-us/articles/4406958143383), and click on your App icon to redirect to the Entry URL with the `account_id` appended in your placeholder.
+
+<!-- theme: info -->
+>*Tip* - Test in a different browser session than where you are editing plugin settings and files from, as you'll gain the permission level of the last user you accessed Wordpress as, including via miniOrange SSO. This keeps you from having to continually re-login as an administrator to be able to edit things.
