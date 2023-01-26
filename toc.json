@@ -34,9 +34,16 @@
          "uri":"docs/Guides/provisioning_workflow.md"
       },
       {
-         "type":"item",
+         "type":"group",
          "title":"Requirement 2: SSO (OAuth2 3-Legged Flow)",
-         "uri":"docs/Guides/oauth2.md"
+         "uri":"docs/Guides/oauth2.md",
+          "items": [
+            {
+              "type": "item",
+              "title": "miniOrange Wordpress SP plugin",
+              "uri": "docs/Guides/miniOrange_sp_guide.md"
+            }
+          ]
       },
       {
          "type":"item",
