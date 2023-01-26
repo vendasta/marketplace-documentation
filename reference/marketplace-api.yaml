@@ -1165,7 +1165,7 @@ paths:
         '404':
           description: Account or file group not found
       summary: Get a File Group
-  /change_spend/resolve/:
+  /change_spend/resolve:
     post:
       tags:
         - change_spend
@@ -1198,6 +1198,9 @@ paths:
                 account_id:
                   type: string
                   description: A unique ID that can be used to identify an account.
+                item_id:
+                  type: string
+                  description: Field for specifying the add-on ID if the change request is for an add-on.
                 approved:
                   type: boolean
                   description: A boolean value representing whether the change spend has been approved or rejected.
@@ -1208,6 +1211,7 @@ paths:
                   type: string
                   description: 'If approved is false, you must give a reason for rejecting the change spend.'
         required: true
+    parameters: []
 tags:
   - name: oauth
     description: The OAuth APIs allow applications to retrieve a bearer token that must be supplied with all API calls. See the Authentication documentation for more details.
