@@ -62,17 +62,18 @@ The class should implement the Oauth2AuthorizationRequestResolver so that means 
 
 Let's create a method `createCustomEntry` to take care of this activity.
 
-![image.png](../../assets/images/guides/vendor_application/create_custom_entry_func.png)
+![image.png](../../assets/images/guides/vendor_application/create_custom_entry.png)
+
 
 The method does a lot of things and it could be engineered better, but to make it screenshot friendly, we have made everything available here. Let's look at what’s happening here
 
 1. Let's call the resolve method of the default implementation of this class by spring boot . (We need this because we need various configuration setup like adding the clientRegistrationId,state,redirectUrl and such. Let's create a temp `Oauth2AuthorizationRequest`.
 
-2. The line 105 gets the accountId from the request Url(This is a mandatory step when integrating with Vendasta. When creating the entry Url , The accountId should be tagged in the format `/entry/accountId` for it to work properly. This is explained better in the docs above.
+2. The line 111 gets the accountId from the request Url(This is a mandatory step when integrating with Vendasta. When creating the entry Url , The accountId should be tagged in the format `/entry/accountId` for it to work properly. This is explained better in the docs above.
 
-3. The if statement at line 106 will make sure that we redirect the user to the right location after the login. This also works hand in hand with another problem. That is to look for an active session with the client. If there is no active session with the client then this variable is null. So the auth flow happens only when there is no valid sessions. 
+3. The if statement at line 112 will make sure that we redirect the user to the right location after the login. This also works hand in hand with another problem. That is to look for an active session with the client. If there is no active session with the client then this variable is null. So the auth flow happens only when there is no valid sessions. 
 
-4. The line 107 sets the accountId in the `state` parameter of your authUrl.
+4. The line 113 sets the accountId and appId in the `state` parameter of your authUrl. The [state](https://auth0.com/docs/secure/attack-protection/state-parameters) parameter will help to prevent [CSRF](https://en.wikipedia.org/wiki/Cross-site_request_forgery) attacks. You can also use state to save your protected URL to redirect the user back to their intended page after the authentication is complete.
 
 5. We then set the callback url here using a session variable called `baseUrl` ( This is purely optional. An authenticated session can be validated a number of ways. We are using a simple session variable. On successful validation from Vendasta we get a request to the redirect Url . Since we don’t want to send the user to the redirect url always we use this variable. Let's look at this implementation later.
 
