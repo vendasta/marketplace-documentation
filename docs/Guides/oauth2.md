@@ -368,3 +368,11 @@ b) OR or have any actual purchase capabilities remove, and the copy made to be '
 Functionally testing SSO can be accomplished by redirecting to the Authorization URL in the browser. This will result in a prompt for user login, and scope acceptance.
 
 For an end to end test, Activate the product on an Account, log into Business App, and click on the icon of the product.
+
+## Example implementation
+
+To see a demonstration of requirement 2 in action check out these examples:
+
+- Java Springboot app 
+  - [Guide](creating_new_vendor_app.md)
+  - [Source Code](https://github.com/vendasta/api-gateway-docs/tree/master/examples/spring-boot/marketplace-app)
