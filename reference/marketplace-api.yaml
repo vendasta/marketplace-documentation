@@ -1007,6 +1007,7 @@ paths:
       summary: Create a File Group
       requestBody:
         $ref: '#/components/requestBodies/Body'
+      description: 'Creates a collection of files, which are available to the Partner in Partner Center, and the End Business in Business App. Note* This feature differs between the UI, and API. You must host the files and supply the urls when using the API. But if you use the file group system via the Vendor Center UI, you upload the files, and Vendasta will host them.'
     get:
       tags:
         - account
@@ -1093,6 +1094,7 @@ paths:
       summary: Replace a File Group
       requestBody:
         $ref: '#/components/requestBodies/Body'
+      description: 'This replaces the entire contents of a file group, so if you are looking to update a file group, ensure your including what is already in place along with your addition. Note* This feature differs between the UI, and API. You must host the files and supply the urls when using the API. But if you use the file group system via the Vendor Center UI, you upload the files, and Vendasta will host them.'
     delete:
       tags:
         - account
