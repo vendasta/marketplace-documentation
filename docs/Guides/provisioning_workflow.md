@@ -6,7 +6,7 @@ flowchart LR
   -->R(Pending Activation Resolved)-->A(Product Avaialble within Platform)
 ```
 
-## Product Lifecycle
+## Product Life Cycle
 
 An activation can be in one of 4 states for any given Account:
 

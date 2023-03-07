@@ -10,6 +10,45 @@ info:
 security:
   - BearerAuth: []
 paths:
+  /oauth/token:
+    post:
+      security: []
+      tags:
+        - oauth
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/access_token'
+        '400':
+          description: Invalid JSON Web token
+        '404':
+          description: App ID not found
+      summary: Get OAuth Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - grant_type
+                - assertion
+              properties:
+                grant_type:
+                  type: string
+                  description: 'Use the following string, URL-encoded as necessary: urn:ietf:params:oauth:grant-type:jwt-bearer'
+                assertion:
+                  type: string
+                  description: 'The JWT, including signature'
+        required: true
   /account/:
     get:
       tags:
@@ -195,6 +234,265 @@ paths:
           schema:
             type: string
       summary: Get Session Transfer URL
+  '/account/{account_id}/users':
+    get:
+      tags:
+        - account
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/associated_user'
+        '400':
+          description: Invalid Request
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+      summary: List Users
+  '/account/{account_id}/addons':
+    get:
+      tags:
+        - account
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/active_addon'
+        '400':
+          description: Invalid Request
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+      summary: List Activated Addons
+  '/account/{account_id}/file-group/':
+    post:
+      tags:
+        - account
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/file_group'
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+        '404':
+          description: Account not found
+      summary: Create a File Group
+      requestBody:
+        $ref: '#/components/requestBodies/Body'
+      description: |-
+        Creates a collection of files, which are available to the Partner in Partner Center, and the End Business in Business App. 
+
+        The Activity will automatically be posted to the Activity Stream in Business App alerting users that they have a new file ready to download, and will include the supplied `description`.
+
+        Note* This feature differs between the UI, and API. You must host the files and supply the urls when using the API. But if you use the file group system via the Vendor Center UI, you upload the files, and Vendasta will host them.
+    get:
+      tags:
+        - account
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+        - description: Must be a positive integer.
+          name: page_size
+          in: query
+          schema:
+            type: integer
+        - name: cursor
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/file_group'
+                  next_url:
+                    type: string
+                    description: 'The URL to call to fetch the next page of results, if there are any.'
+                  total_results:
+                    type: integer
+                    description: The total number of results (across all pages).
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+        '404':
+          description: Account not found
+      summary: List File Groups
+  '/account/{account_id}/file-group/{file_group_id}/':
+    put:
+      tags:
+        - account
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+        - required: true
+          description: The ID of the file group to update.
+          in: path
+          name: file_group_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/file_group'
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+        '404':
+          description: Account or file group not found
+      summary: Replace a File Group
+      requestBody:
+        $ref: '#/components/requestBodies/Body'
+      description: |-
+        This replaces the entire contents of a file group, so if you are looking to update a file group, ensure your including what is already in place along with your addition. Note* This feature differs between the UI, and API. You must host the files and supply the urls when using the API. But if you use the file group system via the Vendor Center UI, you upload the files, and Vendasta will host them.
+
+        Unlike the File Group create, the replace action will not trigger an Activity to be sent to the Activity Stream.
+    delete:
+      tags:
+        - account
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+        - required: true
+          description: The ID of the file group to delete.
+          in: path
+          name: file_group_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/file_group'
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+        '404':
+          description: Account or file group not found
+      summary: Delete a File Group
+    get:
+      tags:
+        - account
+      parameters:
+        - required: true
+          description: A unique account ID that can be used to identify and reference an account.
+          in: path
+          name: account_id
+          schema:
+            type: string
+        - required: true
+          description: The ID of the file group to delete.
+          in: path
+          name: file_group_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  took:
+                    type: integer
+                    description: 'The total response time, in milliseconds.'
+                  data:
+                    $ref: '#/components/schemas/file_group'
+        '401':
+          description: Invalid Authentication
+        '403':
+          description: Not authorized to access account.
+        '404':
+          description: Account or file group not found
+      summary: Get a File Group
   /activity/:
     post:
       tags:
@@ -260,6 +558,8 @@ paths:
                 - title
                 - link
         required: true
+      description: 'Submit an `Activity` for an Event that occured within your App, or a prompt for action that needs to be taken within your App. See the [Guide](https://developers.vendasta.com/vendor/4cb70950bb594-activity-stream) for details.'
+      operationId: ''
   /customer:
     post:
       tags:
@@ -639,64 +939,6 @@ paths:
           schema:
             type: string
       summary: Get Marketplace Application
-  '/account/{account_id}/users':
-    get:
-      tags:
-        - account
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  took:
-                    type: integer
-                    description: 'The total response time, in milliseconds.'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/associated_user'
-        '400':
-          description: Invalid Request
-      parameters:
-        - required: true
-          description: A unique account ID that can be used to identify and reference an account.
-          in: path
-          name: account_id
-          schema:
-            type: string
-      summary: List Users
-  '/account/{account_id}/addons':
-    get:
-      tags:
-        - account
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  took:
-                    type: integer
-                    description: 'The total response time, in milliseconds.'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/active_addon'
-        '400':
-          description: Invalid Request
-      parameters:
-        - required: true
-          description: A unique account ID that can be used to identify and reference an account.
-          in: path
-          name: account_id
-          schema:
-            type: string
-      summary: List Activated Addons
   /activation/resolve/:
     post:
       tags:
@@ -779,45 +1021,6 @@ paths:
           schema:
             type: string
       summary: List Pending Activations
-  /oauth/token:
-    post:
-      security: []
-      tags:
-        - oauth
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  took:
-                    type: integer
-                    description: 'The total response time, in milliseconds.'
-                  data:
-                    $ref: '#/components/schemas/access_token'
-        '400':
-          description: Invalid JSON Web token
-        '404':
-          description: App ID not found
-      summary: Get OAuth Token
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - grant_type
-                - assertion
-              properties:
-                grant_type:
-                  type: string
-                  description: 'Use the following string, URL-encoded as necessary: urn:ietf:params:oauth:grant-type:jwt-bearer'
-                assertion:
-                  type: string
-                  description: 'The JWT, including signature'
-        required: true
   '/user/{user_id}':
     get:
       tags:
@@ -924,6 +1127,8 @@ paths:
                   items:
                     $ref: '#/components/schemas/executive_report_data'
               type: object
+      description: 'Submit data to populate the [Executive Report](https://support.vendasta.com/hc/en-us/articles/4406961302935) with cards aggregated for the past Week. See [Guide](https://developers.vendasta.com/vendor/64ecf7b9ac031-executive-report) for further details.'
+      operationId: ''
   /executive_report/monthly/:
     post:
       tags:
@@ -974,207 +1179,7 @@ paths:
                     $ref: '#/components/schemas/executive_report_data'
               type: object
         required: true
-  '/account/{account_id}/file-group/':
-    post:
-      tags:
-        - account
-      parameters:
-        - required: true
-          description: A unique account ID that can be used to identify and reference an account.
-          in: path
-          name: account_id
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  took:
-                    type: integer
-                    description: 'The total response time, in milliseconds.'
-                  data:
-                    $ref: '#/components/schemas/file_group'
-        '401':
-          description: Invalid Authentication
-        '403':
-          description: Not authorized to access account.
-        '404':
-          description: Account not found
-      summary: Create a File Group
-      requestBody:
-        $ref: '#/components/requestBodies/Body'
-      description: |-
-        Creates a collection of files, which are available to the Partner in Partner Center, and the End Business in Business App. 
-
-        The Activity will automatically be posted to the Activity Stream in Business App alerting users that they have a new file ready to download, and will include the supplied `description`.
-
-        Note* This feature differs between the UI, and API. You must host the files and supply the urls when using the API. But if you use the file group system via the Vendor Center UI, you upload the files, and Vendasta will host them.
-    get:
-      tags:
-        - account
-      parameters:
-        - required: true
-          description: A unique account ID that can be used to identify and reference an account.
-          in: path
-          name: account_id
-          schema:
-            type: string
-        - description: Must be a positive integer.
-          name: page_size
-          in: query
-          schema:
-            type: integer
-        - name: cursor
-          in: query
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  took:
-                    type: integer
-                    description: 'The total response time, in milliseconds.'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/file_group'
-                  next_url:
-                    type: string
-                    description: 'The URL to call to fetch the next page of results, if there are any.'
-                  total_results:
-                    type: integer
-                    description: The total number of results (across all pages).
-        '401':
-          description: Invalid Authentication
-        '403':
-          description: Not authorized to access account.
-        '404':
-          description: Account not found
-      summary: List File Groups
-  '/account/{account_id}/file-group/{file_group_id}/':
-    put:
-      tags:
-        - account
-      parameters:
-        - required: true
-          description: A unique account ID that can be used to identify and reference an account.
-          in: path
-          name: account_id
-          schema:
-            type: string
-        - required: true
-          description: The ID of the file group to update.
-          in: path
-          name: file_group_id
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  took:
-                    type: integer
-                    description: 'The total response time, in milliseconds.'
-                  data:
-                    $ref: '#/components/schemas/file_group'
-        '401':
-          description: Invalid Authentication
-        '403':
-          description: Not authorized to access account.
-        '404':
-          description: Account or file group not found
-      summary: Replace a File Group
-      requestBody:
-        $ref: '#/components/requestBodies/Body'
-      description: |-
-        This replaces the entire contents of a file group, so if you are looking to update a file group, ensure your including what is already in place along with your addition. Note* This feature differs between the UI, and API. You must host the files and supply the urls when using the API. But if you use the file group system via the Vendor Center UI, you upload the files, and Vendasta will host them.
-
-        Unlike the File Group create, the replace action will not trigger an Activity to be sent to the Activity Stream.
-    delete:
-      tags:
-        - account
-      parameters:
-        - required: true
-          description: A unique account ID that can be used to identify and reference an account.
-          in: path
-          name: account_id
-          schema:
-            type: string
-        - required: true
-          description: The ID of the file group to delete.
-          in: path
-          name: file_group_id
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  took:
-                    type: integer
-                    description: 'The total response time, in milliseconds.'
-                  data:
-                    $ref: '#/components/schemas/file_group'
-        '401':
-          description: Invalid Authentication
-        '403':
-          description: Not authorized to access account.
-        '404':
-          description: Account or file group not found
-      summary: Delete a File Group
-    get:
-      tags:
-        - account
-      parameters:
-        - required: true
-          description: A unique account ID that can be used to identify and reference an account.
-          in: path
-          name: account_id
-          schema:
-            type: string
-        - required: true
-          description: The ID of the file group to delete.
-          in: path
-          name: file_group_id
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  took:
-                    type: integer
-                    description: 'The total response time, in milliseconds.'
-                  data:
-                    $ref: '#/components/schemas/file_group'
-        '401':
-          description: Invalid Authentication
-        '403':
-          description: Not authorized to access account.
-        '404':
-          description: Account or file group not found
-      summary: Get a File Group
+      description: 'Submit data to populate the [Executive Report](https://support.vendasta.com/hc/en-us/articles/4406961302935) with cards aggregated for the past Month. See [Guide](https://developers.vendasta.com/vendor/64ecf7b9ac031-executive-report) for further details.'
   /change_spend/resolve:
     post:
       tags:
