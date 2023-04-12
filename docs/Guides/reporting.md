@@ -298,9 +298,13 @@ Example:
 
 ## Testing 
 
-The Executive Report is accessed via Business Center.
+Like most Marketplace Product features, the Executive Report resides in the Business App. From the Account Details page in Partner Center, you can select 'Admin View' in the Reports tile to access the report directly:
+![Exec Report Access](../../assets/images/guides/reporting/testing_access.png)
 
-Submit tests for the previous period, whether monthly or weekly. If you are submitting tests for the current period they won't show up as that period has not yet been released. Tests should show up in Business Center very shortly after submission.
+Tests should show up in the submitted time period's report very shortly after submission.
+
+<!-- theme: warning -->
+>Submit tests for the previous period, whether monthly or weekly. If you are submitting tests for the current period they won't show up in the date selector(found at the top right of the screen) as that period has not yet been released. 
 
 ### Example of a full payload
 
