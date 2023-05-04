@@ -203,6 +203,10 @@ paths:
           schema:
             type: string
       summary: Get Account Settings
+      description: |-
+        Partners can have sub-accounts for branding purposes called Markets. Every Account must be assigned to a Market, even if it is the `default` Market. The majority of Partners have only the single default Market. The `platform_settings` object returns the partner branding data for the specific partner_id/market_id combo. 
+
+        Ensure that you set your branding data at either the Account, or the Market level. If it is configured per partner_id, it will end in a breach of white-label for users in any Market other than that of the latest activated Account!
   '/account/{account_id}/session-transfer':
     get:
       tags:
