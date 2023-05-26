@@ -43,7 +43,7 @@ Purchase notification emails will always be sent to any recipients configured. Y
 
 _Vendor Center -> Product -> Product Info -> Product Activation->Notifications_
 
-![Add Notification Recipients](../../assets/images/provisioning/notification_recipients.png)
+![Add Notification Recipients](../../assets/images/provisioning/notification_recipients_2.png)
 
 Activation email notifications can be sent in conjunction with the webhooks to keep your team in the loop. If your offering has a dashboard, and you are providing SSO it is not recommended to use email as the sole source of your product provisioning as it is a manual process. The email will contain the order form, but doesn't include all of the Account data that the webhook does.
 
