@@ -4,6 +4,8 @@ servers:
     description: Production Server
   - url: 'https://developers-demo.vendasta.com/api/v1'
     description: Demo Server
+  - description: Legacy Server
+    url: 'https://marketplace-proxy-demo.vendasta-internal.com/api/v1'
 info:
   version: '1.0'
   title: Vendasta Marketplace API V1 Endpoints
