@@ -2,7 +2,7 @@ openapi: 3.0.0
 servers:
   - url: 'https://developers.vendasta.com/api/v1'
     description: Production Server
-  - url: 'https://marketplace-proxy-demo.vendasta-internal.com/api/v1'
+  - url: 'https://developers-demo.vendasta.com/api/v1'
     description: Demo Server
 info:
   version: '1.0'
