@@ -51,7 +51,7 @@ This guide aims to provide a step-by-step walkthrough for configuring [SAML](htt
 
 Simplified explanation of the SP-initiated flow of SAML using Vendasta as the Identity Provider (IDP):
 
-![Alt text](./../../assets/images/guides/sso/sp-initiated-flow-diagram.png)
+![Alt text](./../../assets/images/guides/sso/sp_initiated_flow_diagram.png)
 
 1. The process begins when the end user (usually an employee or customer) attempts to access a resource or application hosted by the Service Provider (SP). 
 
@@ -83,11 +83,11 @@ Products **→** (Choose a product that you want to configure) **→** Integrati
 
 If you don’t have any products yet, follow this [guide](https://developers.vendasta.com/vendor/112210c5ddd88-configuring-your-products-and-services#product) to create one.
 
-![image.png](./../../assets/images/guides/sso/integration-tab.png)
+![image.png](./../../assets/images/guides/sso/integration_tab.png)
 
 Change the Access type to SAML by selecting it from the dropdown menu under Access and SSO section.
 
-![image.png](./../../assets/images/guides/sso/access-and-sso-section.png)
+![image.png](./../../assets/images/guides/sso/access_and_sso_section.png)
 
 ## Step 2 - Create SAML Service Provider Configuration 
 
@@ -101,11 +101,11 @@ To configure IDP details in your application, you need IDP metadata. There are t
 
 1. Click the **Download IdP metadata** button, which is accessible under the IdP metadata tab. This will download the metadata as an XML file.
 
-![image.png](./../../assets/images/guides/sso/download-idp-metadata.png)
+![image.png](./../../assets/images/guides/sso/download_idp_metadata.png)
 
 2. By clicking the copy icon in each field, you can manually copy the Entity ID, SSO URL, and SSO Certificate.
 
-![image.png](./../../assets/images/guides/sso/copy-idp-metadata.png)
+![image.png](./../../assets/images/guides/sso/copy_idp_metadata.png)
 
 
 There is an option to regenerate certificate in the SSO Certificate field. By clicking this, you will be able to renew your certificate whenever you need it.
@@ -114,7 +114,7 @@ There is an option to regenerate certificate in the SSO Certificate field. By cl
 
 Switch the tab by clicking **Service provider details**. You can configure your service provider by uploading your metadata file or by manually entering the details.
 
-![image.png](./../../assets/images/guides/sso/service-provider-details-tab.png)
+![image.png](./../../assets/images/guides/sso/service_provider_details_tab.png)
 
 1. **Using Metadata File:**
     Use the Upload details button on the Service provider details tab to upload your service provider metadata XML file. The file you are uploading should be a valid XML file, and the structure of your metadata should follow the guidelines in this [manual](http://docs.oasis-open.org/security/saml/v2.0/saml-metadata-2.0-os.pdf).
