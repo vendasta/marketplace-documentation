@@ -1,6 +1,6 @@
 # Guide to Setup SAML SSO
 
-This guide aims to provide a step-by-step walkthrough for configuring [SAML](https://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf) Single Sign-On (SSO) using Vendasta as the Identity Provider (IDP). SAML, which stands for Security Assertion Markup Language, is a widely used standard for enabling single sign-on and identity federation across different web applications. Before we dive into the configuration process, let's understand some key technical terms related to SAML.
+This guide aims to provide a step-by-step walkthrough for configuring [SAML](https://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf) Single Sign-On (SSO) using Vendasta as the Identity Provider (IDP). SAML, which stands for **Security Assertion Markup Language**, is a widely used standard for enabling single sign-on and identity federation across different web applications. Before we dive into the configuration process, let's understand some key technical terms related to SAML.
 
 ## Technology Review:
 ### Key Terms:
@@ -14,9 +14,9 @@ This guide aims to provide a step-by-step walkthrough for configuring [SAML](htt
     - The Identity Provider is the system that authenticates users and provides identity information to the Service Provider. Vendasta will serve as your Identity Provider in this setup.
 
 3. **Metadata:**
-    - Metadata in the context of SAML (Security Assertion Markup Language) refers to XML documents that contain important configuration information about either the Identity Provider (IDP) or the Service Provider (SP). These documents serve as a way for these entities to exchange critical information required for successful SAML-based single sign-on (SSO).
+    - Metadata in the context of SAML refers to XML documents that contain important configuration information about either the Identity Provider (IDP) or the Service Provider (SP). These documents serve as a way for these entities to exchange critical information required for successful SAML-based single sign-on (SSO).
 
-- **IDP Metadata:** The IDP metadata typically contains information about the Identity Provider, including its entity ID, SSO and Single Logout Service URLs, and its public key for signing SAML assertions. The Service Provider can consume this metadata to configure its SAML SSO settings correctly. IDP Metadata will look like the below example:
+    - **IDP Metadata:** The IDP metadata typically contains information about the Identity Provider, including its entity ID, SSO and Single Logout Service URLs, and its public key for signing SAML assertions. The Service Provider can consume this metadata to configure its SAML SSO settings correctly. IDP Metadata will look like the below example:
 ```xml
 <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://sso-api-demo.apigateway.co/saml2/spc/oWw1OqV" validUntil="2024-09-11T04:57:03.170901138Z" cacheDuration="31536000000000000">
   <IDPSSODescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
@@ -36,7 +36,7 @@ This guide aims to provide a step-by-step walkthrough for configuring [SAML](htt
   </IDPSSODescriptor>
 </EntityDescriptor>
 ```
-- **SP Metadata:** Similarly, the Service Provider can also have its own metadata document that describes its configuration, including its entity ID, ACS URL, and public key. The Identity Provider can use this metadata to configure its settings when establishing trust with the Service Provider. SP Metadata will look like the below example:
+  - **SP Metadata:** Similarly, the Service Provider can also have its own metadata document that describes its configuration, including its entity ID, ACS URL, and public key. The Identity Provider can use this metadata to configure its settings when establishing trust with the Service Provider. SP Metadata will look like the below example:
 ```xml
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="IAMShowcase" validUntil="2025-12-09T09:13:31.006Z">
   <md:SPSSODescriptor AuthnRequestsSigned="false" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
@@ -76,8 +76,66 @@ Now, let's proceed with the steps to configure SAML SSO with Vendasta as the IDP
 
 ## Step 1 - Navigate to Integration tab to Configure SSO
 
-> [!NOTE]  
-> Access Vendor Center by logging in directly in at https://vendors.vendasta.com, or navigate from Partner Center using the top navbar App icon beside your name.
+  
+> **Access Vendor Center** by logging in directly in at https://vendors.vendasta.com, or navigate from Partner Center using the top navbar App icon beside your name.
 
-> **Note**
-> Text
+Products **→** (Choose a product that you want to configure) **→** Integration
+
+If you don’t have any products yet, follow this [guide](https://developers.vendasta.com/vendor/112210c5ddd88-configuring-your-products-and-services#product) to create one.
+
+![image.png](./../../assets/images/guides/sso/integration-tab.png)
+
+Change the Access type to SAML by selecting it from the dropdown menu under Access and SSO section.
+
+![image.png](./../../assets/images/guides/sso/access-and-sso-section.png)
+
+## Step 2 - Create SAML Service Provider Configuration 
+
+Click the **Create new SAML** Config button to create a new configuration for your product. After the successful creation of the configuration, you can see two new sections: *IdP metadata* and *Service provider details*.
+
+![image.png](./../../assets/images/guides/sso/create_new_saml_config.png)
+
+
+## Step 3 - Download or Copy IdP Metadata
+To configure IDP details in your application, you need IDP metadata. There are two ways to obtain IdP metadata.
+
+1. Click the **Download IdP metadata** button, which is accessible under the IdP metadata tab. This will download the metadata as an XML file.
+
+![image.png](./../../assets/images/guides/sso/download-idp-metadata.png)
+
+2. By clicking the copy icon in each field, you can manually copy the Entity ID, SSO URL, and SSO Certificate.
+
+![image.png](./../../assets/images/guides/sso/copy-idp-metadata.png)
+
+
+There is an option to regenerate certificate in the SSO Certificate field. By clicking this, you will be able to renew your certificate whenever you need it.
+
+## Step 4 - Configure your Service Provider Details
+
+Switch the tab by clicking **Service provider details**. You can configure your service provider by uploading your metadata file or by manually entering the details.
+
+![image.png](./../../assets/images/guides/sso/service-provider-details-tab.png)
+
+1. **Using Metadata File:**
+    Use the Upload details button on the Service provider details tab to upload your service provider metadata XML file. The file you are uploading should be a valid XML file, and the structure of your metadata should follow the guidelines in this [manual](http://docs.oasis-open.org/security/saml/v2.0/saml-metadata-2.0-os.pdf).
+
+2. **Using Form Fields:**
+    Under the upload button, there is a set of input fields where you can manually configure your service provider.
+
+|                                             |   | 
+|---------------------------------------------|----------------------------|
+| **Entity ID:** | Specifies the SAML configuration's unique identifier. |          
+| **Binding:** | The only binding type supported by Vendasta at the moment is HTTP POST. |  
+| **Assertion Consumer Service URL:** | After successful login, a POST request will be sent to this URL. |
+| **Start URL:** | The entry URL of the service provider, which initiates the SAML SSO flow. You can also use <accountId>, which is an optional placeholder to bind account ID. |
+| **Logout URL:** | When a Business App session ends, the user is directed to this URL. |
+| **Name ID Format:** | There are two types that Vendasta currently supports.<ul><li> Persistent User ID - Vendasta's user ID will be provided in the SAML assertion.</li> <li> Email Address - User's email address will be provided in the SAML assertion.</li></ul> |
+
+
+
+Once you've finished configuring, click the **Save** button. That's all. SAML SSO is now available for your application.
+
+
+
+
+
