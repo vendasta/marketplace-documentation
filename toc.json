@@ -47,6 +47,11 @@
                "type":"item",
                "title":"Example implementation of Requirement 2",
                "uri":"docs/Guides/creating_new_vendor_app.md"
+            },
+             {
+               "type":"item",
+               "title":"Guide to Setup SAML SSO for your App",
+               "uri":"docs/Guides/guide_to_setup_saml_sso.md"
             }
           ]
       },
