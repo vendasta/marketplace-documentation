@@ -129,7 +129,7 @@ Switch the tab by clicking **Service provider details**. You can configure your 
 | **Assertion Consumer Service URL:** | After successful login, a POST request will be sent to this URL. |
 | **Start URL:** | The entry URL of the service provider, which initiates the SAML SSO flow. You can also use <accountId>, which is an optional placeholder to bind account ID. |
 | **Logout URL:** | When a Business App session ends, the user is directed to this URL. |
-| **Name ID Format:** | There are two types that Vendasta currently supports.<ul><li> Persistent User ID - Vendasta's user ID will be provided in the SAML assertion.</li> <li> Email Address - User's email address will be provided in the SAML assertion.</li></ul> |
+| **Name ID Format:** | There are two types that Vendasta currently supports.<ul><li> Persistent User ID - Vendasta's user ID will be provided in the SAML assertion.</li> <li> Email Address - User's email address will be provided in the SAML assertion. <br> **Note**: This option can not be used for products distributed in the marketplace.</li></ul> |
 
 
 
