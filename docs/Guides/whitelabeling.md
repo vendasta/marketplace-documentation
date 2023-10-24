@@ -1,6 +1,6 @@
-# Whitelabelling & Branding
+# White-labeling & Branding
 
-## Vendasta's Platform Whitelabel
+## Vendasta's White-labeled Platform
 
 Vendasta is a white-label ready **platform**. There must not be any mention of _‘Vendasta’_ in your content.
 You may want to keep the term 'Vendasta' out of your codebase entirely; but if not, aim to avoid mention of Vendasta on anything client-facing - including:
