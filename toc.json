@@ -26,7 +26,7 @@
       },
       {
          "type":"divider",
-         "title":"Integration Guide"
+         "title":"Guides"
       },
       {
          "type":"item",
@@ -69,6 +69,11 @@
          "type":"item",
          "title":"Requirement 5: Customer List CRM",
          "uri":"docs/Guides/customer_list.md"
+      },
+      {
+         "type":"item",
+         "title":"Option: White-label Support",
+         "uri":"docs/Guides/whitelabeling.md"
       },
       {
          "type":"divider",
