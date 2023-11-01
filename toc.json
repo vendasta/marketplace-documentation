@@ -16,11 +16,6 @@
       },
       {
          "type":"item",
-         "title":"Pricing & Distribution",
-         "uri":"docs/GettingStarted/pricing-and-distribution.md"
-      },
-      {
-         "type":"item",
          "title":"Integration Requirement Checklist",
          "uri":"docs/GettingStarted/integration_requirements.md"
       },

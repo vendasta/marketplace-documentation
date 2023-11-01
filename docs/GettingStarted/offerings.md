@@ -51,7 +51,9 @@ If your _Base Offering_ has multiple plans or versions you can configure it to h
 >_Tips:_
 >* If you have a _Freemium_ option for your offering, that can be the first Edition. The nomenclature most commonly used for Freemium offerings in the Marketplace is `Express`
 >* The Full offering name as displayed will be `[Product Name] | [Edition Name]` so keep this in mind when naming your Editions
+<!-- theme: warning -->
 
+> Edition Changes should NOT be rejected due to system limitations at this time.
 &nbsp;
 
 ### Add-on
@@ -79,25 +81,22 @@ For Multi-purchasable Add-ons that include an Order Form, the Order Form can be 
 <!-- theme: warning -->
 >_Please Note:_
 >
->* Currently an Add-on can not be associated with more than one Product, and would need to be copied to any additional Products it applies to
->* Add-on can not be associated with specific Editions. If an Add-on is activated on an Edition that doesn't support it, at this time you will need to reject the activation with an appropriate error message.
+>* Add-ons can not be associated with more than one Product, and would need to be copied to any additional Products it applies to
+>* Add-ons can not be associated with specific Editions. If an Add-on is activated on an Edition that doesn't support it, at this time you will need to reject the activation with an appropriate error message.
 >* Beyond activation, all other integration features belong to the parent Product. Trials, Reporting, SSO, Activity Stream, and Customer List data is shared with and managed by the parent Product.
 
 &nbsp;
 
 ## Order Forms
 
-If your application requires additional information beyond the basic Account information you receive from the _Purchase Webhook_, or your offering is a service that isn't utilizing the Webhooks, you may configure an order form for your Product or Add-on in Vendor Center.
+Order forms may be configured for either Products or Add-ons in Vendor Center.
 
-There are two types of order form fields
+There are two types of order form fields:
 
-**Common Form Fields** - _fields to be auto filled if the data exists for the Account_
+**Common Form Fields**
 
-These fields are optional by default, but you may check them off as required.
-
-* Business Information - ***It is suggested that if you absolutely need country that you add a required _Custom Field_ for this as it's not guaranteed to be within the Address field or on the Account object data**
-* Primary Contact – The first *User* from the Account. ***It is suggested if you need particular contact information that you add required _Custom Fields_ for this**, so you can add a description indicating who's information you need, and what you will use it for.
-* Salesperson – Principle Salesperson the Channel Partner has assigned to the Account
+* Only diplsays in form to user if checked off as required. Fields are auto filled if the data exists for the Account. If available data will be passed on webhook regardless of whether these fields are checked off as being required.
+* Business Data is already what's on the Account Object provided in the provisioning webhook, but may be overriden on the order form. Connect with your Operations team to see if the common form fields are intended to be used.
 
 **Custom fields**
 
@@ -105,13 +104,12 @@ These fields are optional by default, but you may check them off as required.
 * The optional front end validation regex uses javascript formatting
 
 <!-- theme: info -->
->_Special Field - **End User**:_
->* This field provides a dropdown with all the users on the Account
->* Use this to specify who the Admin or Workspace owner will be if this is something that your Product requires
->* Use this for your Add-on if you offer user seat billing
-
-**More information** 
-For a detailed breakdown of how to build out a Marketplace Order Form check out the [Order Form Guide](https://docs.google.com/document/d/1kYCSYxcSu650aWa9fhaQnDEFiXP1jiPGdShtKK8kO80/edit?usp=sharing)
+>_Special Field Type - **End User**:_
+>* This field provides a dropdown with all the End Users on the Account
+>* Use this to specify who the Admin or Workspace owner will be if this is something that your Product requires. Note that it only provides the `legacy_user_id` in the purchase webhook.
+>* You may use this on an Add-on representing a 'seat' if you offer user seat billing to associate the seat with an End User at time of purchase.
+--- 
+_For a detailed breakdown of how to build out a Marketplace Order Form check out the [Order Form Guide](https://support.vendasta.com/hc/en-us/articles/11457612251799-Order-Form-Guide-for-Marketplace-Vendors)_
 
 &nbsp;
 
@@ -120,7 +118,7 @@ For a detailed breakdown of how to build out a Marketplace Order Form check out 
 **Publishing Status is controlled in Vendor Center**
 ![publishing status](../../assets/images/getting_started/publishing_status.png)
 
-The Publishing status controls the visibility of your Product (and its Add-ons) in your Partner Center. **This does not affect whether other Resellers can see your product - that is the Distribution Status, which is controlled by Vendasta.**
+_The Publishing status controls the visibility of your Product (and its Add-ons) in your Partner Center. **This does not affect whether other Resellers can see your product - that is the Distribution Status, which is controlled by Vendasta.**_
 
 **Draft Mode**
 
@@ -138,7 +136,7 @@ _Move to Draft:_
 
 **Integration Testing**
 
-It is suggested that if you are utilizing any of the advanced integration features that you publish your Product so that you may do integration testing since most tests require the Product to be active on an Account.
+If you are utilizing any of the advanced integration features you will need to publish your Product so that you may do integration testing in Partner Center, or Business App since most tests require the Product to be active on an Account.
 
 
 ### Versioning

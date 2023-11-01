@@ -1,13 +1,12 @@
 # Integration Requirement Checklist
 
-Every Product that intends to be listed in the Marketplace will have to follow the points outlined below **before it can be approved and distributed to all channel partners.** 
+Every Product that intends to be listed in the Marketplace will have to follow the applicable points outlined below **before it can be approved and distributed to all channel partners.** 
 
-Fulfilled Services will follow a different set of requirements. Please contact Marketplace Support if you intend to submit a fulfilled service to the Marketplace for distribution approval.
 
 <!-- theme: danger -->
 >**Signed Contract** - This should be in place before integration commences
 
-## Technical Project Checklist
+## WebApp Checklist
  
 |  | **Checklist Item**  | **Details** 
 |---| --- | --- |
@@ -19,4 +18,8 @@ Fulfilled Services will follow a different set of requirements. Please contact M
 | ▢ | **Customer List(On hold pending release of new CRM)** </br>_Applicable if Vendor gathers or utilizes customer data. i.e the SMB/SME’s patrons (*not applicable for prospects)_| Two way CRM Syncing implemented | 
 | ▢ | **Vendasta White-label**| The term *‘Vendasta’* is not mentioned anywhere in the dashboard, error codes, or client side redirect paths, etc. | 
 
+## Services
 
+Services **require** reporting and document handoff to be within the platform. 
+
+Client communications should run through the [Inbox](https://support.vendasta.com/hc/en-us/articles/7573902039575-Inbox-Messaging-Product-Overview#h_01HCWYPD7GAYGRVHQJ47MSKYCK) messaging system, and any shared project management be executed via the Tasks Manager [project fulfillment](https://support.vendasta.com/hc/en-us/articles/4407264708887-Fulfillment-Integration#to-begin-0-1) system. 
