@@ -53,4 +53,4 @@ _To learn more about Business App visit our [Support Center](https://support.ven
 ---
 You should now have a basic understanding of the Vendasta ecosystem. If you need clarification on something, or have any suggestions on how to improve this documentation, let us know via the feedback button on the right hand side of Vendor Center.
 
-**Next:** [Managing Products & Services](https://developers.vendasta.com/vendor/112210c5ddd88-configuring-your-products-and-services)
+**Next:** [Managing Products & Services](./offerings.md)
