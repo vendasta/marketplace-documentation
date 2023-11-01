@@ -149,7 +149,3 @@ If you are utilizing any of the advanced integration features you will need to p
 **Add-ons**
 
 Add-ons do not currently have a versioning system. Any updates you make to your Add-on Marketing, Order Form, etc. will immediately go live.
-
----
-
-**Next:** [Pricing & Distribution](https://developers.vendasta.com/vendor/ZG9jOjIxMDYwOTE0-pricing-and-distribution)
