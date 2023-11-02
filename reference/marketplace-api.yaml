@@ -1119,6 +1119,7 @@ paths:
                     - WEBSITE
                     - SEO
                     - ADVERTISING
+                    - OTHER
                 account_id:
                   type: string
                   description: A unique account ID that can be used to identify and reference an account.
@@ -1170,6 +1171,7 @@ paths:
                     - SEO
                     - ADVERTISING
                     - CONTENT_AND_EXPERIENCE
+                    - OTHER
                 account_id:
                   type: string
                   description: A unique account ID that can be used to identify and reference an account.
