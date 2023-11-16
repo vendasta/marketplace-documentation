@@ -14,6 +14,17 @@ If you intend to distribute your product to the Vendasta Reseller network rather
 ## Platform Overview
 There are several Vendasta dashboards, which we call 'Centers', that you will interact with to configure, test, and manage your Marketplace Offerings in an ongoing fashion.
 
+### Vendor Center
+![Vendor Center](../../assets/images/getting_started/vendor_center.png)
+
+<!-- theme: info -->
+>* Create Products & Add-ons
+>* Configure and manage skus
+>* View, and Accept or Reject orders of your skus
+>* See Resellers selling your skus, and Accounts your skus are active on
+>* Contact Resellers selling your skus via the [Inbox System](https://support.vendasta.com/hc/en-us/articles/7573902039575-Inbox-Messaging-Product-Overview#h_01HCWYPD7GAYGRVHQJ47MSKYCK) when you see an opportunity to accelerate their sales
+
+
 ### Partner Center
 
 ![Partner Center](../../assets/images/getting_started/partner_center.png)
@@ -24,18 +35,7 @@ _To learn more about Partner Center visit our [Support Center](https://support.v
 >* [Manage Admin platform access for your team](https://partners.vendasta.com/my-team)
 >* [Create test Accounts](https://partners.vendasta.com/manage-accounts)
 >* [Test activation of your skus](https://support.vendasta.com/hc/en-us/articles/4406958134807-Activate-products-for-your-customers)
->* [Manage End User Account access](https://support.vendasta.com/hc/en-us/articles/4406951619479)
->* [Access the End User Business App](https://support.vendasta.com/hc/en-us/articles/4406958143383)
-
-### Vendor Center
-![Vendor Center](../../assets/images/getting_started/vendor_center.png)
-
-<!-- theme: info -->
->* Create Products & Add-ons
->* Configure and manage skus
->* View, and Accept or Reject orders of your skus
->* See Resellers selling your skus, and Accounts your skus are active on
->* Contact Resellers selling your skus via the [Inbox System](https://support.vendasta.com/hc/en-us/articles/7573902039575-Inbox-Messaging-Product-Overview#h_01HCWYPD7GAYGRVHQJ47MSKYCK) when you see an opportunity to accelerate their sales
+>* [Access the Business App](https://support.vendasta.com/hc/en-us/articles/4406958143383)
 
 
 ### Whitelabelled Business App
