@@ -35,11 +35,6 @@
          "items":[
             {
                "type":"item",
-               "title":"miniOrange Wordpress SP plugin",
-               "uri":"docs/Guides/miniOrange_sp_guide.md"
-            },
-            {
-               "type":"item",
                "title":"Example implementation of Requirement 2",
                "uri":"docs/Guides/creating_new_vendor_app.md"
             },
