@@ -107,20 +107,19 @@ The `action` field on the Purchase Webhook indicates which payload type you are 
 Once a value has been entered in the _Integration-->Integration Settings-->Purchase URLs_ a testing tab will appear on the far right for sending mock purchase data to your purchase urls.
 However, **if you require order form data to provision your sku, and mock data doesn't suffice** you should test the activations from Partner Center. Activation methods are covered below.
 
-**Test Accounts**
+**Step 1) Create Test Accounts**
 
 Products are activated on Accounts, so you must create test Account(s) before you can test product activation. You can [create](https://support.vendasta.com/hc/en-us/articles/4406959813911) as many Accounts as you want to test with in Partner Center. 
 
 <!-- theme: info -->
 > If you are actively using the platform to sell to your own customers you may want to create a clear naming convention for test accounts. If your circumstances require it, we can provide access to our demo enviornment, but it is less complex to create a product per development enviornment that you utilize.
 
-**Activation Testing**
-
-
-Prior to your products being released they start in 'testing mode'. While in testing mode, when you cancel an activation, the sku will immediately deactivate, rather than waiting until the end of the configured billing term. This means during testing that you could receive the cancellation, and de-provision webhooks within hundredths of a second of one another. 
+**Step 2) Test Activation**
 
 Activate and deactivate your own offerings as much as you desire. The quick start for this is below - for more detailed information see the [help center](https://support.vendasta.com/hc/en-us/articles/4406958134807).
 
+<!-- theme: info -->
+>Prior to your products being released they start in 'testing mode'. While in testing mode, when you cancel an activation, the sku will immediately deactivate, rather than waiting until the end of the configured billing term. This means during testing that you could receive the cancellation, and de-provision webhooks within hundredths of a second of one another. 
 
 ### Product or Add-on Activation
 
@@ -128,11 +127,11 @@ There are many ways a sku can be activated. For testing purposes, the easiest me
 
 1. Navigate to [Partner Center > Businesses > Accounts](https://partners.vendasta.com/manage-accounts) and click on the account name.
 
-2. Within the Account Details page - select `Activate Products`
-![Activate Products](../../assets/images/provisioning/PartnerCenter_ActivateSku.png)
+2. Within the Account Details page - select `Order Products`
+![Order Products](../../assets/images/provisioning/PartnerCenter_ActivateSku.png)
 
 <!-- theme: info -->
->Once Sales Order is completed, and the activation lifecyle begins, if the product has webhooks configured, request(s) will be sent to their respective purchase webhooks with the `provisioned` action.
+>This flow from the Account Details page instantly triggers activation, and request(s) will be sent to their respective purchase webhooks with the `provisioned` action. If a Sales Order is created in any other fashion, it must go through an approval process - which is less frendly for testing.
 
 ### Edition Change
 
