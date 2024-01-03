@@ -3,10 +3,6 @@
 The Guides available below will provide an overview of creating a Marketplace sku, take you through the Vendasta Dashboards that you will be working with for testing, and detail the basic usage of the Marketplace Vendor API & Webhooks. 
 If you intend to distribute your product to the Vendasta Reseller network rather than offer it to your customers only, please review the Marketplace [integration requirements](./integration_requirements.md).
 
-<!-- theme: info -->
->**Learn More** 
->
->If you are new to Marketplace, and want to discover how it can accelerate your sales, learn more, and request to become a Vendor <a href="https://www.vendasta.com/marketplace/vendors" target="_blank">HERE</a>
 
 ---
 

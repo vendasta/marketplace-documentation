@@ -30,12 +30,17 @@
       },
       {
          "type":"group",
-         "title":"Requirement 2: SSO (OAuth2 3-Legged Flow)",
+         "title":"Requirement 2: SSO",
          "uri":"docs/Guides/oauth2.md",
          "items":[
+           {
+               "type":"item",
+               "title":"OAuth2 3-Legged Flow/OpenId Connect",
+               "uri":"docs/Guides/oauth2.md"
+            },
             {
                "type":"item",
-               "title":"Example implementation of Requirement 2",
+               "title":"Example implementation of OAuth2 Flow",
                "uri":"docs/Guides/creating_new_vendor_app.md"
             },
             {
