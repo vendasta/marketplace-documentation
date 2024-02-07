@@ -368,11 +368,11 @@ b) OR or have any actual purchase capabilities remove, and the copy made to be '
 Functionally testing SSO can be accomplished by redirecting to the Authorization URL in the browser. This will result in a prompt for user login, and scope acceptance. 
 
 **For an end to end test**
-1. [Publish](https://developers.vendasta.com/vendor/112210c5ddd88-configuring-your-products-and-services#publishing) the products so they can be interacted with in Partner Center
-2. [Create an Account](https://support.vendasta.com/hc/en-us/articles/4406959813911) for testing with 
-3. [Activate the product](https://support.vendasta.com/hc/en-us/articles/4406958134807) on an Account. This will give you access to the API for this `account_id`
-4. Log into Business App for this Account via [Impersonation](https://support.vendasta.com/hc/en-us/articles/4406958143383).
-5. Click on the icon of the product on the left nav to redirect to your `Entry Url`. Check the 'My Products' page if it's not in the left Nav as there may be enough products that it wasn't automatically pinned.
+1. [Publish](https://developers.vendasta.com/vendor/112210c5ddd88-configuring-your-products-and-services#publishing) the product using the status column in the Vendor Center Products list so it can be interacted with in Partner Center
+2. [Create an Account](https://support.vendasta.com/hc/en-us/articles/4406959813911) in Partner Center for testing with.
+3. [Activate the product](https://support.vendasta.com/hc/en-us/articles/4406958134807) on an Account. This will give you access to the v1 Marketplace API for this `account_id`
+4. Access the Business App for this Account. This can be done via the kabob menu on the Account List, or by using the 'Open in' dropdown in the top right of the Account Details page.
+5. Click on the icon of the product on the left nav to redirect to your `Entry Url`. Check the 'My Products' page if it's not in the left Nav as there may be enough products active that it wasn't automatically pinned.
 
 ## Example implementation
 
