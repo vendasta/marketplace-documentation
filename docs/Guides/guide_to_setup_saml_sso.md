@@ -135,7 +135,12 @@ Switch the tab by clicking **Service provider details**. You can configure your 
 
 Once you've finished configuring, click the **Save** button. That's all. SAML SSO is now available for your application.
 
-
+## Testing
+1. [Publish](https://developers.vendasta.com/vendor/112210c5ddd88-configuring-your-products-and-services#publishing) the product you configured for SAML sso using the status column in the Vendor Center Products list so it can be interacted with in Partner Center
+2. [Create an Account](https://support.vendasta.com/hc/en-us/articles/4406959813911) in Partner Center for testing with.
+3. [Activate the product](https://support.vendasta.com/hc/en-us/articles/4406958134807) on an Account. This will give you access to the v1 Marketplace API for this `account_id`
+4. Access the Business App for this Account. This can be done via the kabob menu on the Account List, or by using the 'Open in' dropdown in the top right of the Account Details page.
+5. Click on the icon of the product on the left nav to redirect to your `Entry Url`. Check the 'My Products' page if it's not in the left Nav as there may be enough products active that it wasn't automatically pinned.
 
 
 
