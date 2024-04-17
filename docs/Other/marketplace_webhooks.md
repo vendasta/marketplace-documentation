@@ -250,9 +250,17 @@ title: Provision Event
 }
 ```
 <!-- theme: info -->
->_Please Note:_
->
+
 >Only core account data is included in the `provisioned` webhook payload. If you need extended account data it can be retrieved via the [Get Account Rich Data](https://developers.vendasta.com/vendor/b3A6MzYxMzM5OTI-get-account-rich-data) endpoint.
+>
+>**Extended Data Points:** 
+>* Images
+>* Description
+>* Short Description
+>* Toll-Free Number
+>* Services Offered
+>* Hours of Operation
+>* Landmark
 
 <!--
 type: tab
