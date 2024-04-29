@@ -3,7 +3,7 @@
 ``` mermaid
 flowchart LR
   OA([Order Accepted])-->P(Purchases from Order sent to Vendor)
-  -->R(Pending Activation Resolved)-->A(Product Avaialble within Platform)
+  -->R(Pending Activation Resolved)-->A(Product available within Platform)
 ```
 
 ## Product Life Cycle
@@ -12,7 +12,7 @@ An activation can be in one of 4 states for any given Account:
 
 ``` mermaid
 flowchart LR
-  I([Inactive])--#1-->P(Pending Message Delivery)-->PV(Pending on Activation Resolution)--#2-->A(Active)--#3-->PD(Pending De-Provision - Cancelled)--#4-->I
+  I([Inactive])--#1-->P(Pending Message Delivery)-->PV(Pending on Activation Resolution)--#2-->A(Active)--#3-->PD(Pending De-Provision - Canceled)--#4-->I
 ```
 
 _*See **Activation Types** below for details on all possible events_
@@ -25,7 +25,7 @@ _*See **Activation Types** below for details on all possible events_
 
 **#4 Deactivation Event:** A de-provison alert is sent to the Vendor. 
 * If the Product is in a pending de-provision state, then the product is fully deactivated at the end of it's billing cycle.
-* If the sku _Billing Frequency_ is set to 'One Time', de-provision event occurs immedialty after cancellation event.
+* If the sku _Billing Frequency_ is set to 'One Time', de-provision event occurs immediately after cancellation event.
 
 
 <!-- theme: warning -->
@@ -72,13 +72,13 @@ Vendors are responsible for maintaining a mapping between the Vendasta Account, 
 
 ## Provisioning Workflows
 
-It is recommended that if webhooks are being used to utilize the _Pending Activation Workflow_. If your operations team has to take manual steps to provision the offering, then this flow is **required**.
+If utilizing webhooks, using the _Pending Activation Workflow_ is recommended. If your operations team has to take manual steps to provision the offering, then this flow is **required**.
 
 The `Use "Pending Activation" workflow` checkbox in the _Product activation_ section of the _Product Info_ page shifts the responsibility for activation resolution from Vendasta to the Vendor.
 
 **Manual UI Route**
 1) An email with the order details will be sent to all of the email addresses registered in the Notifications --> Recipient Email list.
-2) Execute whatever steps are needed to provision product. If you utilize the API or SSO this will involve mapping the `account_id` to the equivilent id for your product.
+2) Execute whatever steps are needed to provision the product. If you utilize the API or SSO this will involve mapping the `account_id` to the equivalent id for your product.
 3) Resolve the pending activation via Vendor Center. _Vendor Center -> Product -> Accounts -> Pending accounts_. *Note that the Pending accounts subtab only appears when the `Pending Activation` workflow checkbox is selected on the product or one of it's Add-ons.
 
 **API Route**
@@ -98,23 +98,29 @@ The `action` field on the Purchase Webhook indicates which payload type you are 
 **actions:** _`provision`, `de-provision`, `provisioned-trial`, `change-edition`_
 
 <!-- theme: info -->
->Note that Add-ons only have the _provisioned & de-provisioned_ actions, as they are not compatible with Editons or Trials.
+>Note that Add-ons only have the _provisioned & de-provisioned_ actions, as they are not compatible with Editions or Trials.
 
-### Initial Testing
+### Development Testing
 
 **Mock Webhooks**
 
 Once a value has been entered in the _Integration-->Integration Settings-->Purchase URLs_ a testing tab will appear on the far right for sending mock purchase data to your purchase urls.
 However, **if you require order form data to provision your sku, and mock data doesn't suffice** you should test the activations from Partner Center. Activation methods are covered below.
 
-**Step 1) Create Test Accounts**
+### Manual Functional Testing - required
 
-Products are activated on Accounts, so you must create test Account(s) before you can test product activation. You can [create](https://support.vendasta.com/hc/en-us/articles/4406959813911) as many Accounts as you want to test with in Partner Center. 
+**Step 1) Publish Product to your Partner Center**
+
+[Publish](https://developers.vendasta.com/vendor/112210c5ddd88-configuring-your-products-and-services#publishing) your product from the Vendor Center Products page. **After Publishing, you're product is still private to you.** Making your product visible in the Vendasta Marketplace is controlled by Vendasta, and referred to as 'Distribution'. You won't see your product in Partner Center to activate unless it is published.
+
+**Step 2) Create Test Accounts**
+
+Products are activated on Accounts, so you must create test Account(s) before you can test product activation. You can [create](https://support.vendasta.com/hc/en-us/articles/4406959813911) as many Accounts as you want to test within Partner Center. 
 
 <!-- theme: info -->
-> If you are actively using the platform to sell to your own customers you may want to create a clear naming convention for test accounts. If your circumstances require it, we can provide access to our demo enviornment, but it is less complex to create a product per development enviornment that you utilize.
+> If you are actively using the platform to sell to your own customers you will want to create a clear naming convention for test accounts. For development it recommended that you create a product per development environment your team deploys to.
 
-**Step 2) Test Activation**
+**Step 3) Test Activation**
 
 Activate and deactivate your own offerings as much as you desire. The quick start for this is below - for more detailed information see the [help center](https://support.vendasta.com/hc/en-us/articles/4406958134807).
 
@@ -131,7 +137,7 @@ There are many ways a sku can be activated. For testing purposes, the easiest me
 ![Order Products](../../assets/images/provisioning/PartnerCenter_ActivateSku.png)
 
 <!-- theme: info -->
->This flow from the Account Details page instantly triggers activation, and request(s) will be sent to their respective purchase webhooks with the `provisioned` action. If a Sales Order is created in any other fashion, it must go through an approval process - which is less frendly for testing.
+>This flow from the Account Details page instantly triggers activation, and request(s) will be sent to their respective purchase webhooks with the `provisioned` action. If an Order is created in any other fashion, it must go through an approval process - which is less friendly for testing.
 
 ### Edition Change
 
