@@ -1194,7 +1194,7 @@ paths:
       tags:
         - change_spend
       responses:
-        '202':
+        '200':
           description: Accepted
         '400':
           description: Bad request - invalid parameters in the body of the request
