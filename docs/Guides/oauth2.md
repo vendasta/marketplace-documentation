@@ -65,7 +65,7 @@ Toggle 'Enable SSO' on, then click `Create Configuration`
 
 |*Client Fields*||
 |-|-|
-| **Logout URL - _(Proposed)_**  |  Front end logout url (*Not yet functional - may be left blank*). Will pop open a hidden iframe and redirect to this url.  **For back channel logouts, please utilize the logout webhook in the main *Access and SSO* section.**
+| **Logout URL - _(Optional)_**  |  Used to do a front end logout url at your application. During platform logout, the platform will pop open a hidden iframe for to this url.  **For back channel logouts, please utilize the logout webhook in the main *Access and SSO* section.**
 | **Redirect URI** | Sometimes referred to as a 'Callback URL' - The URL of the page where the user will be redirected after a successful authentication. This value **must** match the redirect_uri originally used to generate the Authorization `code`.
 
 
