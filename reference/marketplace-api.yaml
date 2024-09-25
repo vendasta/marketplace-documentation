@@ -648,6 +648,8 @@ paths:
               required:
                 - account_id
         required: true
+      deprecated: true
+      description: 'Supported for existing integrations. No new development should occur against the customer API. It will be replaced by an API for the [new CRM](https://support.vendasta.com/hc/en-us/categories/24284629825559-CRM).'
   /customer/list-customers:
     post:
       tags:
@@ -708,6 +710,8 @@ paths:
               required:
                 - account_id
         required: true
+      deprecated: true
+      description: 'Supported for existing integrations. No new development should occur against the customer API. It will be replaced by an API for the [new CRM](https://support.vendasta.com/hc/en-us/categories/24284629825559-CRM).'
   /customer/get-customer:
     post:
       tags:
@@ -754,6 +758,7 @@ paths:
                 - account_id
         required: true
       description: 'Returns a single customer record based on a `vendor_customer_id`. If the id is not unique, the newest record with that id will be returned.'
+      deprecated: true
   /customer/associate-id:
     post:
       tags:
@@ -795,6 +800,8 @@ paths:
                   type: string
                   description: A string indicating what value to return with the customer for api interactions
         required: true
+      deprecated: true
+      description: 'Supported for existing integrations. No new development should occur against the customer API. It will be replaced by an API for the [new CRM](https://support.vendasta.com/hc/en-us/categories/24284629825559-CRM).'
   /customer/update-customer:
     post:
       tags:
@@ -879,6 +886,8 @@ paths:
                   type: string
                   description: Last name of the Rep/Salesperson associated with customer
         required: true
+      deprecated: true
+      description: 'Supported for existing integrations. No new development should occur against the customer API. It will be replaced by an API for the [new CRM](https://support.vendasta.com/hc/en-us/categories/24284629825559-CRM).'
   /customer/delete-customer:
     post:
       tags:
@@ -917,6 +926,8 @@ paths:
                   type: string
                   description: A unique account ID that can be used to identify and reference an account.
         required: true
+      deprecated: true
+      description: 'Supported for existing integrations. No new development should occur against the customer API. It will be replaced by an API for the [new CRM](https://support.vendasta.com/hc/en-us/categories/24284629825559-CRM).'
   '/marketplace_app/{marketplace_app_id}':
     get:
       tags:
@@ -946,6 +957,7 @@ paths:
           schema:
             type: string
       summary: Get Marketplace Application
+      description: ''
   /activation/resolve/:
     post:
       tags:
