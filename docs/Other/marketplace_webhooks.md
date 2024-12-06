@@ -620,6 +620,19 @@ SAMPLE DECODED PAYLOAD:
     }
 }
 ```
+<!-- theme: info -->
+
+>Only core account data is included in the `account` webhook payload. If you need extended account data it can be retrieved via the [Get Account Rich Data](https://developers.vendasta.com/vendor/b3A6MzYxMzM5OTI-get-account-rich-data) endpoint.
+>
+>**Extended Data Points:** 
+>* Images
+>* Description
+>* Short Description
+>* Toll-Free Number
+>* Services Offered
+>* Hours of Operation
+>* Landmark
+
 
 ### User Permission Webhook
 
@@ -691,7 +704,9 @@ title: Permission Revoked Event
 >
 > This webhook is for syncing of Business users(`smb` Persona) only. Resource checks always need to be made as part of the SSO flow regardless of the synced state of a user. Use the [Check User Access to an Account](https://developers.vendasta.com/vendor/b3A6MTY1Njk0MzI-check-user-access-to-an-account) endpoint to validate a user's authorization after session transfer completes before redirecting the user to your dashboard.
 
-### Customer Webhook
+### Customer Webhook(Deprecated)
+<!-- theme: warning -->
+> The [Vendasta CRM](https://support.vendasta.com/hc/en-us/articles/4406953514647-Contacts-in-Business-App) has superceded the Customer List. There should be no new integrations with the Customer List. New APIs and Webhooks will be developed for the CRM.
 
 The customer webhook is called every time a customer is created, or deleted in an Account's _Customer List_.
 
