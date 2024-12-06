@@ -84,7 +84,8 @@ Follow your service's installation guide, entering the following information whe
 
 |                                  |                                                                              |
 |----------------------------------|------------------------------------------------------------------------------|
-| **Issuer**                       | `https://iam-prod.apigateway.co`                                             |
+| **Issuer**                       | `https://iam-prod.apigateway.co`                                |
+| **Well-Known(OIDC Discovery)**                       | `https://iam-prod.apigateway.co/.well-known/openid-configuration`                                |
 | **Authorization URL**            | `https://sso-api-prod.apigateway.co/oauth2/auth?account_id=<account_id>` (see Contextualizing your Auth URL below)                                                                              |
 | **Token URL**                    | `https://sso-api-prod.apigateway.co/oauth2/token`                            |
 | **Logout/End Session URL**       | `https://sso-api-prod.apigateway.co/oauth2/logout`                           |
@@ -92,9 +93,6 @@ Follow your service's installation guide, entering the following information whe
 | **User Info URL (optional)**     | `https://sso-api-prod.apigateway.co/oauth2/user-info`                        |
 | **Client ID**                    | Obtained when creating your OAuth2 configuration within the Vendasta Platform|
 | **Client Secret (backend only)** | Obtained when creating your OAuth2 configuration within the Vendasta Platform|
-
-<!-- theme: warning -->
-> If utilizing an Identity Manager such as Okta or AWS Cognito please utilize their option to configure the IDP endpoints manually rather than utilizing the https://iam-prod.apigateway.co/.well-known/openid-configuration endpoint at this time.
 
 ## Step 3: Session Transfer Implementation
 
@@ -159,16 +157,21 @@ Certain scopes have a special meaning for sso, or are distinct from those used f
 
 
 ### Token Endpoint
+The token endpoint accepts authentication via the request header or body. The OAuth2 spec suggests using the `Authorization` header with the `Authorization: Basic encodedString` format, where the `encodedString` is a result of Base64 encoding the OAuth client data as client_id:client_secret.
+
+Example:
+```curl
+curl -X POST 'https://sso-api-prod.apigateway.co/oauth2/token' \
+--header 'Content-type: application/x-www-form-urlencoded' \
+--header 'Authorization: Basic NWIwNDYwNzctZjM5MS00YzdjLTliMDYtNmVjOWNmZTgwODYzOkVWbkdaaXNjU1k4R2Zud1Z6bnJweTg3RTQ2UGZsR3ZZSmc3VGhIR29kVw==' \
+--data-urlencode 'grant_type=authorization_code' \
+--data-urlencode 'redirect_uri=https://yourredirecturi.com/somepath' \
+--data-urlencode 'code=13a75b73-a1c5-49f7-ad85-9086f3c0f0b0'
+```
 
 #### Access Tokens
 
-Access tokens expire **30 minutes** from the time of issue. They will need to be refreshed regularly using one of the following techniques:
-
-- **Redirect the user back through the authorization process (backend)**. If the user’s token has expired, or is close to expiry, you can fetch a new one by re-initiating the OAuth2 authorization flow. You may pass the `prompt=none` query parameter for users who have already given consent to avoid displaying the consent dialog again, which should allow a seamless redirection back into your Product.
-
-- **Silent Refresh (Frontend) - COMING SOON:** This technique redirects the user through the authorization process just as the previous technique, however it is initiated from Javascript by opening a hidden browser window for the authorization flow, using prompt=none to complete the flow without user interaction. This refreshes the user’s token without any interruption.
-
-- **Use a refresh token (Backend) - COMING SOON:** Refresh tokens allow applications to refresh access tokens at any time, even after the user has left their application. This is useful, but requires explicit consent from the end-user and is not recommended unless your application needs to perform background work on behalf of the end-user. Refresh tokens are sensitive and must be kept secure.
+Access tokens expire **30 minutes** from the time of issue. They will need to be refreshed by redirecting the user back through the authorization process (backend)**. If the user’s token has expired, or is close to expiry, you can fetch a new one by re-initiating the OAuth2 authorization flow. You may pass the `prompt=none` query parameter for users who have already given consent to avoid displaying the consent dialog again, which should allow a seamless redirection back into your Product.
 
 <!-- theme: warning -->
 >All access token claims are subject to change without notice, and should only be inspected for debugging purposes.
