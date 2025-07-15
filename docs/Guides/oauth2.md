@@ -261,13 +261,13 @@ Here is the User Info URL:
 
     https://sso-api-prod.apigateway.co/oauth2/user-info
 
-You may make a `GET` or `POST` request to this endpoint. Include your Identity Token in the **AUTHORIZATION** header like so, replacing the token with your own:
+You may make a `GET` or `POST` request to this endpoint. Include the Access Token retreived from the token endpoint in the request **AUTHORIZATION** header, replacing the token with your own:
 
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lhbS1wcm9kLmFwaWdhdGV3YXkuY28iLCJleHAiOjE2MTExNjEyMDQsImlhdCI6MTYxMTE1OTQwNCwiaXNzIjoiaHR0cHM6Ly9pYW0tcHJvZC5hcGlnYXRld2F5LmNvIiwic3ViIjoiVS1lNzg1MWM1My04YTQ5LTRjODktOTBmZC03YTgxNDA4ODhjMDIiLCJmZWRlcmF0ZWRfaWRlbnRpdHlfcHJvdmlkZXIiOiJvYXV0aCIsInVzZXJfaWQiOiJVLWU3ODUxYzUzLThhNDktNGM4OS05MGZkLTdhODE0MDg4OGMwMiIsImtpbmQiOiJhY2Nlc3MiLCJzY29wZSI6InByb2ZpbGUgZW1haWwgb3BlbmlkIiwia2lkIjoiOWZjMGEyYWNlMTNjZjdjOTBiM2ZmZjcxODkzZGJjODAiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.s12fKo19qKBR4CjMlXqkV0KxksieY7jlgT7Ryg9PH68
 ```
 
-The amount of information returned is determined by the scopes which your Product requested during its authorization flow as follows:
+The amount of information returned is determined by the scopes requested on the _Authorization URL_:
 
 |           |                                                                                                      |
 |-----------|------------------------------------------------------------------------------------------------------|
